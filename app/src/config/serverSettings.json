@@ -1,0 +1,15 @@
+{
+    "environment": ["VERSION", "PORT", "LOG_LEVEL", "WEBHOOK_URL", "DATABASE", "DB_USER", "USER_PASSWORD", "DB_PORT", "SESSION_SECRET", "JWT_SECRET"],
+    "fullBackupTime": {
+        "second": "0",
+        "minute": "30",
+        "hour": "17"
+    },
+    "rsyncBackupTime": {
+        "second": "0",
+        "minute": "0",
+        "hour": "*/1"
+    },
+    "serverDir": "/opt/minecraft/mcbedrock_control/mcbedrock",
+    "serverDirDev": "/opt/minecraft/mcbedrock_control/mc_dummy"
+}
