@@ -24,6 +24,7 @@ import { logger } from './services/log/logger'; // ロガー関数をインポ�
 import { handler } from './services/cli/cliHandler';
 import { DatabaseConnection } from "./services/db/mysqld/DatabaseConnection";
 import pageRouter from './routes/pageRouter';
+import { MongoConnection } from './services/db/mongod/MongoConnection';
 
 declare global {
     namespace Express {
@@ -53,6 +54,9 @@ export async function bootstrap() {
         connectionLimit: 10,
         queueLimit: 0,
     });
+
+    const mongodb = MongoConnection.getInstance();
+    await mongodb.connect(process.env.MONGO_URL!);
 
     // 環境変数を読み込み
     const VERSION = process.env.VERSION!;
@@ -167,12 +171,12 @@ export async function bootstrap() {
 
     // コマンドラインからサーバー操作のコマンドを受け付ける
     rl.on('line', async (input) => {
-        handler(httpServer, rl, input.trim());
+        handler(httpServer, rl, input.trim(), mongodb);
     });
 
     // 終了シグナルをキャッチするとサーバーをシャットダウン
-    process.on('SIGINT', () => shutdown(httpServer, rl));
-    process.on('SIGTERM', () => shutdown(httpServer, rl));
+    process.on('SIGINT', () => shutdown(httpServer, rl, mongodb));
+    process.on('SIGTERM', () => shutdown(httpServer, rl, mongodb));
 
     try {
         logger.info('Starting Server');

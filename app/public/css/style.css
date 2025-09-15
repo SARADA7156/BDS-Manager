@@ -1,0 +1,146 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: 'NotoSansJP';
+    src: url(../fonts/NotoSansJP-VariableFont_wght.woff)format('woff'),
+         url(../fonts/NotoSansJP-VariableFont_wght.woff2)format('woff2');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SpaceGrotesk';
+    src: url(../fonts/SpaceGrotesk-VariableFont_wght.woff)format('woff'),
+         url(../fonts/SpaceGrotesk-VariableFont_wght.woff2)format('woff2');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'unifont';
+    src: url(../fonts/unifont-16.0.04.woff)format('woff'),
+         url(../fonts/unifont-16.0.04.woff2)format('woff2');
+    font-display: swap;
+}
+
+:root {
+    --bg-color-white-1: #f0f0f0;
+    --bg-color-white-2: #fff;
+    --bg-color-black-1: #161616;
+    --bg-color-black-2: #252525;
+    --border-color-1: #00cf00;
+    --border-color-2: #009700;
+    --border-color-3: #00ff00;
+    --border-color-4: #00b100;
+}
+
+body {
+    background-image: url(../../imgs/minecraft1.png);
+    background-attachment: fixed;
+    font-family: NotoSansJP;
+    color: #fff;
+}
+
+footer {
+    background-color: var(--bg-color-black-1);
+    padding: 4em 1em 1em 1em;
+}
+
+.information {
+    grid-template-columns: 100%;
+    grid-template-rows: auto auto;
+}
+
+/* ==== 各コンポーネントの共通のスタイリング ==== */
+
+/* ==== ボーダーのスタイリング ==== */
+.box-border {
+    border-top: solid 5px var(--border-color-1);
+    border-left: solid 5px var(--border-color-1);
+    border-right: solid 5px var(--border-color-2);
+    border-bottom: solid 5px var(--border-color-2);
+}
+
+.box-border:hover {
+    border-top: solid 5px var(--border-color-3);
+    border-left: solid 5px var(--border-color-3);
+    border-right: solid 5px var(--border-color-4);
+    border-bottom: solid 5px var(--border-color-4);
+}
+
+.btn {
+    padding: 0.7em 1.2em;
+    background-color: #00b600;
+    border-radius: 0;
+    color: #fff;
+}
+
+.btn:hover {
+    color: #fff;
+    background-color: #00da00;
+}
+
+/* アプリアイコンのスタイリング */
+.BDS-emblem .bedrock {
+    width: 50px
+}
+
+.material-icons {
+    color: #fff;
+}
+
+/* アプリアイコンのエフェクト */
+.bedrock {
+    cursor: pointer;
+    filter: drop-shadow(0 0 10px #ffd900);
+}
+
+.bedrock:hover {
+    animation: hue-rotate-glow 5s linear infinite;
+}
+
+.bg-black {
+    background: linear-gradient(var(--bg-color-black-1), black);
+}
+
+.bg-dark {
+    background-color: var(--bg-color-black-1) !important;
+}
+
+.bg-dark2 {
+    background-color: var(--bg-color-black-2);
+}
+
+.rounded {
+    border-radius: .50rem !important;
+}
+
+.center {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* アニメーション定義 */
+@keyframes hue-rotate-glow {
+    0% {
+        filter: drop-shadow(0 0 13px #ff0000); /* 赤 */
+    }
+    16.6% {
+        filter: drop-shadow(0 0 13px #ffff00); /* 黄色 */
+    }
+    33.3% {
+        filter: drop-shadow(0 0 13px #00ff00); /* 緑 */
+    }
+    50% {
+        filter: drop-shadow(0 0 13px #00ffff); /* シアン */
+    }
+    66.6% {
+        filter: drop-shadow(0 0 13px #0000ff); /* 青 */
+    }
+    83.3% {
+        filter: drop-shadow(0 0 13px #ff00ff); /* マゼンタ */
+    }
+    100% {
+        filter: drop-shadow(0 0 13px #ff0000); /* 赤に戻る */
+    }
+}

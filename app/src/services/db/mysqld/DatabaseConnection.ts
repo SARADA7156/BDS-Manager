@@ -14,7 +14,7 @@ export class DatabaseConnection {
             const conn = await DatabaseConnection.pool.getConnection();
             await conn.ping();
             conn.release();
-            logger.info('✅ Connection to the database successfully.')
+            logger.info('✅ Connection to the MySQL successfully.')
         } catch (error) {
             logger.error('❌ Failed to connect to the database:', error);
             throw error;
@@ -35,7 +35,7 @@ export class DatabaseConnection {
     public static async disconnect(): Promise<void> {
         if (DatabaseConnection.pool) {
             await DatabaseConnection.pool.end();
-            logger.info('🔌 Database connection closed.');
+            logger.info('🔌 MySQL disconnected...');
         }
     }
 }

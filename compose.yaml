@@ -13,5 +13,16 @@ services:
     ports:
       - "3307:3306"
 
+  mongodb:
+    image: mongo:7.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_NAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongodb_data:/data/db
+
 volumes:
   mysql_data:
+  mongodb_data:

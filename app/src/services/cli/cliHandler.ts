@@ -5,11 +5,12 @@ import { Server } from "http";
 import { logger } from "../log/logger";
 import { shutdown } from "../process/shutdown";
 import { Interface } from "readline";
+import { MongoConnection } from "../db/mongod/MongoConnection";
 
-export async function handler(httpServer: Server, rl: Interface, command: string, /*manager: ServerManager, notifier: NotificationManager, fullBackup: FullBackup*/): Promise<void> {
+export async function handler(httpServer: Server, rl: Interface, command: string, mongodb: MongoConnection /*manager: ServerManager, notifier: NotificationManager, fullBackup: FullBackup*/): Promise<void> {
     switch(command) {
         case 'stop':
-            shutdown(httpServer, rl);
+            shutdown(httpServer, rl, mongodb);
             break;
         // case 'mcstart':
         //     manager.start();
