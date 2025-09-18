@@ -2,8 +2,8 @@ import { Router } from "express";
 
 const router = Router();
 
-import v1ApiRouter from './v1/apiRouter';
+import dashboard from './pages/dashboard';
 
-router.use('/v1', v1ApiRouter);
+router.use('/dashboard', dashboard);
 
 export default router;

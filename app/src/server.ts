@@ -23,7 +23,8 @@ import { shutdown } from './services/process/shutdown';
 import { logger } from './services/log/logger'; // ロガー関数をインポート
 import { handler } from './services/cli/cliHandler';
 import { DatabaseConnection } from "./services/db/mysqld/DatabaseConnection";
-import pageRouter from './routes/pageRouter';
+import pageRouter from './routes/PageRouter';
+import apiRouter from './routes/apiRouter';
 import { MongoConnection } from './services/db/mongod/MongoConnection';
 
 declare global {
@@ -136,6 +137,7 @@ export async function bootstrap() {
     // });
 
     app.use('/', pageRouter);
+    app.use('/api', apiRouter);
 
     app.use((req, res, next) => {
         res.render('layout', {

@@ -26,6 +26,10 @@
 
         <!-- メイン要素のマークアップ -->
         <main>
+            <% if (typeof nav !== "undefined" && nav) { %>
+                <%- include(`./components/${nav}`) %>
+            <% } %>
+
             <% if (typeof page !== "undefined" && page) { %>
                 <%- include(`./pages/${page}`) %>
             <% } %>
