@@ -141,7 +141,7 @@ export async function bootstrap() {
 
     app.use((req, res, next) => {
         res.render('layout', {
-            style: 'error.css',
+            stylesheets: ['pages/error'],
             page: 'error.ejs',
             errorCode: '404',
             errorMsg: '指定されたページが見つかりません。'
@@ -151,7 +151,7 @@ export async function bootstrap() {
     const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
         try {
             res.render('layout', {
-                style: 'error.css',
+                stylesheets: ['pages/error'],
                 page: 'error.ejs',
                 errorCode: '500',
                 errorMsg: 'サーバー側でエラーが発生しました。'

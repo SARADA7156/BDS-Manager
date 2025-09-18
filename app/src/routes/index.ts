@@ -5,8 +5,9 @@ const router = Router();
 router.get('/', (req, res, next) => {
     try {
         res.render('layout', {
-        style: 'index.css',
-        header: 'headerHome.ejs'
+        stylesheets: ['components/header', 'pages/index'],
+        header: 'headerHome.ejs',
+        footer: 'footer.ejs'
     });
     } catch(error) {
         next(error);

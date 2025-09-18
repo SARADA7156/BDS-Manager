@@ -26,6 +26,8 @@
     --bg-color-white-2: #fff;
     --bg-color-black-1: #161616;
     --bg-color-black-2: #252525;
+    --bg-color-green: #00b600;
+    --hover-color: #ffffff2f;
     --border-color-1: #00cf00;
     --border-color-2: #009700;
     --border-color-3: #00ff00;
@@ -68,14 +70,14 @@ footer {
 
 .btn {
     padding: 0.7em 1.2em;
-    background-color: #00b600;
+    background-color: var(--bg-color-green);
     border-radius: 0;
     color: #fff;
 }
 
 .btn:hover {
     color: #fff;
-    background-color: #00da00;
+    background-color: var(--bg-color-green);
 }
 
 /* アプリアイコンのスタイリング */
@@ -95,6 +97,12 @@ footer {
 
 .bedrock:hover {
     animation: hue-rotate-glow 5s linear infinite;
+}
+
+/* 共通スタイリング */
+
+p {
+    margin: 0;
 }
 
 .bg-black {
@@ -118,6 +126,19 @@ footer {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.iconBtn {
+    border-radius: 50px;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.iconBtn:hover {
+    background-color: var(--hover-color);
 }
 
 /* アニメーション定義 */

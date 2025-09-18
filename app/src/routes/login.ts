@@ -5,8 +5,9 @@ const router = Router();
 router.get('/', (req, res, next) => {
     try {
         res.render('layout', {
-        style: 'login.css',
-        page: 'login.ejs'
+        stylesheets: ['pages/login'],
+        page: 'login.ejs',
+        footer: 'footer.ejs'
     });
     } catch(error) {
         next(error);
