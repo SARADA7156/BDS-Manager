@@ -1,0 +1,61 @@
+@charset "UTF-8";
+
+#list-createInstance {
+    background-color: var(--hover-color);
+    color: var(--bg-color-green);
+}
+
+#create-btn {
+    padding: 0.4em;
+    width: 100%;
+}
+
+#instance-setting-tabs {
+    width: 200px;
+    height: 100%;
+    margin: 0;
+    border-right: solid 1px var(--border-color-normal);
+}
+
+#instance-setting-tabs li {
+    height: 66px;
+    padding: 1em;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+#instance-setting-tabs li.active {
+    background-color: var(--hover-color);
+    color: var(--bg-color-green);
+}
+
+#instance-setting-tabs li:hover {
+    background-color: var(--hover-color);
+    color: var(--bg-color-green);
+}
+
+#settings-container {
+    grid-template-columns: 200px auto;
+    grid-template-rows: 550px;
+}
+
+.setting {
+    overflow-y: auto;
+    display: none;
+}
+
+.setting.active {
+    display: block;
+}
+
+.setting ul li {
+    margin-bottom: 1.2em;
+}
+
+input[type="text"] {
+    width: 95%;
+    height: 2.5em;
+    background-color: #4b4b4b;
+    color: white;
+}

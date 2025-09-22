@@ -27,11 +27,14 @@
     --bg-color-black-1: #161616;
     --bg-color-black-2: #252525;
     --bg-color-green: #00b600;
+    --bg-color-green-hover: #00cf00;
     --hover-color: #ffffff2f;
+    --border-color-normal: #ffffff75;
     --border-color-1: #00cf00;
     --border-color-2: #009700;
     --border-color-3: #00ff00;
-    --border-color-4: #00b100;
+    --border-color-4: #00b600;
+    --transition-speed-1: 0.3s;
 }
 
 body {
@@ -73,11 +76,24 @@ footer {
     background-color: var(--bg-color-green);
     border-radius: 0;
     color: #fff;
+    transition: none;
 }
 
 .btn:hover {
     color: #fff;
+    background-color: var(--bg-color-green-hover);
+}
+
+.btn-green {
     background-color: var(--bg-color-green);
+}
+
+.btn-gray {
+    background-color: #616161;
+}
+
+.btn-gray:hover {
+    background-color: #7e7e7e;
 }
 
 /* アプリアイコンのスタイリング */
@@ -141,6 +157,20 @@ p {
     background-color: var(--hover-color);
 }
 
+.main-container {
+    margin-top: 7em;
+    margin-left: 66px;
+    transition: var(--transition-speed-1);
+}
+
+.main-container.nav-active {
+    margin-left: 200px;
+}
+
+.border-bottom {
+    border-bottom: solid 1px var(--border-color-normal) !important;
+}
+
 /* アニメーション定義 */
 @keyframes hue-rotate-glow {
     0% {
@@ -164,4 +194,35 @@ p {
     100% {
         filter: drop-shadow(0 0 13px #ff0000); /* 赤に戻る */
     }
+}
+
+/* スピナーアニメーション */
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 30px;
+  margin: 1em auto;
+  aspect-ratio: 1;
+  display: grid;
+  border-radius: 50%;
+  background:
+    linear-gradient(0deg ,rgba(255, 255, 255, 0.5) 30%,#ffffff00 0 70%,rgb(255, 255, 255) 0) 50%/8% 100%,
+    linear-gradient(90deg,rgba(255, 255, 255, 0.25) 30%,#ffffff00 0 70%,rgba(255, 255, 255, 0.75) 0) 50%/100% 8%;
+  background-repeat: no-repeat;
+  animation: l23 1s infinite steps(12);
+}
+.loader::before,
+.loader::after {
+   content: "";
+   grid-area: 1/1;
+   border-radius: 50%;
+   background: inherit;
+   opacity: 0.915;
+   transform: rotate(30deg);
+}
+.loader::after {
+   opacity: 0.83;
+   transform: rotate(60deg);
+}
+@keyframes l23 {
+  100% {transform: rotate(1turn)}
 }

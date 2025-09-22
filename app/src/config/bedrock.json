@@ -1,0 +1,52 @@
+{
+    "createInstanceTabs": [
+        { "id": "general", "text": "一般", "active": true },
+        { "id": "advanced", "text": "詳細設定", "active": false },
+        { "id": "multi", "text": "マルチプレイ", "active": false },
+        { "id": "cheat", "text": "チート", "active": false }
+    ],
+    "createInstanceSettings": [
+        {
+            "id": "general-settings",
+            "label": "一般",
+            "settings": [
+                {
+                    "id": "instance-name",
+                    "name": "instanceName",
+                    "type": "text",
+                    "label": "[b]インスタンス名: [bE]インスタンス名を定義します。[br]",
+                    "required": true
+                },
+                {
+                    "id": "world-name",
+                    "name": "worldName",
+                    "type": "text",
+                    "label": "[b]ワールド名: [bE]ワールド名を定義します。空白の場合はデフォルトで[code]bedrock_level[codeE]となります。[br]",
+                    "required": false
+                },
+                {
+                    "id": "gamemode",
+                    "name": "gamemode-opt",
+                    "type": "radio",
+                    "label": "[b]ゲームモード: [bE]ワールドのゲームモードを設定します。デフォルトはサバイバルモードです。[br]",
+                    "options": [
+                        { "optId": "gamemode-opt1", "label": "サバイバル", "value": "survival", "checked": true },
+                        { "optId": "gamemode-opt2", "label": "クリエイティブ", "value": "creative", "checked": false }
+                    ],
+                    "required": true
+                },
+                {
+                    "id": "difficulty",
+                    "name": "difficulty-opt",
+                    "type": "radio",
+                    "label": "[b]難易度: [bE]ゲームの難易度を設定します。デフォルトはイージーです。[br]",
+                    "options": [
+                        { "optId": "difficulty-opt1", "label": "イージー", "value": "easy", "checked": true },
+                        { "optId": "difficulty-opt2", "label": "ノーマル", "value": "normal", "checked": false },
+                        { "optId": "difficulty-opt3", "label": "ハード", "value": "hard", "checked": false }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,33 @@
+<ul>
+    <li>
+        <b>インスタンス名: </b>インスタンス名を定義します。<br>
+        <input type="text" name="instanceName" id="instance-name">
+    </li>
+    <li>
+        <b>ワールド名: </b>ワールド名を定義します。空白の場合はデフォルトで<code>bedrock_level</code>となります。<br>
+        <input type="text" name="worldName" id="world-name">
+    </li>
+    <li>
+        <b>ゲームモード: </b>ワールドのゲームモードを設定します。デフォルトはサバイバルモードです。<br>
+        <div class="btn-group gamemode mt-2" role="group" data-radio-group>
+            <input type="radio" class="btn-check" name="gamemode-opt" id="gamemode-opt1" autocomplete="off" checked>
+            <label for="gamemode-opt1" class="btn btn-green">サバイバル</label>
+
+            <input type="radio" class="btn-check" name="gamemode-opt" id="gamemode-opt2" autocomplete="off">
+            <label for="gamemode-opt2" class="btn btn-gray">クリエイティブ</label>
+        </div>
+    </li>
+    <li>
+        <b>難易度: </b>ゲームの難易度を設定します。デフォルトはイージーです。<br>
+        <div class="btn-group difficulty mt-2" role="group" data-radio-group>
+            <input type="radio" class="btn-check" name="difficulty-opt" id="difficulty-opt1" autocomplete="off" checked>
+            <label for="difficulty-opt1" class="btn btn-green">イージー</label>
+
+            <input type="radio" class="btn-check" name="difficulty-opt" id="difficulty-opt2" autocomplete="off">
+            <label for="difficulty-opt2" class="btn btn-gray">ノーマル</label>
+
+            <input type="radio" class="btn-check" name="difficulty-opt" id="difficulty-opt3" autocomplete="off">
+            <label for="difficulty-opt3" class="btn btn-gray">ハード</label>
+        </div>
+    </li>
+</ul>

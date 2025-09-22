@@ -27,19 +27,21 @@
             </header>
         <% } %>
 
-        <!-- メイン要素のマークアップ -->
-        <main class="min-vh-100 container-fluid p-0">
+        <div>
             <% if (typeof nav !== "undefined" && nav) { %>
-                <nav class="min-vh-100 bg-dark active" id="sideNav">
+                <nav class="bg-dark active min-vh-100" id="sideNav">
                     <%- include(`./components/${nav}`) %>
                 </nav>
                 <script type="module" src="/js/components/nav.js"></script>
             <% } %>
 
-            <% if (typeof page !== "undefined" && page) { %>
-                <%- include(`./pages/${page}`) %>
-            <% } %>
-        </main>
+            <!-- メイン要素のマークアップ -->
+            <main class="p-0 d-grid">
+                <% if (typeof page !== "undefined" && page) { %>
+                    <%- include(`./pages/${page}`) %>
+                <% } %>
+            </main>
+        </div>
 
         <!-- フッターのマークアップ -->
         <% if (typeof footer !== "undefined" && footer) { %>

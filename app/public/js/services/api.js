@@ -1,16 +1,18 @@
 class HttpClient {
-    instance;
-
     constructor(baseURL) {
-        this.instance = axios.create({ baseURL });
+        this.baseURL = baseURL;
     }
 
-    get(url, params) {
-        return this.instance.get(url, { params });
+    async get(endpoint, options = {}) {
+        return this.request(endpoint, { method: "GET", ...options });
     }
 
-    post(url, data) {
-        return this.instance.post(url, data);
+    async request(endpoint, options) {
+        const response = await fetch(this.baseURL + endpoint, options);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json().catch(() => null);
     }
 }
 

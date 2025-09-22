@@ -1,8 +1,8 @@
 import { Router } from "express";
 
 const router = Router();
-import instanceHandler from './api/instance';
+import settingTabs from './api/createInstance/settingTabs';
 
-router.use('/instance', instanceHandler);
+router.use('/instance/settings', settingTabs);
 
 export default router;

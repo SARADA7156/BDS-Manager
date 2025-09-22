@@ -6,6 +6,8 @@ nav {
     user-select: none;
     transition: 0.3s;
     overflow: hidden;
+    position: fixed;
+    z-index: 1000;
 }
 
 nav.active {

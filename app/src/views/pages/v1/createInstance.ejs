@@ -1,0 +1,46 @@
+<div class="main-container row justify-content-center nav-active">
+    <div class="col-9 bg-dark p-3 rounded">
+        <h2 id="page-title">サーバーインスタンスを追加</h2>
+        <!-- インスタンスの設定フォーム -->
+        <form class="bg-dark2 p-2 rounded">
+            <button class="btn box-border" id="create-btn">サーバーインスタンスを作成</button>
+            <h3 class="mt-2 border-bottom">設定</h3>
+            <div class="d-grid bg-dark" id="settings-container">
+                <!-- 設定タブ -->
+                <ul id="instance-setting-tabs" class="list-unstyled"></ul>
+                <script type="module" src="/js/pages/createInstance/settingTabs.js" defer></script>
+                <!-- 設定内容(項目はJavaScriptによって切り替える) -->
+                <div id="instance-settings"></div>
+                <script type="module" src="/js/pages/createInstance/settings.js" defer></script>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="module" src="/js/utils/RadioBtnHelper.js" defer></script>
+<script type="module" src="/js/pages/createInstance/listAction.js" defer></script>
+
+<!-- listAction.jsは非効率なので改善する必要がある。 -->
+
+<!-- リストに追加する設定項目 -->
+<!--
+・詳細設定
+    ・シード値
+    ・座標表示
+    ・プレイ日数を表示
+    ・火の延焼
+    ・TNTの爆発
+    ・モブのアイテムドロップ
+    ・タイルからのドロップ
+    ・必要な睡眠中プレイヤー
+    ・即時リスポーン
+・マルチプレイ
+    ・デフォルトのプレイヤー権限
+    ・PVP
+    ・方向バー
+・チート
+    ・昼夜サイクル
+    ・インベントリの保持
+    ・モブのスポーン
+    ・天候サイクル
+    ・
+ -->
