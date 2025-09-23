@@ -137,6 +137,12 @@ p {
     border-radius: .50rem !important;
 }
 
+input {
+    height: 2.5em;
+    background-color: #4b4b4b;
+    color: white;
+}
+
 .center {
     position: fixed;
     top: 50%;

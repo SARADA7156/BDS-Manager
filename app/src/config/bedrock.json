@@ -1,6 +1,7 @@
 {
     "createInstanceTabs": [
         { "id": "general", "text": "一般", "active": true },
+        { "id": "server", "text": "サーバー", "active": false },
         { "id": "advanced", "text": "詳細設定", "active": false },
         { "id": "multi", "text": "マルチプレイ", "active": false },
         { "id": "cheat", "text": "チート", "active": false }
@@ -21,12 +22,12 @@
                     "id": "world-name",
                     "name": "worldName",
                     "type": "text",
-                    "label": "[b]ワールド名: [bE]ワールド名を定義します。空白の場合はデフォルトで[code]bedrock_level[codeE]となります。[br]",
+                    "label": "[b]ワールド名: [bE]ワールド名を定義します。空白の場合はデフォルトで[code]Dedicated Server[codeE]となります。[br]",
                     "required": false
                 },
                 {
                     "id": "gamemode",
-                    "name": "gamemode-opt",
+                    "name": "gamemodeOpt",
                     "type": "radio",
                     "label": "[b]ゲームモード: [bE]ワールドのゲームモードを設定します。デフォルトはサバイバルモードです。[br]",
                     "options": [
@@ -37,14 +38,177 @@
                 },
                 {
                     "id": "difficulty",
-                    "name": "difficulty-opt",
+                    "name": "difficultyOpt",
                     "type": "radio",
                     "label": "[b]難易度: [bE]ゲームの難易度を設定します。デフォルトはイージーです。[br]",
                     "options": [
                         { "optId": "difficulty-opt1", "label": "イージー", "value": "easy", "checked": true },
                         { "optId": "difficulty-opt2", "label": "ノーマル", "value": "normal", "checked": false },
                         { "optId": "difficulty-opt3", "label": "ハード", "value": "hard", "checked": false }
-                    ]
+                    ],
+                    "required": true
+                }
+            ]
+        },
+        {
+            "id": "server-settings",
+            "label": "サーバー",
+            "settings": [
+                {
+                    "id": "white-list",
+                    "name": "whiteList",
+                    "type": "switch",
+                    "label": "[b]ホワイトリスト: [bE]プレイヤーの接続を制限します。ホワイトリストを設定することにより許可されたプレイヤー以外はワールドに接続できません。[br]",
+                    "options": [
+                        { "optId": "white-list-opt1", "value": "on", "checked": false }
+                    ],
+                    "required": true
+                },
+                {
+                    "id": "view-distance",
+                    "name": "viewDistance",
+                    "type": "number",
+                    "label": "[b]描画距離: [bE]プレイヤーの描画距離を定義します。数値が大きいほどクライアント・サーバーの両方の負荷が高まります。[br]",
+                    "options": [
+                        { "optId": "view-distance-opt", "min": "5", "max": "32", "value": "14", "label": "チャンク", "checked": false }
+                    ],
+                    "required": true
+                },
+                {
+                    "id": "tick-distance",
+                    "name": "tickDistance",
+                    "type": "number",
+                    "label": "[b]演算距離: [bE]プレイヤーから半径何チャンク以内の時間を経過させるかを定義します。値を大きくするとサーバーヘの負荷が増えます。[br]",
+                    "options": [
+                        { "optId": "tick-distance-opt", "min": "4", "max": "12", "value": "4", "label": "チャンク", "checked": false }
+                    ],
+                    "required": true
+                },
+                {
+                    "id": "player-idle-timeout",
+                    "name": "playerIdleTimeout",
+                    "type": "number",
+                    "label": "[b]放置プレイ許容時間: [bE]放置プレイを何分まで許容するかの設定です。0にすると放置プレイヤーは切断されません。[br]",
+                    "options": [
+                        { "optId": "player-idle-timeout-opt", "value": "30", "label": "分", "checked": true }
+                    ],
+                    "required": true
+                },
+                {
+                    "id": "max-threads",
+                    "name": "maxThreads",
+                    "type": "number",
+                    "label": "[b]スレッド数: [bE]サーバーに対してどれだけのCPUスレッドを生成するかを定義します。[br]",
+                    "options": [
+                        { "optId": "max-threads-opt", "min": "2", "max": "8", "value": "2", "label": "スレッド", "checked": false }
+                    ],
+                    "required": true
+                },
+                {
+                    "id": "compression-threshold",
+                    "name": "compressionThreshold",
+                    "type": "number",
+                    "label": "[b]最小ネットワークペイロード: [bE]圧縮するネットワークペイロードの最小サイズを設定します。値を大きくするとサーバーへの負荷は減りますが、ネットワーク帯域幅の使用が増加します。[br]",
+                    "options": [
+                        { "optId": "compression-threshold-opt", "min": "0", "max": "65535", "value": "1", "label": "KB", "checked": false }
+                    ],
+                    "required": true
+                }
+            ]
+        },
+        {
+            "id": "advanced-settings",
+            "label": "詳細設定",
+            "settings": [
+                {
+                    "id": "level-seed",
+                    "name": "levelSeed",
+                    "type": "text",
+                    "label":"[b]シード値[bE]",
+                    "options": [
+                        { "optId": "level-seed-opt", "checked": false }
+                    ],
+                    "required": false
+                },
+                {
+                    "id": "show-coordinates",
+                    "name": "showCoordinates",
+                    "type": "switch",
+                    "label": "[b]座標表示[bE]",
+                    "options": [
+                        { "optId": "player-position-opt", "value": "on", "checked": true }
+                    ],
+                    "required": false
+                },
+                {
+                    "id": "show-days-played",
+                    "name": "showdaysplayed",
+                    "type": "switch",
+                    "label": "[b]プレイ日数[bE]",
+                    "options": [
+                        { "optId": "show-days-played-opt", "value": "on", "checked": true }
+                    ],
+                    "required": false
+                },
+                {
+                    "id": "do-fire-tick",
+                    "name": "doFireTick",
+                    "type": "switch",
+                    "label": "[b]火の延焼[bE]",
+                    "options": [
+                        { "optId": "do-fire-tick-opt", "value": "on", "checked": true }
+                    ],
+                    "required": false
+                },
+                {
+                    "id": "tnt-explodes",
+                    "name": "tntExplodes",
+                    "type": "switch",
+                    "label": "[b]TNTの爆発[bE]",
+                    "options": [
+                        { "optId": "tnt-explodes-opt", "value": "on", "checked": true }
+                    ],
+                    "required": false
+                },
+                {
+                    "id": "do-mob-loot",
+                    "name": "doMobLoot",
+                    "type": "switch",
+                    "label": "[b]モブのアイテムドロップ[bE]",
+                    "options": [
+                        { "optId": "do-mob-loot-opt", "value": "on", "checked": true }
+                    ],
+                    "required": false
+                },
+                {
+                    "id": "do-tile-drops",
+                    "name": "doTileDrops",
+                    "type": "switch",
+                    "label": "[b]タイルからのドロップ[bE]",
+                    "options": [
+                        { "optId": "do-tile-drops-opt", "value": "on", "checked": true }
+                    ],
+                    "required": false
+                },
+                {
+                    "id": "do-immediate-respawn",
+                    "name": "doImmediateRespawn",
+                    "type": "switch",
+                    "label": "[b]即時リスポーン[bE]",
+                    "options": [
+                        { "optId": "do-immediate-respawn-opt", "value": "on", "checked": false }
+                    ],
+                    "required": false
+                },
+                {
+                    "id": "players-sleeping-percentage",
+                    "name": "playersSleepingPercentage",
+                    "type": "number",
+                    "label": "[b]プレイヤーの就寝率[bE]",
+                    "options": [
+                        { "optId": "players-sleeping-percentage", "min": "0", "max": "100", "value": "100", "label": "%", "checked": false }
+                    ],
+                    "required": true
                 }
             ]
         }

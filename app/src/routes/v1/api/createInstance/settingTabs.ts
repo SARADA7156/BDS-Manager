@@ -19,7 +19,7 @@ type InstanceSetting = {
 type Setting = {
     id: string;
     name: string;
-    type: string;
+    type: "text" | "radio" | "number" | "switch";
     label: string;
     options?: Option[];
     required: boolean;
@@ -27,9 +27,11 @@ type Setting = {
 
 type Option = {
     optId: string;
-    label: string;
-    value: string;
-    checked: boolean;
+    label?: string;
+    value?: string;
+    min?: string;
+    max?: string;
+    checked?: boolean;
 }
 
 router.get('/', (req, res) => {

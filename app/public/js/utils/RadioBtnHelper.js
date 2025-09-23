@@ -17,7 +17,6 @@ export class RadioBtnHelper {
         this.radios.forEach(radio => {
             radio.addEventListener('change', () => {
                 this.update();
-                console.log(radio);
             });
         });
     }

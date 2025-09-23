@@ -12,7 +12,6 @@
 
 #instance-setting-tabs {
     width: 200px;
-    height: 100%;
     margin: 0;
     border-right: solid 1px var(--border-color-normal);
 }
@@ -40,9 +39,14 @@
     grid-template-rows: 550px;
 }
 
+#instance-settings {
+    height: 100%;
+}
+
 .setting {
-    overflow-y: auto;
+    overflow: auto;
     display: none;
+    height: 100%;
 }
 
 .setting.active {
@@ -55,7 +59,8 @@
 
 input[type="text"] {
     width: 95%;
-    height: 2.5em;
-    background-color: #4b4b4b;
-    color: white;
+}
+
+input[type="number"] {
+    width: 10%;
 }

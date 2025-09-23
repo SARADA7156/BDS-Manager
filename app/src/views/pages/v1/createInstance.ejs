@@ -2,22 +2,19 @@
     <div class="col-9 bg-dark p-3 rounded">
         <h2 id="page-title">サーバーインスタンスを追加</h2>
         <!-- インスタンスの設定フォーム -->
-        <form class="bg-dark2 p-2 rounded">
+        <form class="bg-dark2 p-2 rounded" method="post" action="/api/v1/instance/create">
             <button class="btn box-border" id="create-btn">サーバーインスタンスを作成</button>
             <h3 class="mt-2 border-bottom">設定</h3>
             <div class="d-grid bg-dark" id="settings-container">
                 <!-- 設定タブ -->
                 <ul id="instance-setting-tabs" class="list-unstyled"></ul>
-                <script type="module" src="/js/pages/createInstance/settingTabs.js" defer></script>
                 <!-- 設定内容(項目はJavaScriptによって切り替える) -->
                 <div id="instance-settings"></div>
-                <script type="module" src="/js/pages/createInstance/settings.js" defer></script>
+                <script type="module" src="/js/pages/createInstance/renderSetting.js" defer></script>
             </div>
         </form>
     </div>
 </div>
-<script type="module" src="/js/utils/RadioBtnHelper.js" defer></script>
-<script type="module" src="/js/pages/createInstance/listAction.js" defer></script>
 
 <!-- listAction.jsは非効率なので改善する必要がある。 -->
 

@@ -112,6 +112,7 @@ export async function bootstrap() {
         ejs.renderFile(filePath, options, { cache: false }, callback);
     });
 
+    app.use(express.urlencoded({ extended: true }));
     app.use(express.json()); // jsonボディをパースするためのミドルウェアを設定
 
     const serverBin: string = './bedrock_server'; // 実行ファイルのパスと名前

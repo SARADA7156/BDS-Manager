@@ -3,7 +3,7 @@ import { InstanceApi } from '../../services/instanceApi/instance.js';
 import { Sanitize } from '../../utils/sanitize.js';
 import { RadioBtnHelper } from '../../utils/RadioBtnHelper.js';
 
-class SettingsRenderer {
+export class SettingsRenderer {
     constructor(mainContainer) {
         this.mainContainer = mainContainer;
     }
@@ -22,6 +22,14 @@ class SettingsRenderer {
             container.appendChild(this.createSettingList(data.settings));
             this.mainContainer.appendChild(container)
         });
+    }
+
+    createInput(id, name, type) {
+        const input = document.createElement('input');
+        input.id = id;
+        input.name = name;
+        input.type = type;
+        return input;
     }
 
     // ヘッダーを生成
@@ -43,10 +51,19 @@ class SettingsRenderer {
             // inputのタイプによってinput要素のレンダリング方法を変更
             switch(setting.type) {
                 case 'text':
-                    listContent.appendChild(this.createTextInput(setting.id, setting.name, setting.required));
+                    listContent.appendChild(this.createTextInput(setting.id, setting.name, setting.type, setting.required));
                     break;
                 case 'radio':
-                    listContent.appendChild(this.createRadioInput(setting.id, setting.name, setting.options));
+                    listContent.appendChild(this.createRadioInput(setting.id, setting.name, setting.type, setting.options));
+                    break;
+                case 'number':
+                    listContent.appendChild(this.createNumberInput(setting.id, setting.name, setting.type, setting.required, setting.options[0]));
+                    break;
+                case 'range':
+                    listContent.appendChild(this.createRangeInput(setting.id, setting.name, setting.type, setting.options[0]));
+                    break;
+                case 'switch':
+                    listContent.appendChild(this.createSwitchInput(setting.id, setting.name, setting.type, setting.options[0]));
                     break;
             }
 
@@ -55,16 +72,36 @@ class SettingsRenderer {
         return list;
     }
 
-    createTextInput(id, name, required) {
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.id = id;
-        input.name = name;
+    createTextInput(id, name, type, required) {
+        const input = this.createInput(id, name, type);
         if (required) input.required = true;
         return input;
     }
 
-    createRadioInput(id, name, options) {
+    createNumberInput(id, name, type, required, options) {
+        const container = document.createElement('div');
+        container.id = id;
+
+        // type="number"のinput要素を生成
+        const input = this.createInput(options.optId, name, type);
+        if (required) input.required = true;
+        if (options.value) input.value = options.value;
+        if (options.min) input.min = options.min;
+        if (options.max) input.max = options.max;
+        container.appendChild(input);
+
+        if (options.label) {
+            // labelを生成
+            const label = document.createElement('label');
+            label.htmlFor = options.optId;
+            label.textContent = options.label;
+            label.classList.add('ms-1')
+            container.appendChild(label);
+        }
+        return container;
+    }
+
+    createRadioInput(id, name, type, options) {
         const radioContainer = document.createElement('div');
         radioContainer.id = id;
         radioContainer.role = 'group';
@@ -73,11 +110,8 @@ class SettingsRenderer {
 
         options.forEach(option => {
             // type="radio"のinput要素を生成
-            const input = document.createElement('input');
-            input.type = 'radio'
-            input.name = name;
+            const input = this.createInput(option.optId, name, type);
             input.classList.add('btn-check');
-            input.id = option.optId;
             input.value = option.value;
             input.autocomplete = 'off';
 
@@ -97,31 +131,28 @@ class SettingsRenderer {
         });
         return radioContainer;
     }
+
+    createRangeInput(id, name, type, options) {
+        const input = this.createInput(id, name, type);
+        input.min = options.min;
+        input.max = options.max;
+        input.value = options.value;
+        input.classList.add('form-range');
+        return input;
+    }
+
+    createSwitchInput(id, name, type, options) {
+        const container = document.createElement('div');
+        container.id = id;
+        container.classList.add('form-check', 'form-switch');
+
+        // type="checkbox"をbootstrapでスイッチ化
+        const input = this.createInput(options.optId, name, 'checkbox');
+        input.role = type;
+        input.classList.add('form-check-input');
+        if (options.checked) input.checked = true;
+        container.appendChild(input);
+
+        return container;
+    }
 }
-
-window.addEventListener('DOMContentLoaded', () => {
-    const settingsContainer = document.getElementById('instance-settings');
-    LoadingHelper.create(settingsContainer); // ロード画面を表示
-    // UI/UXの都合上ディレイを実装
-    setTimeout(async () => {
-        try {
-            // 設定項目データをすべて取得
-            const datas = await InstanceApi.instanceSettings();
-            // データを取得できなかった場合はエラー
-            if (!datas) throw new Error('Failed to retrieve list data.');
-
-            LoadingHelper.remove(settingsContainer); // ロード画面を削除
-
-            const renderer = new SettingsRenderer(settingsContainer);
-            renderer.render(datas.settingsData);
-
-            document.querySelectorAll('[data-radio-group]').forEach(group => {
-                new RadioBtnHelper(group);
-            });
-
-        } catch(error) {
-            console.error('List generation error:', error);
-            settingsContainer.textContent = '予期せぬエラーが発生しました。';
-        }
-    }, 300);
-});
