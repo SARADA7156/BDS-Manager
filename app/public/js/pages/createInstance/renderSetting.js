@@ -3,15 +3,18 @@ import { InstanceApi } from '../../services/instanceApi/instance.js';
 import { RadioBtnHelper } from '../../utils/RadioBtnHelper.js';
 import { TabRenderer } from './settingTabs.js';
 import { SettingsRenderer } from './settings.js';
-import { setupTabs } from '../../utils/tabActionHelper.js';
+import { TabActionHelper } from '../../utils/tabActionHelper.js';
+import { PreviewRenderer } from './renderPreview.js';
 
 class InstanceSettingRenderer {
-    constructor (settingWrapper, tabWrapper, TabRenderer, SettingsRenderer) {
+    constructor (form, settingWrapper, tabWrapper, TabRenderer, SettingsRenderer, PreviewRenderer) {
         this.delay = 300;
+        this.form = form;
         this.settingWrapper = settingWrapper;
         this.tabWrapper = tabWrapper;
         this.TabRenderer = new TabRenderer(this.tabWrapper);
         this.SettingsRenderer = new SettingsRenderer(this.settingWrapper);
+        this.PreviewRenderer = PreviewRenderer;
     }
 
     async renderSettigTabs() {
@@ -65,16 +68,27 @@ class InstanceSettingRenderer {
     async init() {
         await this.renderSettigTabs();
         await this.renderSettings();
-        setupTabs(
-            this.tabWrapper.querySelectorAll('.setting-tab'),
-            this.settingWrapper.querySelectorAll('.setting')
-        );
+        const tabs = this.tabWrapper.querySelectorAll('.setting-tab');
+        const settings = this.settingWrapper.querySelectorAll('.setting');
+        TabActionHelper.setupTabs(tabs, settings);
+        // form送信ボタンを押された際の処理を登録
+        this.form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            // TabActionHelper.inactive(tabs, settings);
+            const previewModal = document.getElementById('preview-modal-content');
+            const modal = document.getElementById('preview-modal');
+            const preview = new this.PreviewRenderer(settings, previewModal);
+            preview.render();
+            previewModal.classList.add('active');
+            modal.classList.add('active');
+        });
     }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('createInstanceForm');
     const tab = document.getElementById('instance-setting-tabs');
     const setting = document.getElementById('instance-settings');
-    const renderer = new InstanceSettingRenderer(setting, tab, TabRenderer, SettingsRenderer);
+    const renderer = new InstanceSettingRenderer(form, setting, tab, TabRenderer, SettingsRenderer, PreviewRenderer);
     renderer.init();
 });

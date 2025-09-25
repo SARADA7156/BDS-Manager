@@ -16,6 +16,9 @@
                     "name": "instanceName",
                     "type": "text",
                     "label": "[b]インスタンス名: [bE]インスタンス名を定義します。[br]",
+                    "options": [
+                        { "optId": "instance-name", "checked": false }
+                    ],
                     "required": true
                 },
                 {
@@ -23,6 +26,9 @@
                     "name": "worldName",
                     "type": "text",
                     "label": "[b]ワールド名: [bE]ワールド名を定義します。空白の場合はデフォルトで[code]Dedicated Server[codeE]となります。[br]",
+                    "options": [
+                        { "optId": "world-name", "value": "Dedicated Server", "checked": false }
+                    ],
                     "required": false
                 },
                 {
@@ -206,9 +212,93 @@
                     "type": "number",
                     "label": "[b]プレイヤーの就寝率[bE]",
                     "options": [
-                        { "optId": "players-sleeping-percentage", "min": "0", "max": "100", "value": "100", "label": "%", "checked": false }
+                        { "optId": "players-sleeping-percentage-opt", "min": "0", "max": "100", "value": "100", "label": "%", "checked": false }
                     ],
                     "required": true
+                }
+            ]
+        },
+        {
+            "id": "multi-settings",
+            "label": "マルチプレイ",
+            "settings": [
+                {
+                    "id": "player-default-permission",
+                    "name": "playerDefaultPermission",
+                    "type": "radio",
+                    "label": "[b]プレイヤーのデフォルト権限[bE][br]",
+                    "options": [
+                        { "optId": "player-default-permission-opt1", "label": "ビジター", "value": "visitor", "checked": false },
+                        { "optId": "player-default-permission-opt2", "label": "メンバー", "value": "member", "checked": true },
+                        { "optId": "player-default-permission-opt3", "label": "オペレーター", "value": "operator", "checked": false }
+                    ],
+                    "required": true
+                },
+                {
+                    "id": "pvp",
+                    "name": "pvp",
+                    "type": "switch",
+                    "label": "[b]PVP[bE]",
+                    "options": [
+                        { "optId": "pvp-opt", "value": "on", "checked": true }
+                    ],
+                    "required": false
+                },
+                {
+                    "id": "locator-bar",
+                    "name": "locatorBar",
+                    "type": "switch",
+                    "label": "[b]方向バー[bE]",
+                    "options": [
+                        { "optId": "locator-bar-opt", "value": "on", "checked": true }
+                    ],
+                    "required": false
+                }
+            ]
+        },
+        {
+            "id": "cheat-settings",
+            "label": "チート",
+            "settings": [
+                {
+                    "id": "do-daylight-cycle",
+                    "name": "dodaylightcycle",
+                    "type": "switch",
+                    "label": "[b]昼夜サイクル: [bE]オフにすると常に昼間に設定されます。",
+                    "options": [
+                        { "optId": "do-daylight-cycle-opt", "value": "on", "checked": true }
+                    ],
+                    "required": false
+                },
+                {
+                    "id": "keep-inventory",
+                    "name": "keepinventory",
+                    "type": "switch",
+                    "label": "[b]インベントリの保持: [bE]オンにすると死亡しても、インベントリ内のアイテムや経験値がロストしなくなります。",
+                    "options": [
+                        { "optId": "keep-inventory-opt", "value": "on", "checked": false }
+                    ],
+                    "required": false
+                },
+                {
+                    "id": "do-mobspawning",
+                    "name": "domobspawning",
+                    "type": "switch",
+                    "label": "[b]モブのスポーン[bE]",
+                    "options": [
+                        { "optId": "do-mobspawning-opt", "value": "on", "checked": true }
+                    ],
+                    "required": false
+                },
+                {
+                    "id": "do-weather-cycle",
+                    "name": "doweathercycle",
+                    "type": "switch",
+                    "label": "[b]天候サイクル[bE]",
+                    "options": [
+                        { "optId": "do-weather-cycle-opt", "value": "on", "checked": true }
+                    ],
+                    "required": false
                 }
             ]
         }

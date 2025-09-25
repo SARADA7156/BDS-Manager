@@ -1,5 +1,3 @@
-import { ClassHelper } from '../../utils/classHelper.js';
-
 export class TabRenderer {
     constructor(tabWrapper) {
         this.tabWrapper = tabWrapper;
@@ -8,10 +6,10 @@ export class TabRenderer {
     render(datas) {
         datas.forEach(data => {
             const list = document.createElement('li');
-            ClassHelper.add(list, 'setting-tab');
-            ClassHelper.add(list, 'd-flex');
+            list.classList.add('setting-tab');
+            list.classList.add('d-flex');
             if (data.active) {
-                ClassHelper.add(list, 'active');
+                list.classList.add('active');
             }
 
             list.id = data.id; // idを追加

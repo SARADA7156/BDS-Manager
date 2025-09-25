@@ -1,7 +1,4 @@
-import { LoadingHelper } from '../../utils/loadingHelper.js';
-import { InstanceApi } from '../../services/instanceApi/instance.js';
 import { Sanitize } from '../../utils/sanitize.js';
-import { RadioBtnHelper } from '../../utils/RadioBtnHelper.js';
 
 export class SettingsRenderer {
     constructor(mainContainer) {
@@ -51,7 +48,7 @@ export class SettingsRenderer {
             // inputのタイプによってinput要素のレンダリング方法を変更
             switch(setting.type) {
                 case 'text':
-                    listContent.appendChild(this.createTextInput(setting.id, setting.name, setting.type, setting.required));
+                    listContent.appendChild(this.createTextInput(setting.id, setting.name, setting.type, setting.required, setting.options[0]));
                     break;
                 case 'radio':
                     listContent.appendChild(this.createRadioInput(setting.id, setting.name, setting.type, setting.options));
@@ -72,8 +69,9 @@ export class SettingsRenderer {
         return list;
     }
 
-    createTextInput(id, name, type, required) {
+    createTextInput(id, name, type, required, options) {
         const input = this.createInput(id, name, type);
+        if (options.value) input.value = options.value;
         if (required) input.required = true;
         return input;
     }
