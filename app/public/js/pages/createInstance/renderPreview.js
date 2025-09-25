@@ -1,3 +1,5 @@
+import { InstanceApi } from "../../services/instanceApi/instance.js";
+
 export class PreviewRenderer {
     constructor(settings, element) {
         this.settings = settings;
@@ -62,6 +64,10 @@ export class PreviewRenderer {
             warapper.appendChild(container);
         });
         this.element.appendChild(warapper);
-        console.log(this.instanceData)
+
+        // 作成ボタンが押されるとサーバーへリクエストを送信する
+        this.element.querySelector('#submit-btn').addEventListener('click', () => {
+            InstanceApi.createInstance(this.instanceData);
+        });
     }
 }

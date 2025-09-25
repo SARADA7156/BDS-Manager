@@ -1,0 +1,275 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: 'NotoSansJP';
+    src: url(../fonts/NotoSansJP-VariableFont_wght.woff)format('woff'),
+         url(../fonts/NotoSansJP-VariableFont_wght.woff2)format('woff2');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SpaceGrotesk';
+    src: url(../fonts/SpaceGrotesk-VariableFont_wght.woff)format('woff'),
+         url(../fonts/SpaceGrotesk-VariableFont_wght.woff2)format('woff2');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'unifont';
+    src: url(../fonts/unifont-16.0.04.woff)format('woff'),
+         url(../fonts/unifont-16.0.04.woff2)format('woff2');
+    font-display: swap;
+}
+
+:root {
+    --bg-color-white-1: #f0f0f0;
+    --bg-color-white-2: #fff;
+    --bg-color-black-1: #161616;
+    --bg-color-black-2: #252525;
+    --bg-color-green: #00b600;
+    --bg-color-green-hover: #00cf00;
+    --bg-color-red: #dd0000;
+    --bg-color-red-hover: #d60000;
+    --hover-color: #ffffff2f;
+    --border-color-normal: #ffffff75;
+    --border-color-1: #00cf00;
+    --border-color-2: #009700;
+    --border-color-3: #00ff00;
+    --border-color-4: #00b600;
+    --border-color-5: #bd0000;
+    --border-color-6: #7c0000;
+    --border-color-7: #ff0000;
+    --border-color-8: #a50000;
+    --transition-speed-1: 0.3s;
+}
+
+body {
+    background-image: url(../../imgs/minecraft1.png);
+    background-attachment: fixed;
+    font-family: NotoSansJP;
+    color: #fff;
+}
+
+footer {
+    background-color: var(--bg-color-black-1);
+    padding: 4em 1em 1em 1em;
+}
+
+.information {
+    grid-template-columns: 100%;
+    grid-template-rows: auto auto;
+}
+
+/* ==== 各コンポーネントの共通のスタイリング ==== */
+
+/* ==== ボーダーのスタイリング ==== */
+.box-border {
+    border-top: solid 5px var(--border-color-1);
+    border-left: solid 5px var(--border-color-1);
+    border-right: solid 5px var(--border-color-2);
+    border-bottom: solid 5px var(--border-color-2);
+}
+
+.box-border:hover {
+    border-top: solid 5px var(--border-color-3);
+    border-left: solid 5px var(--border-color-3);
+    border-right: solid 5px var(--border-color-4);
+    border-bottom: solid 5px var(--border-color-4);
+}
+
+.box-border.border-red {
+    border-top: solid 5px var(--border-color-5);
+    border-left: solid 5px var(--border-color-5);
+    border-right: solid 5px var(--border-color-6);
+    border-bottom: solid 5px var(--border-color-6);
+}
+
+.box-border.border-red:hover {
+    border-top: solid 5px var(--border-color-7);
+    border-left: solid 5px var(--border-color-7);
+    border-right: solid 5px var(--border-color-8);
+    border-bottom: solid 5px var(--border-color-8);
+}
+
+.btn {
+    padding: 0.7em 1.2em;
+    background-color: var(--bg-color-green);
+    border-radius: 0;
+    color: #fff;
+    transition: none;
+}
+
+.btn.btn-cancel {
+    padding: 0.7em 1.2em;
+    background-color: var(--bg-color-red);
+    border-radius: 0;
+    color: #fff;
+    transition: none;
+}
+
+.btn:hover {
+    color: #fff;
+    background-color: var(--bg-color-green-hover);
+}
+
+.btn.btn-cancel:hover {
+    color: #fff;
+    background-color: var(--bg-color-red-hover);
+}
+
+.btn-green {
+    background-color: var(--bg-color-green);
+}
+
+.btn-gray {
+    background-color: #616161;
+}
+
+.btn-gray:hover {
+    background-color: #7e7e7e;
+}
+
+/* アプリアイコンのスタイリング */
+.BDS-emblem .bedrock {
+    width: 50px
+}
+
+.material-icons {
+    color: #fff;
+}
+
+/* アプリアイコンのエフェクト */
+.bedrock {
+    cursor: pointer;
+    filter: drop-shadow(0 0 10px #ffd900);
+}
+
+.bedrock:hover {
+    animation: hue-rotate-glow 5s linear infinite;
+}
+
+/* 共通スタイリング */
+
+p {
+    margin: 0;
+}
+
+.bg-black {
+    background: linear-gradient(var(--bg-color-black-1), black);
+}
+
+.bg-dark {
+    background-color: var(--bg-color-black-1) !important;
+}
+
+.bg-dark2 {
+    background-color: var(--bg-color-black-2);
+}
+
+.rounded {
+    border-radius: .50rem !important;
+}
+
+input {
+    height: 2.5em;
+    background-color: #4b4b4b;
+    color: white;
+}
+
+.center {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.iconBtn {
+    border-radius: 50px;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.iconBtn:hover {
+    background-color: var(--hover-color);
+}
+
+.main-container {
+    margin-top: 7em;
+    margin-left: 66px;
+    transition: var(--transition-speed-1);
+}
+
+.main-container.nav-active {
+    margin-left: 200px;
+}
+
+.border-bottom {
+    border-bottom: solid 1px var(--border-color-normal) !important;
+}
+
+.modal {
+    background-color: rgba(0, 0, 0, 0.363);
+}
+
+.modal.active {
+    display: flex;
+}
+
+/* アニメーション定義 */
+@keyframes hue-rotate-glow {
+    0% {
+        filter: drop-shadow(0 0 13px #ff0000); /* 赤 */
+    }
+    16.6% {
+        filter: drop-shadow(0 0 13px #ffff00); /* 黄色 */
+    }
+    33.3% {
+        filter: drop-shadow(0 0 13px #00ff00); /* 緑 */
+    }
+    50% {
+        filter: drop-shadow(0 0 13px #00ffff); /* シアン */
+    }
+    66.6% {
+        filter: drop-shadow(0 0 13px #0000ff); /* 青 */
+    }
+    83.3% {
+        filter: drop-shadow(0 0 13px #ff00ff); /* マゼンタ */
+    }
+    100% {
+        filter: drop-shadow(0 0 13px #ff0000); /* 赤に戻る */
+    }
+}
+
+/* スピナーアニメーション */
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 30px;
+  margin: 1em auto;
+  aspect-ratio: 1;
+  display: grid;
+  border-radius: 50%;
+  background:
+    linear-gradient(0deg ,rgba(255, 255, 255, 0.5) 30%,#ffffff00 0 70%,rgb(255, 255, 255) 0) 50%/8% 100%,
+    linear-gradient(90deg,rgba(255, 255, 255, 0.25) 30%,#ffffff00 0 70%,rgba(255, 255, 255, 0.75) 0) 50%/100% 8%;
+  background-repeat: no-repeat;
+  animation: l23 1s infinite steps(12);
+}
+.loader::before,
+.loader::after {
+   content: "";
+   grid-area: 1/1;
+   border-radius: 50%;
+   background: inherit;
+   opacity: 0.915;
+   transform: rotate(30deg);
+}
+.loader::after {
+   opacity: 0.83;
+   transform: rotate(60deg);
+}
+@keyframes l23 {
+  100% {transform: rotate(1turn)}
+}

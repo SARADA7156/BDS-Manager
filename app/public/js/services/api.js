@@ -7,6 +7,15 @@ class HttpClient {
         return this.request(endpoint, { method: "GET", ...options });
     }
 
+    async post(endpoint, body = {}, options = {}) {
+        return this.request(endpoint, {
+            method: "POST", 
+            headers: { "Content-Type": "application/json", ...(options.headers || {}) },
+            body: JSON.stringify(body),
+            ...options
+        });
+    }
+
     async request(endpoint, options) {
         const response = await fetch(this.baseURL + endpoint, options);
         if (!response.ok) {

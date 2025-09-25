@@ -1,0 +1,6 @@
+@charset "UTF-8";
+
+#list-dashboard {
+    background-color: var(--hover-color);
+    color: var(--bg-color-green);
+}

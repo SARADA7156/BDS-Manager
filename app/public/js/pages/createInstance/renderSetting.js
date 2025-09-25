@@ -74,13 +74,16 @@ class InstanceSettingRenderer {
         // form送信ボタンを押された際の処理を登録
         this.form.addEventListener('submit', (event) => {
             event.preventDefault();
-            // TabActionHelper.inactive(tabs, settings);
             const previewModal = document.getElementById('preview-modal-content');
             const modal = document.getElementById('preview-modal');
             const preview = new this.PreviewRenderer(settings, previewModal);
             preview.render();
             previewModal.classList.add('active');
             modal.classList.add('active');
+            previewModal.querySelector('#cancel-btn').addEventListener('click', () => {
+                previewModal.classList.remove('active');
+                modal.classList.remove('active');
+            });
         });
     }
 }

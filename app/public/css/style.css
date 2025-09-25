@@ -28,12 +28,18 @@
     --bg-color-black-2: #252525;
     --bg-color-green: #00b600;
     --bg-color-green-hover: #00cf00;
+    --bg-color-red: #dd0000;
+    --bg-color-red-hover: #d60000;
     --hover-color: #ffffff2f;
     --border-color-normal: #ffffff75;
     --border-color-1: #00cf00;
     --border-color-2: #009700;
     --border-color-3: #00ff00;
     --border-color-4: #00b600;
+    --border-color-5: #bd0000;
+    --border-color-6: #7c0000;
+    --border-color-7: #ff0000;
+    --border-color-8: #a50000;
     --transition-speed-1: 0.3s;
 }
 
@@ -71,6 +77,20 @@ footer {
     border-bottom: solid 5px var(--border-color-4);
 }
 
+.box-border.border-red {
+    border-top: solid 5px var(--border-color-5);
+    border-left: solid 5px var(--border-color-5);
+    border-right: solid 5px var(--border-color-6);
+    border-bottom: solid 5px var(--border-color-6);
+}
+
+.box-border.border-red:hover {
+    border-top: solid 5px var(--border-color-7);
+    border-left: solid 5px var(--border-color-7);
+    border-right: solid 5px var(--border-color-8);
+    border-bottom: solid 5px var(--border-color-8);
+}
+
 .btn {
     padding: 0.7em 1.2em;
     background-color: var(--bg-color-green);
@@ -79,9 +99,22 @@ footer {
     transition: none;
 }
 
+.btn.btn-cancel {
+    padding: 0.7em 1.2em;
+    background-color: var(--bg-color-red);
+    border-radius: 0;
+    color: #fff;
+    transition: none;
+}
+
 .btn:hover {
     color: #fff;
     background-color: var(--bg-color-green-hover);
+}
+
+.btn.btn-cancel:hover {
+    color: #fff;
+    background-color: var(--bg-color-red-hover);
 }
 
 .btn-green {
