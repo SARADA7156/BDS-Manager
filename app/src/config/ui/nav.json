@@ -1,0 +1,13 @@
+{
+    "sideNav": {
+        "admin": [
+            { "id": "dashboard", "link": "/dashboard", "label": "ダッシュボード", "icon": "dashboard" },
+            { "id": "Services", "link": "/Services", "label": "サーバー", "icon": "globe" },
+            { "id": "createInstance", "link": "/createInstance", "label": "サーバー追加", "icon": "add" },
+            { "id": "backup", "link": "/backup", "label": "バックアップ", "icon": "backup" },
+            { "id": "jobs", "link": "/jobs", "label": "ジョブ", "icon": "timer" },
+            { "id": "info", "link": "/info", "label": "サーバー状態", "icon": "host" },
+            { "id": "analytics", "link": "/analytics", "label": "アナリティクス", "icon": "finance_mode" }
+        ]
+    }
+}

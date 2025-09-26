@@ -1,10 +1,10 @@
 @charset "UTF-8";
 
-header {
+.main-header {
     margin-left: 66px;
     transition: 0.3s;
 }
 
-header.active {
+.main-header.active {
     margin-left: 200px;
 }

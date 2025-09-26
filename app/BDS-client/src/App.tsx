@@ -4,6 +4,7 @@ import Footer from './components/Footer';
 import Header from './components/header/Header';
 import SideNav from './components/SideNav/SideNav';
 import Dashboard from './pages/dashboard/Dashboard';
+import { useEffect, useState } from 'react';
 
 
 function App() {
@@ -15,11 +16,22 @@ function App() {
     const showSideNav = !noSideNavPaths.includes(location.pathname);
     const showFooter = location.pathname === '/';
 
+    const [isOpen, setIsOpen] = useState(() => {
+        const saved = localStorage.getItem('sideNavOpen');
+        return saved === 'true';
+    });
+
+    useEffect(() => {
+        localStorage.setItem('sideNavOpen', String(isOpen));
+    }, [isOpen]);
+
+    const toggleMenu = () => setIsOpen((prev) => !prev);
+
     return (
         <>
-            {showHeader && <Header />}
+            {showHeader && <Header isOpen={isOpen}/>}
             <div>
-                {showSideNav && <SideNav />}
+                {showSideNav && <SideNav isOpen={isOpen} onToggle={toggleMenu} />}
                 <main className='p-0 d-grid'>
                     <Routes>
                         <Route path='/' element={<HomePage />}></Route>

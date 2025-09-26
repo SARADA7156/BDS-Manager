@@ -1,8 +1,13 @@
+import type React from 'react';
 import './headerAction.css';
 
-const Header = () => {
+interface HeaderProps {
+    isOpen: boolean;
+}
+
+const Header: React.FC<HeaderProps> = ({ isOpen }) => {
     return (
-        <header>
+        <header className={`main-header ${isOpen ? 'active' : ''}`}>
             <div className='p-2 d-grid align-items-center header-content'>
                 <div className="row align-items-center">
                     <div className="d-flex align-items-center col-11 BDS-emblem">

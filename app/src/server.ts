@@ -72,19 +72,6 @@ export async function bootstrap() {
     // 開発モードで起動しているかを確認しセットアップ
     if (isMode) {
         serverDir = settings.serverDirDev; // 開発モードで起動すると作業ディレクトリを変更
-        // ==== LiveReload 設定 ====
-        const liveReloadServer = livereload.createServer({
-            exts: ['ejs', 'css', 'js', 'html']
-        });
-        liveReloadServer.watch(path.join(__dirname, 'views'));
-        liveReloadServer.watch(path.join(__dirname, '../public/css'));
-        liveReloadServer.watch(path.join(__dirname, '../public/js'));
-
-        liveReloadServer.on('filechange', (filepath) => {
-            liveReloadServer.refresh(filepath);
-        });
-
-        app.use(connectLivereload());
     }
 
     // ==== sessionの設定 ====
@@ -104,13 +91,6 @@ export async function bootstrap() {
     app.use(express.static(path.join(__dirname, '../public')));
 
     // ==== Expressの基本設定 ====
-    // ==== EJS の設定 ====
-    app.set('view engine', 'ejs');
-    app.set('views', path.join(__dirname, 'views'));
-    app.set('view cache', false);
-    app.engine('ejs', (filePath, options, callback) => {
-        ejs.renderFile(filePath, options, { cache: false }, callback);
-    });
 
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json()); // jsonボディをパースするためのミドルウェアを設定
@@ -137,17 +117,7 @@ export async function bootstrap() {
     //     next();
     // });
 
-    app.use('/', pageRouter);
     app.use('/api', apiRouter);
-
-    app.use((req, res, next) => {
-        res.render('layout', {
-            stylesheets: ['pages/error'],
-            page: 'error.ejs',
-            errorCode: '404',
-            errorMsg: '指定されたページが見つかりません。'
-        });
-    });
 
     const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
         try {
