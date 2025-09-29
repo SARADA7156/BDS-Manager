@@ -6,7 +6,7 @@ import settingTabs from './api/createInstance/settingTabs';
 import sidebar from './api/ui/sidebarNav';
 
 router.use('/sidebar', sidebar);
-router.use('/instance/settings', settingTabs);
+router.use('/instance/setting', settingTabs);
 router.use('/instance/create', create);
 
 export default router;

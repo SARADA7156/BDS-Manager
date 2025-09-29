@@ -7,7 +7,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ isOpen }) => {
     return (
-        <header className={`main-header ${isOpen ? 'active' : ''}`}>
+        <header className={`main-header ${isOpen ? 'active' : ''} bg-dark`}>
             <div className='p-2 d-grid align-items-center header-content'>
                 <div className="row align-items-center">
                     <div className="d-flex align-items-center col-11 BDS-emblem">

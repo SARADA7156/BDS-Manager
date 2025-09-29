@@ -34,7 +34,7 @@ type Option = {
     checked?: boolean;
 }
 
-router.get('/', (req, res) => {
+router.get('/tabs', (req, res) => {
     try {
         const settingsData = bedrockJson.createInstanceSettings as InstanceSetting[];
         res.status(200).json({ settingsData });
@@ -44,7 +44,7 @@ router.get('/', (req, res) => {
     }
 })
 
-router.get('/tabs', (req, res) => {
+router.get('/lists', (req, res) => {
     try {
         const tabData: TabDataSchema[] = bedrockJson.createInstanceTabs;
         res.status(200).json({ tabData });

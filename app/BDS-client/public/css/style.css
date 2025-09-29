@@ -14,13 +14,6 @@
     font-display: swap;
 }
 
-@font-face {
-    font-family: 'unifont';
-    src: url(../fonts/unifont-16.0.04.woff)format('woff'),
-         url(../fonts/unifont-16.0.04.woff2)format('woff2');
-    font-display: swap;
-}
-
 :root {
     --bg-color-white-1: #f0f0f0;
     --bg-color-white-2: #fff;
@@ -41,6 +34,10 @@
     --border-color-7: #ff0000;
     --border-color-8: #a50000;
     --transition-speed-1: 0.3s;
+}
+
+#root {
+    width: 100%;
 }
 
 body {
@@ -141,7 +138,7 @@ footer {
 /* アプリアイコンのエフェクト */
 .bedrock {
     cursor: pointer;
-    filter: drop-shadow(0 0 10px #ffd900);
+    filter: drop-shadow(0 0 5px #ffd900);
 }
 
 .bedrock:hover {
@@ -197,13 +194,20 @@ input {
 }
 
 .main-container {
-    margin-top: 7em;
-    margin-left: 66px;
+    background-color: #00000060;
     transition: var(--transition-speed-1);
 }
 
 .main-container.nav-active {
     margin-left: 200px;
+}
+
+.main-container.nav-no-active {
+    margin-left: 66px;
+}
+
+.content {
+    margin-top: 5em;
 }
 
 .border-bottom {
@@ -221,25 +225,25 @@ input {
 /* アニメーション定義 */
 @keyframes hue-rotate-glow {
     0% {
-        filter: drop-shadow(0 0 13px #ff0000); /* 赤 */
+        filter: drop-shadow(0 0 8px #ff0000); /* 赤 */
     }
     16.6% {
-        filter: drop-shadow(0 0 13px #ffff00); /* 黄色 */
+        filter: drop-shadow(0 0 8px #ffff00); /* 黄色 */
     }
     33.3% {
-        filter: drop-shadow(0 0 13px #00ff00); /* 緑 */
+        filter: drop-shadow(0 0 8px #00ff00); /* 緑 */
     }
     50% {
-        filter: drop-shadow(0 0 13px #00ffff); /* シアン */
+        filter: drop-shadow(0 0 8px #00ffff); /* シアン */
     }
     66.6% {
-        filter: drop-shadow(0 0 13px #0000ff); /* 青 */
+        filter: drop-shadow(0 0 8px #0000ff); /* 青 */
     }
     83.3% {
-        filter: drop-shadow(0 0 13px #ff00ff); /* マゼンタ */
+        filter: drop-shadow(0 0 8px #ff00ff); /* マゼンタ */
     }
     100% {
-        filter: drop-shadow(0 0 13px #ff0000); /* 赤に戻る */
+        filter: drop-shadow(0 0 8px #ff0000); /* 赤に戻る */
     }
 }
 

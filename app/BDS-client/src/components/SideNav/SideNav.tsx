@@ -81,7 +81,7 @@ const SideNav: React.FC<SidenavProps> = ({ isOpen, onToggle }) => {
                 <ul className="service-list list-unstyled">
                     {lists.map((list) => (
                         <li key={list.id}>
-                            <Link to={list.link} id={`list-${list.id}`} className={location.pathname === list.link ? 'active' : ''}>
+                            <Link to={list.link} id={`list-${list.id}`} className={location.pathname === list.link ? 'active' : ''} title={list.label}>
                                 <span className="material-symbols-outlined">{list.icon}</span>
                                 <p>{list.label}</p>
                             </Link>
