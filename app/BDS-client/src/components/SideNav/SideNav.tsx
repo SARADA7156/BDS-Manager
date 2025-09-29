@@ -21,7 +21,7 @@ interface NavApiResponse {
     nav: MenuItem[];
 }
 
-const SideNav: React.FC<SidenavProps> = ({ isOpen, onToggle }) => {
+const SideNav = ({ isOpen, onToggle }: SidenavProps) => {
     const location = useLocation();
     const [lists, setLists] = useState<MenuItem[]>([]);
     const [loading, setLoading] = useState(true);

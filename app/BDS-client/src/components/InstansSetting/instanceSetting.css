@@ -1,0 +1,37 @@
+@charset "UTF-8";
+
+#settings-container {
+    grid-template-columns: 200px auto;
+    border: 1px solid var(--border-color-normal);
+}
+
+#instance-setting-lists {
+    margin: 0;
+    user-select: none;
+}
+
+.list-btns {
+    width: 200px;
+    height: 66px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding-left: 0.5em;
+}
+
+.list-btns:hover {
+    background-color: var(--hover-color);
+    transition: var(--transition-speed-1);
+}
+
+.list-btns.active {
+    background-color: var(--hover-color);
+    border-left: 5px solid var(--bg-color-green);
+}
+
+
+
+#instance-settings {
+    border-left: 1px solid var(--border-color-normal);
+}

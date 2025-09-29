@@ -46,6 +46,11 @@ nav.active {
     color: var(--bg-color-green);
 }
 
+.service-list a.active {
+    background-color: var(--hover-color);
+    color: var(--bg-color-green);
+}
+
 .service-list span {
     width: 24px;
     margin: auto;
