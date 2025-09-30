@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { fetchSettingList } from "../../../api/instanceSetting";
 import Loader from "../../loader/Loader";
@@ -9,19 +9,27 @@ interface TabData {
     active: boolean;
 }
 
-const SettingLists = () => {
+interface ActiveTabProps {
+    activeTab: string,
+    setActiveTab: (index: string) => void;
+}
+
+const SettingLists = ({ activeTab, setActiveTab }: ActiveTabProps) => {
     const [lists, setLists] = useState<TabData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [showLoader, setShowLoader] = useState(false);
 
-    useEffect(() => {
-        let timerId = setTimeout(() => {
-            // 1秒後にローダーの表示を許可
-            setShowLoader(true);
-        }, 1000);
 
-        const fetchData = async () => {
+        const fetchData = useCallback(async () => {
+            setLoading(true);
+            setError(null);
+
+            let timerId = setTimeout(() => {
+                // 1秒後にローダーの表示を許可
+                setShowLoader(true);
+            }, 1000);
+
             try {
                 const list: TabData[] = await fetchSettingList()
                 setLists(list);
@@ -37,32 +45,34 @@ const SettingLists = () => {
                 clearTimeout(timerId);
                 setLoading(false);
             }
-        }
+        }, [])
+
+
+    useEffect(() => {
         fetchData();
-        // コンポーネントがアンマウントされた際にタイマーをクリア
-        return () => clearTimeout(timerId);
-        
-    }, []);
+    }, [fetchData]);
 
     return (
         <ul id="instance-setting-lists" className="list-unstyled">
             {showLoader && loading && (
-                <div>
+                <li>
                     <Loader/>
                     <div className="text-center">リストの取得に時間がかかっています。</div>
-                </div>
+                </li>
             )}
             {error && (
-                <div className="d-grid justify-content-center">
+                <li className="d-grid justify-content-center">
                     <div className="text-center">リストの読み込みに失敗しました。: {error}</div>
-                    <button onClick={() => window.location.reload()}>再読み込み</button>
-                </div>
+                    <button onClick={fetchData}>再読み込み</button>
+                </li>
             )}
-            {lists.map((list) => (
+            {lists.map((list, index) => (
                 <li
-                    key={`list-${list.id}`}
+                    key={index}
                     id={`list-${list.id}`}
-                    title={list.text} className={`${list.active ? 'active' : ''} list-btns`}
+                    title={list.text}
+                    className={`${activeTab === list.id ? 'active' : ''} list-btns`}
+                    onClick={() => setActiveTab(list.id)}
                 >
                     <p>{list.text}</p>
                 </li>

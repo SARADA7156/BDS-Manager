@@ -34,6 +34,7 @@
     --border-color-7: #ff0000;
     --border-color-8: #a50000;
     --transition-speed-1: 0.3s;
+    --transition-speed-2: 0.2s;
 }
 
 #root {

@@ -1,12 +1,12 @@
 {
     "createInstanceTabs": [
-        { "id": "general", "text": "一般", "active": true },
-        { "id": "server", "text": "サーバー", "active": false },
-        { "id": "advanced", "text": "詳細設定", "active": false },
-        { "id": "multi", "text": "マルチプレイ", "active": false },
-        { "id": "cheat", "text": "チート", "active": false }
+        { "id": "general", "text": "一般" },
+        { "id": "server", "text": "サーバー"},
+        { "id": "advanced", "text": "詳細設定"},
+        { "id": "multi", "text": "マルチプレイ"},
+        { "id": "cheat", "text": "チート"}
     ],
-    "createInstanceSettings": [
+    "settingTabs": [
         {
             "id": "general-settings",
             "label": "一般",

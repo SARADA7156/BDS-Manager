@@ -4,50 +4,50 @@ import bedrockJson from "../../../../config/bedrock.json";
 
 const router = Router();
 
-interface TabDataSchema {
+interface ListDataSchema {
     id: string;
     text: string;
-    active: boolean;
 }
 
-type InstanceSetting = {
+type TabDataSchema = {
     id: string;
     label: string;
-    settings: Setting[];
+    settings: Setting[]
 }
 
 type Setting = {
     id: string;
     name: string;
-    type: "text" | "radio" | "number" | "switch";
+    type: 'text' | 'number' | 'radio' | 'switch';
     label: string;
-    options?: Option[];
+    options: SettingOptions[];
     required: boolean;
 }
 
-type Option = {
-    optId: string;
-    label?: string;
+type SettingOptions = {
+    optId?: string;
     value?: string;
+    label?: string;
     min?: string;
     max?: string;
-    checked?: boolean;
+    checked: boolean;
 }
 
 router.get('/tabs', (req, res) => {
     try {
-        const settingsData = bedrockJson.createInstanceSettings as InstanceSetting[];
-        res.status(200).json({ settingsData });
+        const tabData = bedrockJson.settingTabs as TabDataSchema[];
+
+        res.status(200).json({ tabData });
     } catch(error) {
         logger.error('Fatal Error:', error);
         res.status(500).json({ code: 'internal_server_error', message: 'サーバーで予期せぬエラーが発生しました。', details: null });
     }
-})
+});
 
 router.get('/lists', (req, res) => {
     try {
-        const tabData: TabDataSchema[] = bedrockJson.createInstanceTabs;
-        res.status(200).json({ tabData });
+        const listData: ListDataSchema[] = bedrockJson.createInstanceTabs;
+        res.status(200).json({ listData });
     } catch (error) {
         logger.error('Fatal Error:', error);
         res.status(500).json({ code: 'internal_server_error', message: 'サーバーで予期せぬエラーが発生しました。', details: null });
