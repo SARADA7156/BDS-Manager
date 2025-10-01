@@ -1,5 +1,5 @@
 {
-    "createInstanceTabs": [
+    "settingLists": [
         { "id": "general", "text": "一般" },
         { "id": "server", "text": "サーバー"},
         { "id": "advanced", "text": "詳細設定"},
@@ -15,7 +15,7 @@
                     "id": "instance-name",
                     "name": "instanceName",
                     "type": "text",
-                    "label": "[b]インスタンス名: [bE]インスタンス名を定義します。[br]",
+                    "label": "[b]インスタンス名: [bE]インスタンス名を定義します。",
                     "options": [
                         { "optId": "instance-name", "checked": false }
                     ],
@@ -26,7 +26,7 @@
                     "id": "world-name",
                     "name": "worldName",
                     "type": "text",
-                    "label": "[b]ワールド名: [bE]ワールド名を定義します。空白の場合はデフォルトで[code]Dedicated Server[codeE]となります。[br]",
+                    "label": "[b]ワールド名: [bE]ワールド名を定義します。空白の場合はデフォルトで[code]Dedicated Server[codeE]となります。",
                     "options": [
                         { "optId": "world-name", "value": "Dedicated Server", "checked": false }
                     ],
@@ -37,7 +37,7 @@
                     "id": "gamemode",
                     "name": "gamemodeOpt",
                     "type": "radio",
-                    "label": "[b]ゲームモード: [bE]ワールドのゲームモードを設定します。デフォルトはサバイバルモードです。[br]",
+                    "label": "[b]ゲームモード: [bE]ワールドのゲームモードを設定します。デフォルトはサバイバルモードです。",
                     "options": [
                         { "optId": "gamemode-opt1", "label": "サバイバル", "value": "survival", "checked": true },
                         { "optId": "gamemode-opt2", "label": "クリエイティブ", "value": "creative", "checked": false }
@@ -49,7 +49,7 @@
                     "id": "difficulty",
                     "name": "difficultyOpt",
                     "type": "radio",
-                    "label": "[b]難易度: [bE]ゲームの難易度を設定します。デフォルトはイージーです。[br]",
+                    "label": "[b]難易度: [bE]ゲームの難易度を設定します。デフォルトはイージーです。",
                     "options": [
                         { "optId": "difficulty-opt1", "label": "イージー", "value": "easy", "checked": true },
                         { "optId": "difficulty-opt2", "label": "ノーマル", "value": "normal", "checked": false },
@@ -68,7 +68,7 @@
                     "id": "white-list",
                     "name": "whiteList",
                     "type": "switch",
-                    "label": "[b]ホワイトリスト: [bE]プレイヤーの接続を制限します。ホワイトリストを設定することにより許可されたプレイヤー以外はワールドに接続できません。[br]",
+                    "label": "[b]ホワイトリスト: [bE]プレイヤーの接続を制限します。ホワイトリストを設定することにより許可されたプレイヤー以外はワールドに接続できません。",
                     "options": [
                         { "optId": "white-list-opt1", "value": "on", "checked": false }
                     ],
@@ -79,7 +79,7 @@
                     "id": "view-distance",
                     "name": "viewDistance",
                     "type": "number",
-                    "label": "[b]描画距離: [bE]プレイヤーの描画距離を定義します。数値が大きいほどクライアント・サーバーの両方の負荷が高まります。[br]",
+                    "label": "[b]描画距離: [bE]プレイヤーの描画距離を定義します。数値が大きいほどクライアント・サーバーの両方の負荷が高まります。",
                     "options": [
                         { "optId": "view-distance-opt", "min": "5", "max": "32", "value": "14", "label": "チャンク", "checked": false }
                     ],
@@ -90,7 +90,7 @@
                     "id": "tick-distance",
                     "name": "tickDistance",
                     "type": "number",
-                    "label": "[b]演算距離: [bE]プレイヤーから半径何チャンク以内の時間を経過させるかを定義します。値を大きくするとサーバーヘの負荷が増えます。[br]",
+                    "label": "[b]演算距離: [bE]プレイヤーから半径何チャンク以内の時間を経過させるかを定義します。値を大きくするとサーバーヘの負荷が増えます。",
                     "options": [
                         { "optId": "tick-distance-opt", "min": "4", "max": "12", "value": "4", "label": "チャンク", "checked": false }
                     ],
@@ -101,7 +101,7 @@
                     "id": "player-idle-timeout",
                     "name": "playerIdleTimeout",
                     "type": "number",
-                    "label": "[b]放置プレイ許容時間: [bE]放置プレイを何分まで許容するかの設定です。0にすると放置プレイヤーは切断されません。[br]",
+                    "label": "[b]放置プレイ許容時間: [bE]放置プレイを何分まで許容するかの設定です。0にすると放置プレイヤーは切断されません。",
                     "options": [
                         { "optId": "player-idle-timeout-opt", "value": "30", "label": "分", "checked": true }
                     ],
@@ -112,7 +112,7 @@
                     "id": "max-threads",
                     "name": "maxThreads",
                     "type": "number",
-                    "label": "[b]スレッド数: [bE]サーバーに対してどれだけのCPUスレッドを生成するかを定義します。[br]",
+                    "label": "[b]スレッド数: [bE]サーバーに対してどれだけのCPUスレッドを生成するかを定義します。",
                     "options": [
                         { "optId": "max-threads-opt", "min": "2", "max": "8", "value": "2", "label": "スレッド", "checked": false }
                     ],
@@ -123,7 +123,7 @@
                     "id": "compression-threshold",
                     "name": "compressionThreshold",
                     "type": "number",
-                    "label": "[b]最小ネットワークペイロード: [bE]圧縮するネットワークペイロードの最小サイズを設定します。値を大きくするとサーバーへの負荷は減りますが、ネットワーク帯域幅の使用が増加します。[br]",
+                    "label": "[b]最小ネットワークペイロード: [bE]圧縮するネットワークペイロードの最小サイズを設定します。値を大きくするとサーバーへの負荷は減りますが、ネットワーク帯域幅の使用が増加します。",
                     "options": [
                         { "optId": "compression-threshold-opt", "min": "0", "max": "65535", "value": "1", "label": "KB", "checked": false }
                     ],
@@ -245,7 +245,7 @@
                     "id": "player-default-permission",
                     "name": "playerDefaultPermission",
                     "type": "radio",
-                    "label": "[b]プレイヤーのデフォルト権限[bE][br]",
+                    "label": "[b]プレイヤーのデフォルト権限[bE]",
                     "options": [
                         { "optId": "player-default-permission-opt1", "label": "ビジター", "value": "visitor", "checked": false },
                         { "optId": "player-default-permission-opt2", "label": "メンバー", "value": "member", "checked": true },

@@ -22,6 +22,7 @@ type Setting = {
     label: string;
     options: SettingOptions[];
     required: boolean;
+    edit: boolean;
 }
 
 type SettingOptions = {

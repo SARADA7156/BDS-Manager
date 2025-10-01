@@ -57,3 +57,7 @@
 .settings.active {
     display: block;
 }
+
+input[type=text] {
+    max-width: 60%;
+}
