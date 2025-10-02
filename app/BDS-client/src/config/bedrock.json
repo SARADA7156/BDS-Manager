@@ -4,7 +4,8 @@
         { "id": "server", "text": "サーバー"},
         { "id": "advanced", "text": "詳細設定"},
         { "id": "multi", "text": "マルチプレイ"},
-        { "id": "cheat", "text": "チート"}
+        { "id": "cheat", "text": "チート"},
+        { "id": "preview", "text": "確認と作成" }
     ],
     "settingTabs": [
         {
@@ -68,7 +69,7 @@
                     "id": "white-list",
                     "name": "whiteList",
                     "type": "switch",
-                    "label": "[b]ホワイトリスト: [bE]プレイヤーの接続を制限します。ホワイトリストを設定することにより許可されたプレイヤー以外はワールドに接続できません。",
+                    "label": "[b]ホワイトリスト: [bE]プレイヤーの接続を制限します。有効にすると許可されたプレイヤー以外はワールドに接続できません。",
                     "options": [
                         { "optId": "white-list-opt1", "value": "on", "checked": false }
                     ],
@@ -101,7 +102,7 @@
                     "id": "player-idle-timeout",
                     "name": "playerIdleTimeout",
                     "type": "number",
-                    "label": "[b]放置プレイ許容時間: [bE]放置プレイを何分まで許容するかの設定です。0にすると放置プレイヤーは切断されません。",
+                    "label": "[b]放置プレイ許容時間: [bE]0にすると放置プレイヤーは切断されません。",
                     "options": [
                         { "optId": "player-idle-timeout-opt", "value": "30", "label": "分", "checked": true }
                     ],
@@ -112,7 +113,7 @@
                     "id": "max-threads",
                     "name": "maxThreads",
                     "type": "number",
-                    "label": "[b]スレッド数: [bE]サーバーに対してどれだけのCPUスレッドを生成するかを定義します。",
+                    "label": "[b]スレッド数: [bE]サーバーに対してどれだけのCPUスレッドを割り当てるかを定義します。",
                     "options": [
                         { "optId": "max-threads-opt", "min": "2", "max": "8", "value": "2", "label": "スレッド", "checked": false }
                     ],
@@ -123,7 +124,7 @@
                     "id": "compression-threshold",
                     "name": "compressionThreshold",
                     "type": "number",
-                    "label": "[b]最小ネットワークペイロード: [bE]圧縮するネットワークペイロードの最小サイズを設定します。値を大きくするとサーバーへの負荷は減りますが、ネットワーク帯域幅の使用が増加します。",
+                    "label": "[b]最小ネットワークペイロード: [bE]データをクライアント側に送信する際、何KBからデータを圧縮するかを定義します。値を大きくするとCPU負荷は減りますが、ネットワーク帯域幅をより消費します。",
                     "options": [
                         { "optId": "compression-threshold-opt", "min": "0", "max": "65535", "value": "1", "label": "KB", "checked": false }
                     ],

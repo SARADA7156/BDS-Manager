@@ -1,6 +1,6 @@
 import type React from "react";
 import { formatLabel } from "../../utils/format/formatText";
-import type { Setting } from "../../types/InstanceSetting/settingTab";
+import type { Setting } from "../../types/InstanceSetting/InstanceSetting";
 import { useState } from "react";
 
 interface RadioInputProps {
@@ -30,7 +30,7 @@ const RadioInput = ({ setting, value, onChange }: RadioInputProps) => {
                             id={opt.optId}
                             autoComplete="off"
                             value={opt.value}
-                            checked={selected === String(opt.value)}
+                            checked={selected === String(opt.value) ? true : false}
                             onChange={handleChange}
                         />
                         <label htmlFor={opt.optId} className={`btn ${selected === opt.value ? 'btn-green' : 'btn-gray'}`}>

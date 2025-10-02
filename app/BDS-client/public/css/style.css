@@ -152,6 +152,10 @@ p {
     margin: 0;
 }
 
+.custom-scrollbar {
+    scrollbar-color: white var(--bg-color-black-2);
+}
+
 .bg-black {
     background: linear-gradient(var(--bg-color-black-1), black);
 }

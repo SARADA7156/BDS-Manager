@@ -22,3 +22,9 @@ type SettingOptions = {
     max?: string;
     checked: boolean;
 }
+
+export type PreviewData = {
+    key: string;
+    value: string;
+    label: string;
+}

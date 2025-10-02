@@ -9,7 +9,7 @@ const InstanceSetting = () => {
     return (
         <div className="d-grid bg-dark2" id="settings-container">
             <SettingLists activeTab={activeTab} setActiveTab={setActiveTab}/>
-            <SettingTabs activeTab={`${activeTab}-settings`}/>
+            <SettingTabs activeTab={`${activeTab}-settings`} setActiveTab={setActiveTab}/>
         </div>
     )
 }

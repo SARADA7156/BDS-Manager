@@ -1,10 +1,10 @@
-import type { Setting } from "../../../types/InstanceSetting/settingTab";
+import type { Setting } from "../../../types/InstanceSetting/InstanceSetting";
 import { NumberInput } from "../../Inputs/NumberInput";
 import RadioInput from "../../Inputs/RadioInput";
 import SwitchInput from "../../Inputs/SwitchInput";
 import { Textinput } from "../../Inputs/TextInput";
 
-const RenderInput = (setting: Setting, value: string, onChange: (key: string, value: string) => void) => {
+const RenderInput = (setting: Setting, value: string, onChange: (key: string, value: string, label: string) => void) => {
     switch(setting.type) {
         case 'text':
             return (
@@ -12,7 +12,7 @@ const RenderInput = (setting: Setting, value: string, onChange: (key: string, va
                     key={setting.id}
                     setting={setting}
                     value={value}
-                    onChange={(e) => onChange(setting.name, e.target.value)}
+                    onChange={(e) => onChange(setting.name, e.target.value, setting.label)}
                 />
             );
         case 'number':
@@ -21,7 +21,7 @@ const RenderInput = (setting: Setting, value: string, onChange: (key: string, va
                     key={setting.id}
                     setting={setting}
                     value={value}
-                    onChange={(e) => onChange(setting.name, e.target.value)}
+                    onChange={(e) => onChange(setting.name, e.target.value, setting.label)}
                 />
             );
         case 'radio':
@@ -30,7 +30,7 @@ const RenderInput = (setting: Setting, value: string, onChange: (key: string, va
                     key={setting.id}
                     setting={setting}
                     value={value}
-                    onChange={(e) => onChange(setting.name, e.target.value)}
+                    onChange={(e) => onChange(setting.name, e.target.value, setting.label)}
                 />
             );
         case 'switch':
@@ -39,7 +39,7 @@ const RenderInput = (setting: Setting, value: string, onChange: (key: string, va
                     key={setting.id}
                     setting={setting}
                     value={value}
-                    onChange={(e) => onChange(setting.name, e.target.checked ? 'on' : 'off')}
+                    onChange={(e) => onChange(setting.name, e.target.checked ? 'on' : 'off', setting.label)}
                 />
             );
         default:

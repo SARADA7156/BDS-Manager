@@ -1,7 +1,7 @@
-import type { SettingOptions, TabDataSchema } from "../../types/InstanceSetting/settingTab";
+import type { PreviewData, SettingOptions, TabDataSchema } from "../../types/InstanceSetting/InstanceSetting";
 
-export const initializeFormData = (config: TabDataSchema[]): Record<string, string> => {
-    const initialData: Record<string, string> = {};
+export const initializeFormData = (config: TabDataSchema[]): PreviewData[] => {
+    const initialData: PreviewData[] = [];
 
     config.forEach(tab => {
         tab.settings.forEach(setting => {
@@ -38,7 +38,7 @@ export const initializeFormData = (config: TabDataSchema[]): Record<string, stri
                         break;
                 }
 
-                initialData[setting.name] = defaultValue;
+                initialData.push({ key: setting.name, value: defaultValue, label: setting.label});
             }
         });
     });
