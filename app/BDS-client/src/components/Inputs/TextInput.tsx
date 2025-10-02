@@ -1,19 +1,18 @@
 import type React from "react";
 import { formatLabel } from "../../utils/format/formatText";
+import type { Setting } from "../../types/InstanceSetting/settingTab";
 
 interface TextInputProps {
-    id: string;
-    label: string;
-    name: string;
+    setting: Setting;
     value: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const Textinput = ({ id, label, name, value, onChange }: TextInputProps) => {
+export const Textinput = ({ setting, value, onChange }: TextInputProps) => {
     return (
-        <div className="d-grid">
-            <label htmlFor={id}>{formatLabel(label)}</label>
-            <input type="text" id={id} value={value} name={name} onChange={onChange} />
+        <div className="d-grid pb-2">
+            <label htmlFor={setting.id}>{formatLabel(setting.label)}</label>
+            <input type="text" id={setting.id} value={value} name={setting.name} required={setting.required} onChange={onChange} />
         </div>
     )
 }

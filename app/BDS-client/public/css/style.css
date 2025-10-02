@@ -215,14 +215,6 @@ input {
     border-bottom: solid 1px var(--border-color-normal) !important;
 }
 
-.modal {
-    background-color: rgba(0, 0, 0, 0.363);
-}
-
-.modal.active {
-    display: flex;
-}
-
 /* アニメーション定義 */
 @keyframes hue-rotate-glow {
     0% {

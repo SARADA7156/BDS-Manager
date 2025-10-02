@@ -2,7 +2,7 @@ import { initializeFormData } from "../../../utils/instanceSetting/formDataIniti
 import type { TabDataSchema } from "../../../types/InstanceSetting/settingTab";
 import { settingTabs } from '../../../config/bedrock.json';
 import { useState } from "react";
-import { Textinput } from "../../Inputs/TextInput";
+import RenderInput from "./RenderInput";
 
 interface TabProps {
     activeTab: string;
@@ -22,23 +22,12 @@ const SettingTabs = ({activeTab}: TabProps) => {
                 <div id={tab.id} key={tab.id} className={`${activeTab === tab.id ? 'active' : ''} settings p-2`}>
                     <h4 className="border-bottom">{tab.label}</h4>
                     <ul>
-                        {tab.settings.map((setting) => {
-                            switch(setting.type) {
-                                case 'text':
-                                    return (
-                                        <Textinput
-                                        id={setting.id}
-                                        key={setting.id}
-                                        label={setting.label}
-                                        name={setting.name}
-                                        value={formData[setting.name]}
-                                        onChange={(e) => handleChange(setting.name, e.target.value)}
-                                        />
-                                    );
-                                default:
-                                    return null;
-                            }
-                        })}
+                        {tab.settings.map((setting) =>
+                            <li key={`list-${setting.id}`}>
+                                {RenderInput(setting, formData[setting.name], handleChange)}
+                            </li>
+                            
+                        )}
                     </ul>
                 </div>
             ))}

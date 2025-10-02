@@ -19,11 +19,19 @@ export const initializeFormData = (config: TabDataSchema[]): Record<string, stri
                         }
                         break;
                     case "radio":
-                    case "switch":
                         // typeがradioまたはswitchの際は、checkedの値がtrueのoptionsのvalueを初期値とする
                         const checkedOption: SettingOptions | undefined = setting.options.find(opt => opt.checked === true);
                         if (checkedOption && checkedOption.value !== undefined) {
                             defaultValue = checkedOption.value;
+                        }
+                        break;
+                    case "switch":
+                        // checkedの真偽値によってon/offを切り替える
+                        const isChecked: SettingOptions | undefined = setting.options.find(opt => opt.checked);
+                        if (isChecked && isChecked.checked && isChecked.value) {
+                            defaultValue = isChecked.value;
+                        } else {
+                            defaultValue = 'off';
                         }
                         break;
                     default:

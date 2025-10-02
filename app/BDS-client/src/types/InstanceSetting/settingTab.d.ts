@@ -4,7 +4,7 @@ export type TabDataSchema = {
     settings: Setting[]
 }
 
-type Setting = {
+export type Setting = {
     id: string;
     name: string;
     type: 'text' | 'number' | 'radio' | 'switch';
