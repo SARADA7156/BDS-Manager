@@ -38,7 +38,7 @@ export const initializeFormData = (config: TabDataSchema[]): PreviewData[] => {
                         break;
                 }
 
-                initialData.push({ key: setting.name, value: defaultValue, label: setting.label});
+                initialData.push({ key: setting.name, value: defaultValue, label: setting.label, required: setting.required});
             }
         });
     });

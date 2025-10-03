@@ -1,7 +1,8 @@
 import type React from "react";
 import { formatLabel } from "../../utils/format/formatText";
 import type { Setting } from "../../types/InstanceSetting/InstanceSetting";
-import { useState } from "react";
+import { isRequired, isValid } from "../../utils/validation";
+import { useSettingErrors } from "../../contexts/InstanceSettingContexts";
 
 interface NumberInputProps {
     setting: Setting;
@@ -10,26 +11,26 @@ interface NumberInputProps {
 }
 
 export const NumberInput = ({ setting, value, onChange }: NumberInputProps) => {
-    const [error, setError] = useState<string | null>(null);
+    const {errors, updateError, clearError } = useSettingErrors();
 
     // バリデーションラッパー関数を定義
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
         let newValue: string = e.target.value;
 
-        newValue = newValue.trim(); // 前後の空白を削除
+        newValue = newValue.trim();
 
-        if (newValue.length === 0 && setting.required) {
-            setError('入力必須項目です。');
+        if (isRequired(newValue) && setting.required) {
+            updateError(setting.name, '入力必須項目です。');
             return;
         }
 
         const validCharacters = /^[0-9]*$/; // 半角数字のみ有効
-        if (!validCharacters.test(newValue)) {
-            setError('半角数字のみ有効です。');
+        if (!isValid(newValue, validCharacters)) {
+            updateError(setting.name, '半角数字のみ有効です。');
             return;
         }
 
-        setError(null);
+        clearError(setting.name);
     }
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,11 +48,11 @@ export const NumberInput = ({ setting, value, onChange }: NumberInputProps) => {
                     value={value} name={setting.name}
                     required={setting.required}
                     onChange={handleInputChange}
-                    onBlur={handleChange}
-                    className={error ? 'inputError' : ''}
+                    onBlur={handleBlur}
+                    className={errors[setting.name] ? 'inputError' : ''}
                 />
                 <p>{setting.options[0].label ? setting.options[0].label : ''}</p>
-                {error && (<p className="setting-error-msg">※{error}</p>)}
+                {errors[setting.name] && (<p className="setting-error-msg">※{errors[setting.name]}</p>)}
             </div>
         </div>
     )

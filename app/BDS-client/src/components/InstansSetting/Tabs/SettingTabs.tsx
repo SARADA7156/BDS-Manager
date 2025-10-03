@@ -1,34 +1,27 @@
-import { initializeFormData } from "../../../utils/instanceSetting/formDataInitializer";
 import type { PreviewData, TabDataSchema } from "../../../types/InstanceSetting/InstanceSetting";
-import { settingTabs } from '../../../config/bedrock.json';
-import { useEffect, useState } from "react";
 import RenderInput from "./RenderInput";
 import { formatLabel } from "../../../utils/format/formatText";
 
 interface TabProps {
     activeTab: string;
-    setActiveTab: (index: string) => void;
+    tabs: TabDataSchema[];
+    previewData: PreviewData[];
+    setPreviewData: React.Dispatch<React.SetStateAction<PreviewData[]>>
 }
 
-const SettingTabs = ({activeTab, setActiveTab}: TabProps) => {
-    const tabs = settingTabs as TabDataSchema[];
-    const [previewData, setPreviewData] = useState<PreviewData[]>(initializeFormData(tabs));
+const SettingTabs = ({activeTab, tabs, previewData, setPreviewData}: TabProps) => {
 
-    const handleChange = (key: string, value: string, label: string) => {
+    const handleChange = (key: string, value: string, label: string, required: boolean) => {
         setPreviewData(prev => {
             const exists = prev.find(item => item.key === key);
             if (exists) {
                 return prev.map(item => 
-                    item.key === key ? { ...item, value, label } : item
+                    item.key === key ? { ...item, value, label, required } : item
                 );
             }
-            return [...prev, { key, value, label }];
+            return [...prev, { key, value, label, required }];
         });
     }
-
-    useEffect(() => {
-        console.log(previewData);
-    }, [previewData]);
 
     return (
         <div>
@@ -65,10 +58,6 @@ const SettingTabs = ({activeTab, setActiveTab}: TabProps) => {
                         </tbody>
                     </table>
                 </div>
-            </div>
-
-            <div id="btns" className="p-2 d-flex justify-content-end">
-                <button className="btn" onClick={() => setActiveTab('preview')}>確認と作成</button>
             </div>
         </div>
     )

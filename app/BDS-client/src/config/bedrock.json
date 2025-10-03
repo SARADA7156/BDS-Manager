@@ -18,7 +18,7 @@
                     "type": "text",
                     "label": "[b]インスタンス名: [bE]インスタンス名を定義します。",
                     "options": [
-                        { "optId": "instance-name", "checked": false }
+                        { "optId": "instance-name", "validatonRules": "str", "checked": false }
                     ],
                     "required": true,
                     "edit": false
@@ -29,7 +29,7 @@
                     "type": "text",
                     "label": "[b]ワールド名: [bE]ワールド名を定義します。空白の場合はデフォルトで[code]Dedicated-Server[codeE]となります。",
                     "options": [
-                        { "optId": "world-name", "value": "Dedicated-Server", "checked": false }
+                        { "optId": "world-name", "value": "Dedicated-Server", "validatonRules": "str", "checked": false }
                     ],
                     "required": false,
                     "edit": true
@@ -140,10 +140,10 @@
                 {
                     "id": "level-seed",
                     "name": "levelSeed",
-                    "type": "number",
-                    "label":"[b]シード値[bE]",
+                    "type": "text",
+                    "label":"[b]シード値: [bE]半角の数字で入力してください。",
                     "options": [
-                        { "optId": "level-seed-opt", "checked": false }
+                        { "optId": "level-seed-opt", "validatonRules": "/^[0-9]*$/", "checked": false }
                     ],
                     "required": false,
                     "edit": false

@@ -20,6 +20,7 @@ type SettingOptions = {
     label?: string;
     min?: string;
     max?: string;
+    validatonRules?: string;
     checked: boolean;
 }
 
@@ -27,4 +28,5 @@ export type PreviewData = {
     key: string;
     value: string;
     label: string;
+    required: boolean;
 }

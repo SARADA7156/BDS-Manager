@@ -68,8 +68,7 @@
     display: block;
 }
 
-input[type=text],
-#level-seed {
+input[type=text] {
     max-width: 60%;
     min-width: 60%;
 }

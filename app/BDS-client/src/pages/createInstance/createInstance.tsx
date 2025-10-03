@@ -1,5 +1,6 @@
 import './createInstance.css';
 import InstanceSetting from '../../components/InstansSetting/InstanceSetting';
+import { ErrorProvider } from '../../contexts/InstanceSettingContexts';
 
 const Create = () => {
     return (
@@ -7,10 +8,12 @@ const Create = () => {
             <h2 id="page-title">サーバーインスタンスを追加</h2>
             <div className="p-2 rounded" id="createInstanceForm">
                 <h3 className="mt-2 border-bottom">設定</h3>
-                <InstanceSetting/>
+                <ErrorProvider>
+                    <InstanceSetting/>
+                </ErrorProvider>
             </div>
         </div>
-    )
+    );
 }
 
 export default Create;
