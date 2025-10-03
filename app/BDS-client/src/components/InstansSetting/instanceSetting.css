@@ -68,10 +68,33 @@
     display: block;
 }
 
-input[type=text] {
+input[type=text],
+#level-seed {
     max-width: 60%;
+    min-width: 60%;
 }
 
 input[type=number] {
-    max-width: 70px;
+    max-width: 100px;
+}
+
+input.inputError {
+    border: solid 2px #ff4444be;
+    border-radius: 5px;
+}
+
+.setting-error-msg {
+    color: #ff4444;
+    animation: 0.5s error ease;
+}
+
+@keyframes error {
+    0% { transform: translateX(0); }
+    15% { transform: translateX(2px); }
+    30% { transform: translateX(-2px); }
+    45% { transform: translateX(2px); }
+    60% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
+    85% { transform: translateX(0); }
+    100% { transform: translateX(0); }
 }

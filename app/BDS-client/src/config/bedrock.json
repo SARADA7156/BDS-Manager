@@ -27,9 +27,9 @@
                     "id": "world-name",
                     "name": "worldName",
                     "type": "text",
-                    "label": "[b]ワールド名: [bE]ワールド名を定義します。空白の場合はデフォルトで[code]Dedicated Server[codeE]となります。",
+                    "label": "[b]ワールド名: [bE]ワールド名を定義します。空白の場合はデフォルトで[code]Dedicated-Server[codeE]となります。",
                     "options": [
-                        { "optId": "world-name", "value": "Dedicated Server", "checked": false }
+                        { "optId": "world-name", "value": "Dedicated-Server", "checked": false }
                     ],
                     "required": false,
                     "edit": true
@@ -140,7 +140,7 @@
                 {
                     "id": "level-seed",
                     "name": "levelSeed",
-                    "type": "text",
+                    "type": "number",
                     "label":"[b]シード値[bE]",
                     "options": [
                         { "optId": "level-seed-opt", "checked": false }
