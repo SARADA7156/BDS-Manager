@@ -7,10 +7,10 @@ interface TabProps {
     tabs: TabDataSchema[];
     previewData: PreviewData[];
     setPreviewData: React.Dispatch<React.SetStateAction<PreviewData[]>>
+    handleClick: () => void
 }
 
-const SettingTabs = ({activeTab, tabs, previewData, setPreviewData}: TabProps) => {
-
+const SettingTabs = ({activeTab, tabs, previewData, setPreviewData, handleClick}: TabProps) => {
     const handleChange = (key: string, value: string, label: string, required: boolean) => {
         setPreviewData(prev => {
             const exists = prev.find(item => item.key === key);
@@ -57,6 +57,9 @@ const SettingTabs = ({activeTab, tabs, previewData, setPreviewData}: TabProps) =
                         )}
                         </tbody>
                     </table>
+                    <div className="d-flex justify-content-start">
+                        <button className="btn" onClick={() => handleClick()}>作成</button>
+                    </div>
                 </div>
             </div>
         </div>

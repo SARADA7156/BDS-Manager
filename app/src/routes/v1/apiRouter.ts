@@ -1,12 +1,10 @@
 import { Router } from "express";
 
 const router = Router();
-import create from './api/createInstance/instance';
-import settingTabs from './api/createInstance/settingTabs';
+import instance from './api/instance/instance';
 import sidebar from './api/ui/sidebarNav';
 
 router.use('/sidebar', sidebar);
-router.use('/instance/setting', settingTabs);
-router.use('/instance/create', create);
+router.use('/instance/', instance);
 
 export default router;

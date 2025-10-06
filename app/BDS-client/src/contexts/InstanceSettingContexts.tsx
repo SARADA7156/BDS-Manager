@@ -15,7 +15,7 @@ export const ErrorProvider = ({ children }: { children: ReactNode }) => {
         }));
     };
 
-    // すべてのエラーをクリアする関数
+    // エラーをクリアする関数
     const clearError = (name: string) => {
         setErrors(prevErrors => {
             const newErrors = { ...prevErrors };

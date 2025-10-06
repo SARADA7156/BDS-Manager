@@ -6,6 +6,8 @@ import SideNav from './components/SideNav/SideNav';
 import Dashboard from './pages/dashboard/Dashboard';
 import { useEffect, useState } from 'react';
 import Create from './pages/createInstance/createInstance';
+import { NotificationsProvider } from './contexts/NotificationsContext';
+import { NotificationsContainer } from './components/Notice/NotificationsContainer';
 
 
 function App() {
@@ -30,20 +32,23 @@ function App() {
 
     return (
         <>
-            {showHeader && <Header isOpen={isOpen}/>}
-            <div>
-                {showSideNav && <SideNav isOpen={isOpen} onToggle={toggleMenu} />}
-                <main className='p-0 d-grid'>
-                    <div className={showSideNav ? `main-container row justify-content-center ${isOpen ? 'nav-active' : 'nav-no-active'}` : ''}>
-                        <Routes>
-                            <Route path='/' element={<HomePage />}></Route>
-                            <Route path='/dashboard' element={<Dashboard />}></Route>
-                            <Route path='/createInstance' element={<Create />}></Route>
-                        </Routes>
-                    </div>
-                </main>
-                {showFooter && <Footer />}
-            </div>
+            <NotificationsProvider>
+                {showHeader && <Header isOpen={isOpen}/>}
+                <div>
+                    {showSideNav && <SideNav isOpen={isOpen} onToggle={toggleMenu} />}
+                    <main className='p-0 d-grid'>
+                        <div className={showSideNav ? `main-container row justify-content-center ${isOpen ? 'nav-active' : 'nav-no-active'}` : ''}>
+                            <Routes>
+                                <Route path='/' element={<HomePage />}></Route>
+                                <Route path='/dashboard' element={<Dashboard />}></Route>
+                                <Route path='/createInstance' element={<Create />}></Route>
+                            </Routes>
+                        </div>
+                    </main>
+                    {showFooter && <Footer />}
+                    <NotificationsContainer/>
+                </div>
+            </NotificationsProvider>
         </>
     )
 }

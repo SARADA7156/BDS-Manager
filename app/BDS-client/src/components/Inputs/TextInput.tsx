@@ -27,7 +27,7 @@ export const Textinput = ({ setting, value, onChange }: TextInputProps) => {
 
         const validatonRule = setting.options[0].validatonRules;
 
-        if (validatonRule && !isValid(newValue, toRegExp(validatonRule))) {
+        if (validatonRule && !isValid(newValue, toRegExp(validatonRule)) && setting.required) {
             console.log(validatonRule)
             updateError(setting.name, '無効な値が入力されました。');
             return;

@@ -24,6 +24,20 @@ export const NumberInput = ({ setting, value, onChange }: NumberInputProps) => {
             return;
         }
 
+        // string型の数字を数値データへ変換
+        const numValue = Number(newValue);
+
+        const max = setting.options[0].max; // スキーマの入力上限
+        const min = setting.options[0].min; // スキーマの入力下限
+        // 入力上限・下限よりも多いまたは少ない場合はエラーを出す。
+        if (max && numValue > Number(max)) {
+            updateError(setting.name, `最大値は${max}です。${max}以下の値を入力してください。`);
+            return;
+        } else if (min && numValue < Number(min)) {
+            updateError(setting.name, `最小値は${min}です。${min}以上の値を入力してください。`);
+            return;
+        }
+
         const validCharacters = /^[0-9]*$/; // 半角数字のみ有効
         if (!isValid(newValue, validCharacters)) {
             updateError(setting.name, '半角数字のみ有効です。');
@@ -50,6 +64,8 @@ export const NumberInput = ({ setting, value, onChange }: NumberInputProps) => {
                     onChange={handleInputChange}
                     onBlur={handleBlur}
                     className={errors[setting.name] ? 'inputError' : ''}
+                    max={setting.options[0].max}
+                    min={setting.options[0].min}
                 />
                 <p>{setting.options[0].label ? setting.options[0].label : ''}</p>
                 {errors[setting.name] && (<p className="setting-error-msg">※{errors[setting.name]}</p>)}

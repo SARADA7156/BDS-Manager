@@ -1,5 +1,6 @@
 import { settingLists } from '../../../config/bedrock.json';
 import { useSettingErrors } from '../../../contexts/InstanceSettingContexts';
+import { useNotifications, type NotificationsContext } from '../../../contexts/NotificationsContext';
 
 interface ListData {
     id: string;
@@ -16,10 +17,20 @@ const SettingLists = ({ activeTab, setActiveTab }: ActiveTabProps) => {
 
     const { hasErrors } = useSettingErrors();
 
+    const context: NotificationsContext = useNotifications();
+    if (!context) return null;
+    const { addNotification } = context;
+
     // エラーがない時だけタブを切り替える
     const handleClick = (id: string) => {
         if (!hasErrors) {
             setActiveTab(id);
+        } else {
+            addNotification(
+                '正しいデータが入力されていないため、タブ切り替えがブロックされました。正しいデータを入力してください。',
+                'warning',
+                6000
+            )
         }
     }
 

@@ -1,0 +1,67 @@
+@charset "UTF-8";
+
+.notifications {
+    width: 400px;
+    align-items: center;
+    grid-template-columns: auto 18px;
+    align-items: start;
+    animation: 0.3s notice-fade-in ease-in-out;
+}
+
+.close-btn {
+    color: #fff;
+    cursor: pointer;
+}
+
+.level-info .notice-content {
+    color: var(--bg-color-green);
+}
+
+.level-warning .notice-content {
+    color: yellow;
+}
+
+.level-error .notice-content {
+    color: red;
+}
+
+.notifications-container .close-btn {
+    font-size: 18px;
+    padding: 0;
+}
+
+.notice-message {
+    color: #fff;
+}
+
+.progress {
+    height: 4px;
+}
+
+.progress-bar {
+    background-color: var(--bg-color-green);
+    transition: none;
+}
+.progress-bar.time-5000ms {
+    animation: 5s progress-bar linear;
+}
+
+.progress-bar.time-6000ms {
+    animation: 6s progress-bar linear;
+}
+
+@keyframes notice-fade-in {
+    0% {
+        opacity: 0;
+        transform: translateX(6px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes progress-bar {
+    0% { width: 100%; }
+    100% { width: 0%; }
+}
