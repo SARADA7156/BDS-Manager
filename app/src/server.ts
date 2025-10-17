@@ -1,10 +1,7 @@
 import express, { ErrorRequestHandler } from 'express';
 import session from 'express-session';
 import { createServer } from 'http';
-import livereload from 'livereload';
-import connectLivereload from 'connect-livereload';
 import path from 'path';
-import ejs from 'ejs';
 import dotenv from 'dotenv';
 import readline from 'readline';
 import settings from './config/serverSettings.json';
@@ -23,7 +20,6 @@ import { shutdown } from './services/process/shutdown';
 import { logger } from './services/log/logger'; // ロガー関数をインポート
 import { handler } from './services/cli/cliHandler';
 import { DatabaseConnection } from "./services/db/mysqld/DatabaseConnection";
-import pageRouter from './routes/PageRouter';
 import apiRouter from './routes/apiRouter';
 import { MongoConnection } from './services/db/mongod/MongoConnection';
 

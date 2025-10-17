@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import Create from './pages/createInstance/createInstance';
 import { NotificationsProvider } from './contexts/NotificationsContext';
 import { NotificationsContainer } from './components/Notice/NotificationsContainer';
+import Login from './pages/login/Login';
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
                         <div className={showSideNav ? `main-container row justify-content-center ${isOpen ? 'nav-active' : 'nav-no-active'}` : ''}>
                             <Routes>
                                 <Route path='/' element={<HomePage />}></Route>
+                                <Route path='/login' element={<Login />}></Route>
                                 <Route path='/dashboard' element={<Dashboard />}></Route>
                                 <Route path='/createInstance' element={<Create />}></Route>
                             </Routes>

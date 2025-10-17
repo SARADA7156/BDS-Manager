@@ -1,5 +1,19 @@
 {
-    "environment": ["VERSION", "PORT", "LOG_LEVEL", "WEBHOOK_URL", "DATABASE", "DB_USER", "USER_PASSWORD", "DB_PORT", "SESSION_SECRET", "JWT_SECRET", "MONGO_PORT", "MONGO_URL"],
+    "environment": [
+        "VERSION",
+        "PORT",
+        "LOG_LEVEL",
+        "WEBHOOK_URL",
+        "DATABASE",
+        "DB_USER", 
+        "USER_PASSWORD",
+        "DB_PORT",
+        "SESSION_SECRET",
+        "JWT_ACCESS_SECRET",
+        "JWT_REFRESH_SECRET",
+        "MONGO_PORT",
+        "MONGO_URL"
+    ],
     "fullBackupTime": {
         "second": "0",
         "minute": "30",
