@@ -9,6 +9,7 @@ const SPECIFIC_DOMAIN_REGEX = /^[a-zA-Z0-9._%+-]+@(gmail\.com|icloud\.com)$/i; /
 const Login = () => {
     const [state, setState] = useState<'input' | 'loading' | 'complete' | 'error'>('input');
     const [email, setEmail] = useState('');
+    const [maskEmail, setMaskEmail] = useState('');
     const [isValid, setIsValid] = useState<null | boolean>(null);
     const [isError, setIsError] = useState<null | string>(null);
 
@@ -46,12 +47,12 @@ const Login = () => {
         setState('loading');
 
         try {
-            await verifyEmail(email);
-            console.log('hoge');
+            const result = await verifyEmail(email); // Emailが存在するか検証し送信しマスキングされたメールアドレスを格納
+            setMaskEmail(result);
+
             setTimeout(() => {
                 setState('complete');
             }, 2000);
-            
         } catch(error) {
             setState('error');
             console.error('メールアドレスの送信に失敗しました。');
@@ -83,7 +84,7 @@ const Login = () => {
                 <div className='text-center'>
                     <h2 >あともう少しです！</h2>
                     <div className='bg-dark2 p-2'>
-                        <p>入力されたメールアドレスにログイン用のリンクを送信しました。</p>
+                        <p>{maskEmail}にログイン用のリンクを送信しました。</p>
 
                         <h5 className='mt-4'>メールが届きませんか?</h5>
                         <p>迷惑メールBOXを確認するか再送信ボタンを押してください。</p>

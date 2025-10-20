@@ -12,7 +12,11 @@
         "JWT_ACCESS_SECRET",
         "JWT_REFRESH_SECRET",
         "MONGO_PORT",
-        "MONGO_URL"
+        "MONGO_URL",
+        "GMAIL_USER",
+        "GMAIL_PASS",
+        "ICLOUD_USER",
+        "ICLOUD_PASS"
     ],
     "fullBackupTime": {
         "second": "0",

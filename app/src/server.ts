@@ -22,10 +22,13 @@ import { handler } from './services/cli/cliHandler';
 import { DatabaseConnection } from "./services/db/mysqld/DatabaseConnection";
 import apiRouter from './routes/apiRouter';
 import { MongoConnection } from './services/db/mongod/MongoConnection';
+import { UserService } from './services/db/mysqld/Service/UserService';
+import { ServiceContainer } from './containers/ServiceContainer';
 
 declare global {
     namespace Express {
         interface Request {
+            services: import('./containers/ServiceContainer').ServiceContainer;
             // manager: ServerManager;
             // fullBackup: FullBackup;
             // rsyncBackup: RsyncBackup;
@@ -58,9 +61,9 @@ export async function bootstrap() {
     // 環境変数を読み込み
     const VERSION = process.env.VERSION!;
     const PORT = process.env.PORT!;
-    const WEBHOOK_URL = process.env.WEBHOOK_URL!;
 
     const app = express();
+    const services = new ServiceContainer(); // すべてのサービスをインスタンス化
     const httpServer = createServer(app);
 
     let serverDir: string = settings.serverDir;
@@ -93,25 +96,10 @@ export async function bootstrap() {
 
     const serverBin: string = './bedrock_server'; // 実行ファイルのパスと名前
 
-    // 各機能のクラスをインスタンス化
-    // const fullBackup: FullBackup = new FullBackup(manager, discordNotifier, isMode); // フルバックアップの機能のインスタンス
-    // const rsyncBackup: RsyncBackup = new RsyncBackup(manager, discordNotifier, isMode); // 差分バックアップ機能のインスタンス
-    // const fullBackupCron: BackupCronManager = new BackupCronManager(fullBackup); // フルバックアップのcron機能のインスタンスを生成
-    // const rsyncBackupCron: BackupCronManager = new BackupCronManager(rsyncBackup); // 差分バックアップのcron機能のインスタンスを生成
-
-    // manager.firstLaunch(); // サーバー初回起動時に環境をセットアップ
-
-    // const fbJobTime = settings.fullBackupTime; // フルバックアップのcron時間設定を格納
-    // const rbJobTime = settings.rsyncBackupTime; // 差分バックアップのcron時間設定を格納
-    // fullBackupCron.addJob('defaultFullBackup', `${fbJobTime.second} ${fbJobTime.minute} ${fbJobTime.hour} * * *`);
-    // rsyncBackupCron.addJob('defaultRsyncBackup', `${rbJobTime.second} ${rbJobTime.minute} ${rbJobTime.hour} * * *`);
-
-    // app.use((req, res, next) => {
-    //     req.manager = manager;
-    //     req.fullBackup = fullBackup;
-    //     req.rsyncBackup = rsyncBackup;
-    //     next();
-    // });
+    app.use((req, res, next) => {
+        req.services = services;
+        next();
+    });
 
     app.use('/api', apiRouter);
 

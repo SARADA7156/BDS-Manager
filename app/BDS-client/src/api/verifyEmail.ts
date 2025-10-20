@@ -1,4 +1,8 @@
-export async function verifyEmail(email: string) {
+type VerifyResponse = {
+    maskedEmail: string;
+}
+
+export async function verifyEmail(email: string): Promise<string> {
     const API_URL: string = import.meta.env.VITE_LOGIN_URL;
 
     try {
@@ -11,7 +15,10 @@ export async function verifyEmail(email: string) {
         if (!response.ok) {
             throw new Error('リクエストの送信に失敗しました。');
         }
-        return;
+
+        const resData: VerifyResponse = await response.json();
+
+        return resData.maskedEmail;
     } catch (error) {
         console.error('致命的なエラー:', error);
         throw error;
