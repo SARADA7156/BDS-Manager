@@ -14,9 +14,7 @@
         "MONGO_PORT",
         "MONGO_URL",
         "GMAIL_USER",
-        "GMAIL_PASS",
-        "ICLOUD_USER",
-        "ICLOUD_PASS"
+        "GMAIL_PASS"
     ],
     "fullBackupTime": {
         "second": "0",

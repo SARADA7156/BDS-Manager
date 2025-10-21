@@ -4,7 +4,7 @@ export interface User {
     id: number;
     name: string;
     email: string;
-    permission: 'operator' | 'member';
+    permission: 'admin' | 'operator' | 'member';
 }
 
 export class UserRepository {

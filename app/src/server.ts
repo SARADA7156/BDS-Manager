@@ -22,7 +22,6 @@ import { handler } from './services/cli/cliHandler';
 import { DatabaseConnection } from "./services/db/mysqld/DatabaseConnection";
 import apiRouter from './routes/apiRouter';
 import { MongoConnection } from './services/db/mongod/MongoConnection';
-import { UserService } from './services/db/mysqld/Service/UserService';
 import { ServiceContainer } from './containers/ServiceContainer';
 
 declare global {

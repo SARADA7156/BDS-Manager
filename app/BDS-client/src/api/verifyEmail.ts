@@ -6,7 +6,7 @@ export async function verifyEmail(email: string): Promise<string> {
     const API_URL: string = import.meta.env.VITE_LOGIN_URL;
 
     try {
-        const response = await fetch(API_URL, {
+        const response = await fetch(`${API_URL}/request`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: email }),

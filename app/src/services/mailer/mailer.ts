@@ -28,28 +28,3 @@ export class GmailSender implements MailService {
         });
     }
 }
-
-// icloud専用のクラス
-export class IcloudSender implements MailService {
-    private transporter: nodemailer.Transporter;
-
-    constructor(user: string, pass: string) {
-        this.transporter = nodemailer.createTransport({
-            service: 'icloud',
-            auth: {
-                user: user,
-                pass: pass,
-            },
-        });
-    }
-
-    public async send(to: string, subject: string, body: string, html?: string): Promise<void> {
-        await this.transporter.sendMail({
-            from: 'BDS-Manager',
-            to: to,
-            subject: subject,
-            text: body,
-            html: html
-        });
-    }
-}

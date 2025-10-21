@@ -8,13 +8,14 @@ import { useEffect, useState } from 'react';
 import Create from './pages/createInstance/createInstance';
 import { NotificationsProvider } from './contexts/NotificationsContext';
 import { NotificationsContainer } from './components/Notice/NotificationsContainer';
+import { VerifyToken } from './pages/verifyToken/VerifyToken';
 import Login from './pages/login/Login';
 
 
 function App() {
     const location = useLocation();
-    const noHeaderPaths = ['/', '/login', '/error']; // ヘッダーを表示しないパス
-    const noSideNavPaths = ['/', '/login', '/error']; // サイドナビゲーションを表示しないパス
+    const noHeaderPaths = ['/', '/login', '/error', '/auth/login/token']; // ヘッダーを表示しないパス
+    const noSideNavPaths = ['/', '/login', '/error', '/auth/login/token']; // サイドナビゲーションを表示しないパス
 
     const showHeader = !noHeaderPaths.includes(location.pathname);
     const showSideNav = !noSideNavPaths.includes(location.pathname);
@@ -42,6 +43,7 @@ function App() {
                             <Routes>
                                 <Route path='/' element={<HomePage />}></Route>
                                 <Route path='/login' element={<Login />}></Route>
+                                <Route path='/auth/login/token' element={<VerifyToken />}></Route>
                                 <Route path='/dashboard' element={<Dashboard />}></Route>
                                 <Route path='/createInstance' element={<Create />}></Route>
                             </Routes>

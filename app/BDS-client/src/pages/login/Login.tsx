@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { EmailInput } from '../../components/Inputs/EmailInput';
 import './login.css';
 import { verifyEmail } from '../../api/verifyEmail';
 import Loader from '../../components/loader/Loader';
+import { Input } from './Input';
+import { Complete } from './Complete';
 
 const SPECIFIC_DOMAIN_REGEX = /^[a-zA-Z0-9._%+-]+@(gmail\.com|icloud\.com)$/i; // Gmail/iCloud 専用の正規表現
 
@@ -67,13 +68,7 @@ const Login = () => {
     return (
         <div className='bg-dark2 center p-3' id='login-container'>
             {state === 'input' &&
-                <div>
-                    <h2 className='text-center'>サインイン</h2>
-                    <form className='bg-dark2 p-2 d-grid'>
-                        <EmailInput onChange={handleChange} isError={isError}/>
-                        <button className={`btn box-border mt-3 ${isValid ? 'active' : 'no-active'}`} onClick={handleClick}>サインイン</button>
-                    </form>
-                </div>
+                <Input isValid={isValid} isError={isError} handleChange={handleChange} handleClick={handleClick} />
             }
 
             {state === 'loading' &&
@@ -81,15 +76,13 @@ const Login = () => {
             }
 
             {state === 'complete' &&
-                <div className='text-center'>
-                    <h2 >あともう少しです！</h2>
-                    <div className='bg-dark2 p-2'>
-                        <p>{maskEmail}にログイン用のリンクを送信しました。</p>
+                <Complete maskEmail={maskEmail} handleResendClick={handleResendClick} />
+            }
 
-                        <h5 className='mt-4'>メールが届きませんか?</h5>
-                        <p>迷惑メールBOXを確認するか再送信ボタンを押してください。</p>
-                        <button className='btn box-border mt-3' onClick={handleResendClick}>再送信</button>
-                    </div>
+            {state === 'error' &&
+                <div className='text-center'>
+                    <h2>メールアドレスの送信に失敗しました。</h2>
+                    <p>もう一度送信するか時間をおいてから再度送信してください。</p>
                 </div>
             }
         </div>
