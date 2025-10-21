@@ -2,6 +2,7 @@ import { Router } from "express";
 import { maskEmail } from "../../utils/maskEmail";
 import { logger } from "../../services/log/logger";
 import { isEmail } from "../../utils/validateEmail";
+import { Payload } from "../../types/jwt/payload";
 
 const router = Router();
 
@@ -33,7 +34,11 @@ router.post('/magic-login', async (req, res) => {
         const jwt = req.services.jwtService.signRefreshJwt({ userId: user.id, userName: user.name, permission: user.permission });
 
         // cookieにセットしてリダイレクト
-        res.cookie('auth_token', jwt, { httpOnly: true });
+        res.cookie('auth_token', jwt, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'lax'
+        });
         res.status(200).json({ redirectUrl: '/dashboard' });
 
     } catch (error) {
@@ -72,5 +77,31 @@ router.post('/request', async (req, res) => {
         logger.error('internal server error:', error);
     }
 });
+
+router.get('/refresh', async (req, res) => {
+    try {
+        const refreshToken = req.cookies.auth_token;
+        if (!refreshToken) return res.status(401).json({ status: 401, code: "Unauthorized", message: "リフレッシュトークンが存在しません。" });
+
+        const payload: Payload | null = req.services.jwtService.verifyToken(refreshToken, true);
+
+        if (!payload) {
+            return res.status(401).json({ status: 401, code: "Unauthorized", message: "無効なリフレッシュトークン" });
+        }
+
+        const newPayload: Payload = {
+            userId: payload.userId,
+            userName: payload.userName,
+            permission: payload.permission,
+        }
+
+        const newAccessToken = req.services.jwtService.signAccessJwt(newPayload);
+        res.status(200).json({ accessToken: newAccessToken });
+
+    } catch(error) {
+        res.status(500).json({ status: 500, code: "internal_server_error", message: "サーバー側で予期せぬエラーが発生しました。" });
+        console.error('internal server error:', error);
+    }
+})
 
 export default router;

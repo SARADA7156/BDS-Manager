@@ -1,5 +1,7 @@
 import express, { ErrorRequestHandler } from 'express';
 import session from 'express-session';
+import cors from 'cors';
+const cookiePerser = require('cookie-parser');
 import { createServer } from 'http';
 import path from 'path';
 import dotenv from 'dotenv';
@@ -92,6 +94,12 @@ export async function bootstrap() {
 
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json()); // jsonボディをパースするためのミドルウェアを設定
+    app.use(cookiePerser());
+
+    app.use(cors({
+        origin: 'http://localhost:5173',
+        credentials: true,
+    }));
 
     const serverBin: string = './bedrock_server'; // 実行ファイルのパスと名前
 
