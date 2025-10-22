@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { setAccessToken as axiosSetAccessToken } from "../api/axiosClient";
 
 interface AuthContextType {
     accessToken: string | null;
@@ -21,11 +22,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             if (response.ok) {
                 const data = await response.json();
                 setAccessToken(data.accessToken);
+                axiosSetAccessToken(data.accessToken);
             } else {
                 setAccessToken(null);
+                axiosSetAccessToken(null);
             }
         } catch {
             setAccessToken(null);
+            axiosSetAccessToken(null);
         } finally {
             setLoading(false);
         }
@@ -37,10 +41,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const login = (token: string) => {
         setAccessToken(token);
+        axiosSetAccessToken(token);
     }
 
     const logout = () => {
         setAccessToken(null);
+        axiosSetAccessToken(null);
     }
 
     const value = {

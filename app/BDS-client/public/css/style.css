@@ -145,6 +145,14 @@ footer {
     width: 50px
 }
 
+.BDS-emblem.vertical img {
+    margin: auto;
+}
+
+.BDS-emblem.vertical h2 {
+    margin: 0;
+}
+
 .material-icons {
     color: #fff;
 }
@@ -183,6 +191,10 @@ p {
 
 .bg-dark2 {
     background-color: var(--bg-color-black-2);
+}
+
+.bg-gray {
+    background-color: #414141;
 }
 
 .rounded {

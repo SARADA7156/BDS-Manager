@@ -1,5 +1,11 @@
 @charset "UTF-8";
 
 #login-container {
-    width: 30%;
+    width: 25%;
+    height: 45%;
+}
+
+#login-container input {
+    background-color: #f0f0f0;
+    border: 1px solid #fff;
 }

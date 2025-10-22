@@ -6,12 +6,10 @@ import SideNav from './components/SideNav/SideNav';
 import Dashboard from './pages/dashboard/Dashboard';
 import { useEffect, useState } from 'react';
 import Create from './pages/createInstance/createInstance';
-import { NotificationsProvider } from './contexts/NotificationsContext';
 import { NotificationsContainer } from './components/Notice/NotificationsContainer';
 import { VerifyToken } from './pages/verifyToken/VerifyToken';
 import Login from './pages/login/Login';
 import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
-import { AuthProvider } from './contexts/AuthContext';
 
 
 function App() {
@@ -36,34 +34,30 @@ function App() {
 
     return (
         <>
-        <AuthProvider>
-            <NotificationsProvider>
-                {showHeader && <Header isOpen={isOpen}/>}
-                <div>
-                    {showSideNav && <SideNav isOpen={isOpen} onToggle={toggleMenu} />}
-                    <main className='p-0 d-grid'>
-                        <div className={showSideNav ? `main-container row justify-content-center ${isOpen ? 'nav-active' : 'nav-no-active'}` : ''}>
-                            <Routes>
-                                <Route path='/' element={<HomePage />}></Route>
-                                <Route path='/login' element={<Login />}></Route>
-                                <Route path='/auth/login/token' element={<VerifyToken />}></Route>
+            {showHeader && <Header isOpen={isOpen}/>}
+            <div>
+                {showSideNav && <SideNav isOpen={isOpen} onToggle={toggleMenu} />}
+                <main className='p-0 d-grid'>
+                    <div className={showSideNav ? `main-container row justify-content-center ${isOpen ? 'nav-active' : 'nav-no-active'}` : ''}>
+                        <Routes>
+                            <Route path='/' element={<HomePage />}></Route>
+                            <Route path='/login' element={<Login />}></Route>
+                            <Route path='/auth/login/token' element={<VerifyToken />}></Route>
 
-                                <Route
-                                    path='/dashboard'
-                                    element={< ProtectedRoute element={<Dashboard />}/>}
-                                />
-                                <Route
-                                    path='/createInstance'
-                                    element={< ProtectedRoute element={<Create />}/>}
-                                />
-                            </Routes>
-                        </div>
-                    </main>
-                    {showFooter && <Footer />}
-                    <NotificationsContainer/>
-                </div>
-            </NotificationsProvider>
-        </AuthProvider>
+                            <Route
+                                path='/dashboard'
+                                element={< ProtectedRoute element={<Dashboard />}/>}
+                            />
+                            <Route
+                                path='/createInstance'
+                                element={< ProtectedRoute element={<Create />}/>}
+                            />
+                        </Routes>
+                    </div>
+                </main>
+                {showFooter && <Footer />}
+                <NotificationsContainer/>
+            </div>
         </>
     )
 }

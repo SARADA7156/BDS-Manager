@@ -21,11 +21,11 @@ export const Complete = ({ maskEmail, handleResendClick }: CompleteProps) => {
     return (
         <div className='text-center'>
             <h2 >あともう少しです！</h2>
-            <div className='bg-dark2 p-2'>
-                <p>{maskEmail}にログイン用のリンクを送信しました。<br/>※リンクは15分間有効です。</p>
+            <div className='p-2'>
+                <p>{maskEmail}にログイン用のリンクを送信しました。リンクをクリックしてログインしてください。<br/>※リンクは15分間有効です。</p>
 
                 <h5 className='mt-4'>メールが届きませんか?</h5>
-                <p>迷惑メールBOXを確認するか再送信ボタンを押してください。</p>
+                <p>迷惑メールBOXを確認するか、再送信ボタンを押してください。</p>
                 <button
                     disabled={isDisabled}
                     className={`btn mt-3 ${isDisabled ? 'no-active' : ''}`}

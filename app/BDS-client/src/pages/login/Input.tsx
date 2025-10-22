@@ -1,19 +1,20 @@
+import { Icon } from "../../components/Icon/Icon";
 import { EmailInput } from "../../components/Inputs/EmailInput"
 
 type InputProps = {
-    isValid: null | boolean;
     isError: null | string;
     handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleClick: (e: React.FormEvent<HTMLButtonElement>) => Promise<void>;
 }
 
-export const Input = ({ isValid, isError, handleChange, handleClick }: InputProps) => {
+export const Input = ({ isError, handleChange, handleClick }: InputProps) => {
     return (
-        <div>
-            <h2 className='text-center'>サインイン</h2>
-            <form className='bg-dark2 p-2 d-grid'>
+        <div className="h-100">
+            <Icon vertical={true} />
+            <h4 className="text-center mt-4">サインイン</h4>
+            <form className='p-2 d-grid'>
                 <EmailInput onChange={handleChange} isError={isError}/>
-                <button className={`btn box-border mt-3 ${isValid ? 'active' : 'no-active'}`} onClick={handleClick}>サインイン</button>
+                <button className={`btn box-border mt-3`} onClick={handleClick}>サインイン</button>
             </form>
         </div>
 

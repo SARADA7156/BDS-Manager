@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axiosClient from "../../api/axiosClient";
 import Loader from "../loader/Loader";
 import axios from "axios";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface SidenavProps {
     isOpen: boolean;
@@ -24,11 +25,15 @@ interface NavApiResponse {
 const SideNav = ({ isOpen, onToggle }: SidenavProps) => {
     const location = useLocation();
     const [lists, setLists] = useState<MenuItem[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [showLoader, setShowLoader] = useState(false);
+    const {loading, isAuthenticated} = useAuth();
 
     useEffect(() => {
+        if (loading) return;
+        if (!isAuthenticated) return;
+
         let timerId = setTimeout(() => {
             // 1秒後にローダーの表示を許可
             setShowLoader(true);
@@ -54,7 +59,7 @@ const SideNav = ({ isOpen, onToggle }: SidenavProps) => {
 
             // コンポーネントがアンマウントされた際にタイマーをクリア
             return () => clearTimeout(timerId);
-    }, []);
+    }, [loading, isAuthenticated]);
 
     return (
         <nav className={`bg-dark min-vh-100 ${isOpen ? 'active' : ''}`} id="sideNav">
@@ -65,7 +70,7 @@ const SideNav = ({ isOpen, onToggle }: SidenavProps) => {
                     </span>
                 </div>
 
-                {showLoader && loading && (
+                {showLoader && isLoading && (
                     <div>
                         <Loader/>
                         <div className="text-center">メニューの取得に時間がかかっています。</div>

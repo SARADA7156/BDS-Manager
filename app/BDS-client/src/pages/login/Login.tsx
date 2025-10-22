@@ -11,18 +11,15 @@ const Login = () => {
     const [state, setState] = useState<'input' | 'loading' | 'complete' | 'error'>('input');
     const [email, setEmail] = useState('');
     const [maskEmail, setMaskEmail] = useState('');
-    const [isValid, setIsValid] = useState<null | boolean>(null);
     const [isError, setIsError] = useState<null | string>(null);
 
     const validateEmail = (inputEmail: string) => {
         if (!inputEmail) {
-            setIsValid(null);
             return;
         }
 
         // 正規表現でテスト
         const result = SPECIFIC_DOMAIN_REGEX.test(inputEmail);
-        setIsValid(result);
         setIsError(result ? null : '無効なメールアドレスです。');
     }
 
@@ -66,9 +63,9 @@ const Login = () => {
     }
 
     return (
-        <div className='bg-dark2 center p-3' id='login-container'>
+        <div className='bg-dark center p-3' id='login-container'>
             {state === 'input' &&
-                <Input isValid={isValid} isError={isError} handleChange={handleChange} handleClick={handleClick} />
+                <Input isError={isError} handleChange={handleChange} handleClick={handleClick} />
             }
 
             {state === 'loading' &&

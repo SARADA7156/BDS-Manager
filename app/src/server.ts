@@ -25,11 +25,14 @@ import { DatabaseConnection } from "./services/db/mysqld/DatabaseConnection";
 import apiRouter from './routes/apiRouter';
 import { MongoConnection } from './services/db/mongod/MongoConnection';
 import { ServiceContainer } from './containers/ServiceContainer';
+import { Payload } from './types/jwt/payload';
+import { initSocket } from './services/webSocket';
 
 declare global {
     namespace Express {
         interface Request {
             services: import('./containers/ServiceContainer').ServiceContainer;
+            user?: Payload;
             // manager: ServerManager;
             // fullBackup: FullBackup;
             // rsyncBackup: RsyncBackup;
@@ -109,6 +112,8 @@ export async function bootstrap() {
     });
 
     app.use('/api', apiRouter);
+
+    initSocket(httpServer, services.jwtService);
 
     const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
         try {
