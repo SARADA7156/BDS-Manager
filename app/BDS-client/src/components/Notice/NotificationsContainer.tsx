@@ -28,9 +28,6 @@ export const NotificationsContainer = () => {
                             <span className="close-btn material-symbols-outlined iconBtn" onClick={() => removeNotification(n.id)}>close</span>
                         </div>
                     </div>
-                    <div className='progress' role='progressbar'>
-                        <div className={`progress-bar time-${n.duration}ms`}></div>
-                    </div>
                 </div>
             ))}
         </div>

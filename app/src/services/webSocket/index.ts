@@ -9,7 +9,11 @@ interface JwtService {
 }
 
 export function initSocket(httpServer: HttpServer, jwtService: JwtService): void {
-    const io = new Server(httpServer, { cors: { origin: '*' } });
+    const io = new Server(httpServer, {
+        cors: { origin: '*' },
+        pingInterval: 30000,
+        pingTimeout: 60000
+    });
     logger.info('🔌Starting to accept WebSocket connections...');
 
     // 接続前認証ミドルウェア

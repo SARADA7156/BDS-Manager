@@ -100,7 +100,7 @@ router.get('/refresh', async (req, res) => {
 
     } catch(error) {
         res.status(500).json({ status: 500, code: "internal_server_error", message: "サーバー側で予期せぬエラーが発生しました。" });
-        console.error('internal server error:', error);
+        logger.error('internal server error:', error);
     }
 })
 

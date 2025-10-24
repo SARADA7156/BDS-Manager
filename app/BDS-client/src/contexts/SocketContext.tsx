@@ -4,7 +4,7 @@ import { useAuth } from "./AuthContext";
 
 interface SocketContextType {
     socket: Socket | null;
-    isConnected: boolean;
+    isConnected: 'connected' | 'connecting' | 'disconnect';
 }
 
 const SocketContext = createContext<SocketContextType | undefined>(undefined);
@@ -13,7 +13,7 @@ const SOCKET_SERVER_URL: string = import.meta.env.VITE_SOCKET_URL;
 
 export const SocketProvider = ({children}: {children: ReactNode}) => {
     const [socket, setSocket] = useState<Socket | null>(null);
-    const [isConnected, setIsConnected] = useState(false);
+    const [isConnected, setIsConnected] = useState<'connected' | 'connecting' | 'disconnect'>('connecting');
     const {loading, isAuthenticated, accessToken} = useAuth(); // アクセストークンがセットされているかの状態
 
     useEffect(() => {
@@ -28,12 +28,12 @@ export const SocketProvider = ({children}: {children: ReactNode}) => {
 
         // イベントハンドラーの設定
         newSocket.on('connect', () => {
-            setIsConnected(true);
+            setIsConnected('connected');
             console.log('Socket接続完了');
         });
 
         newSocket.on('disconnect', () => {
-            setIsConnected(false);
+            setIsConnected('disconnect');
             console.log('Socket切断');
         });
 

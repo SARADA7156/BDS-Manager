@@ -181,6 +181,10 @@ p {
     color: rgb(255, 0, 0) !important;
 }
 
+.text-success {
+    color: #00ff00 !important;
+}
+
 .bg-black {
     background: linear-gradient(var(--bg-color-black-1), black);
 }

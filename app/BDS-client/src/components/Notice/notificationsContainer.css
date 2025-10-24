@@ -25,7 +25,7 @@
 }
 
 .level-info, .level-warning, .level-error {
-    animation: 0.3s notice-fade-in ease-in-out;
+    animation: 0.45s notice-fade-in ease-out;
 }
 
 .notifications-container .close-btn {
@@ -37,34 +37,13 @@
     color: #fff;
 }
 
-.progress {
-    height: 4px;
-}
-
-.progress-bar {
-    background-color: var(--bg-color-green);
-    transition: none;
-}
-.progress-bar.time-5000ms {
-    animation: 5s progress-bar linear;
-}
-
-.progress-bar.time-6000ms {
-    animation: 6s progress-bar linear;
-}
-
 @keyframes notice-fade-in {
     0% {
         opacity: 0;
-        transform: translateX(20px);
+        transform: translateX(100px);
     }
     100% {
         opacity: 1;
         transform: translateX(0);
     }
-}
-
-@keyframes progress-bar {
-    0% { width: 100%; }
-    100% { width: 0%; }
 }

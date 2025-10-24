@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+#websocket-status-icon {
+    cursor: pointer;
+    margin-left: auto;
+}
+
+#click-toulchip {
+    position: absolute;
+    z-index: 1000;
+    top: 60px;
+    right: 15px;
+    border: 2px solid var(--bg-color-green);
+    display: none;
+    max-width: 550px;
+}
+
+#click-toulchip.active {
+    display: block;
+}
+
+#click-toulchip-header {
+    grid-template-columns: auto 40px;
+    align-items: center;
+}
