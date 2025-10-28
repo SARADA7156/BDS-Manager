@@ -1,1 +1,0 @@
-export type LogCallback = (line: string) => void;
