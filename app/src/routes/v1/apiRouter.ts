@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 const router = Router();
-import instance from './api/instance/instance';
+import instance from './bds/instance/instance';
 import sidebar from './api/ui/sidebarNav';
 
 router.use('/sidebar', sidebar);
