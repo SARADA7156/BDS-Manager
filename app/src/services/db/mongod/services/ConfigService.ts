@@ -27,9 +27,9 @@ export class ConfigService {
         const hash = this.generateConfigHash(otherConfs);
 
         const saveConfResult = await this.configRepo.create(instanceConfig, hash); // MongoDBへ設定データを格納
+
         // インスタンスの基本情報をMongoDBに格納
         await this.instanceRepo.registerInstance(instanceName, saveConfResult._id, port, `${instanceName}-${generateRandomSuffix()}`);
-
         return instanceConfig;
     }
 

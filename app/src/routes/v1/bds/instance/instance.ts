@@ -11,7 +11,7 @@ router.post('/create', (req, res) => {
             return res.status(400).json({ status: 400, code: "bat_request", message: "インスタンスの設定項目が不足しています。" });
         }
 
-        console.log(serverConfig.data);
+        req.services.obsidian.createServer(serverConfig.data);
 
         res.status(200).json({ status: 200, code: "ok", message: "インスタンスの作成リクエストが許可されました。" });
 
