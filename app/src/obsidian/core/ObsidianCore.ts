@@ -5,10 +5,11 @@
 import { ServerManager } from "./ServerManager";
 import { bedrockPorts } from '../../config/serverSettings.json';
 import { logger } from "../../services/log/logger";
-import { downloadBdsZip } from "../installer/downloader/downloadBdsZip";
-import { extractZip } from "../utils/extractZip";
 import { ServerConfig } from "../entities/instanceConfigSchema";
-import { ConfigService } from "../../services/db/mongod/services/ConfigService";
+import { ConfigService } from "../installer/config/ConfigService";
+import { CORE_STATUS } from "../errors/coreStatus";
+import { ObsidianParamError } from "../errors/ObsidianParamError";
+import { isObsidianError } from "../errors/ObsidianError";
 
 type Ports = {
     port: number;
@@ -51,15 +52,20 @@ export class ObsidianCore {
 
             if (!parseConfig) {
                 logger.error('The instance settings data format is incorrect.');
-                return { result: false, code: 3, message: 'Instance config Format Error'};
+                throw new ObsidianParamError(CORE_STATUS.BAT_REQUEST, 'Config format Error.', 'The data format of the configuration file is different.');
             }
 
             logger.info('Instance settings saved successfully.');
             // 以下にサーバーをダウンロードして設定を書き換える処理を行う。
-            return { result: true, code: 0, message: 'Instance creation complete.' };
+
+            
+
+            return { result: true, code: CORE_STATUS.SUCCESS, message: 'Instance creation complete.' };
         } catch(error) {
-            logger.error(`Server creation error: ${error}`);
-            return { result: false, code: 1, message: 'Instance create Error' };
+            if (isObsidianError(error)) {
+                return { result: false, code: error.code, message: `${error.message} | ${error.detail}`};
+            }
+            return { result: false, code: CORE_STATUS.INTERNAL_SERVER_ERROR, message: `Internal Obsidian Error: ${error}` };
         }
     }
 }

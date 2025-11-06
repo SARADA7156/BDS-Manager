@@ -1,6 +1,6 @@
 import { InstanceConfigSchema, ServerConfig } from "../../../../../obsidian/entities/instanceConfigSchema";
 import { InstanceConfRepo } from "../../repositories/ConfigRepo";
-import { ConfigService } from "../ConfigService";
+import { ConfigService } from "../../../../../obsidian/installer/config/ConfigService";
 
 jest.mock('../../repositories/ConfigRepo', () => ({
     InstanceConfRepo: jest.fn().mockImplementation(() => ({

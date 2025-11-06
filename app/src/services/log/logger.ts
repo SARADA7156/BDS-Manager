@@ -1,4 +1,4 @@
-import winston from 'winston';
+import winston, { format } from 'winston';
 
 const LOG_LEVEL = process.env.LOG_LEVEL || 'info';
 
@@ -11,7 +11,8 @@ export const logger = winston.createLogger({
     format: winston.format.combine(
         winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         customFormat,
-        winston.format.colorize()
+        winston.format.colorize(),
+        format.errors({ stack: true }),
     ),
     transports: [
         new winston.transports.Console(),

@@ -3,7 +3,7 @@ import { ServerConfigSchema } from "../../../../obsidian/entities/instanceConfig
 
 const router = Router();
 
-router.post('/create', (req, res) => {
+router.post('/create', async (req, res) => {
     try {
         const serverConfig = ServerConfigSchema.safeParse(req.body);
 
@@ -11,12 +11,15 @@ router.post('/create', (req, res) => {
             return res.status(400).json({ status: 400, code: "bat_request", message: "インスタンスの設定項目が不足しています。" });
         }
 
-        req.services.obsidian.createServer(serverConfig.data);
+        const result = await req.services.obsidian.createServer(serverConfig.data);
+        if (!result.result) {
+            throw new Error('Instance create Error')
+        }
 
         res.status(200).json({ status: 200, code: "ok", message: "インスタンスの作成リクエストが許可されました。" });
 
     } catch(error) {
-        res.status(500).json({ status: 500, code: "internal_server_error", message: "サーバー側で予期せぬエラーが発生しました。" });
+        res.status(500).json({ status: 500, code: "internal_server_error", message: "インスタンスの作成に失敗しました。" });
     }
 });
 
