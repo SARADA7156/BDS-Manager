@@ -31,7 +31,7 @@ BDS-Manager/
         │   ├── auth/ セキュア系
         │   ├── cli/ コマンドライン(廃止予定)
         │   ├── db/
-        │   │   ├── mongodb/ MongoDB処理
+        │   │   ├── mongod/ MongoDB処理
         │   │   └── mysql/ MySQL処理
         │   ├── log/ ロギング
         │   ├── mailer/ Gmail等送信

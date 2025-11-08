@@ -9,10 +9,13 @@ import { isObsidianError } from "../../errors/ObsidianError";
 import { ObsidianDatabaseError } from "../../errors/ObsidianDatabaseError";
 import { ObsidianParamError } from "../../errors/ObsidianParamError";
 import { CORE_STATUS } from "../../errors/coreStatus";
+import { ObsidianLogger } from "../../core/ObsidianLogger";
 
 export class ConfigService {
     private configRepo: InstanceConfRepo = new InstanceConfRepo();
     private instanceRepo: InstanceRepo = new InstanceRepo();
+
+    constructor(private logger: ObsidianLogger) {}
 
     // サーバー設定をMongoDBに保存する
     public async registerAndPrepareConfig(config: ServerConfig, port: number): Promise<InstanceConfig | undefined> {
@@ -21,7 +24,7 @@ export class ConfigService {
 
             if (!transformedConfig.success) {
                 // データ変換で不具合が発生するとundefinedを返し処理を中断
-                logger.warn(`Config parse failed: ${JSON.stringify(transformedConfig.error.issues, null, 2)}`);
+                this.logger.warn(`Config parse failed: ${JSON.stringify(transformedConfig.error.issues, null, 2)}`);
                 throw new ObsidianParamError(CORE_STATUS.BAT_REQUEST, 'Config format Error.', 'The data format of the configuration file is different.')
             }
 

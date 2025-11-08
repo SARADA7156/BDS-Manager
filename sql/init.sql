@@ -15,6 +15,12 @@ CREATE TABLE IF NOT EXISTS login_tokens(
     expires_at DATETIME NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS bds_versions (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    version VARCHAR(10) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 FLUSH PRIVILEGES;
 
 INSERT INTO users (name, email, permission) VALUES ('admin', 'tsskyepro@gmail.com', 'operator');

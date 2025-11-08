@@ -1,16 +1,19 @@
-import { logger } from "../../services/log/logger";
+import { logger as baseLogger } from "../../services/log/logger";
+import { ObsidianLogger } from "../core/ObsidianLogger";
 
 export class ObsidianError extends Error {
     public readonly code: number;
     public readonly detail: string;
+    private logger: ObsidianLogger;
 
     constructor(code: number, message: string, detail?: string) {
         super(message);
         this.code = code;
         this.name = new.target.name;
         this.detail = detail ?? '';
+        this.logger = new ObsidianLogger(baseLogger)
 
-        logger.error(`[Obsidian: ${this.name}] code: ${code}, ${message} | ${detail ?? ''}`, );
+        this.logger.error(`type: ${this.name}, code: ${code}, ${message} | ${detail ?? ''}`, );
     }
 }
 

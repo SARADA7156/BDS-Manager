@@ -5,3 +5,7 @@ export class ObsidianParamError extends ObsidianError {
         super(code, message, detail);
     }
 }
+
+export function isObsidianParamError(error: unknown) {
+    return error instanceof ObsidianParamError;
+}
