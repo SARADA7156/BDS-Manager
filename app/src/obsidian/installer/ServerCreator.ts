@@ -7,11 +7,11 @@ import { ObsidianLogger } from "../core/ObsidianLogger";
 import { ObsidianParamError } from "../errors/ObsidianParamError";
 import { BdsDownloadService } from "./downloader/BdsDownloadService";
 
-interface IServerCreator {
+export interface IServerCreator {
     create(serverConfig: ServerConfig): Promise<ReturnType>;
 }
 
-export class SaverCreator implements IServerCreator {
+export class ServerCreator implements IServerCreator {
     constructor(
         private portManager: ObsidianPortManager,
         private confService: ConfigService,
@@ -29,6 +29,8 @@ export class SaverCreator implements IServerCreator {
                 return { result: false, code: CORE_STATUS.MAX_INSTANCE, message: 'Maximum number of instances.'};
             }
 
+            this.logger.info(`The port used by the [${serverConfig.instanceName}] is ${port}.`);
+
             // MongoDBへ保存し、フォーマットしたログを取得
             const config = await this.confService.registerAndPrepareConfig(serverConfig, port);
             if (!config) {
@@ -37,7 +39,7 @@ export class SaverCreator implements IServerCreator {
             }
 
             // ファイルを一時ファイルにダウンロードして展開
-            this.downloader.downloadAndExtract();
+            await this.downloader.downloadAndExtract();
 
             return { result: true, code: CORE_STATUS.SUCCESS, message: 'Instance creation complete.' };
         } catch(err) {

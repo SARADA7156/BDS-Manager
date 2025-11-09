@@ -1,10 +1,14 @@
 import { Ports } from "../types/ObsidianCore";
 import { bedrockPorts } from '../../config/serverSettings.json';
-import { logger } from "../../services/log/logger";
 import { ObsidianParamError } from "../errors/ObsidianParamError";
 import { CORE_STATUS } from "../errors/coreStatus";
 
-export class ObsidianPortManager {
+export interface IPortManager {
+    reserveAvailablePort: () => number | null;
+    releasePort: (port: number) => void;
+}
+
+export class ObsidianPortManager implements IPortManager {
     // BDSが利用できるポート番号
     private ports: Ports[] = bedrockPorts.map((port) => ({
         port,

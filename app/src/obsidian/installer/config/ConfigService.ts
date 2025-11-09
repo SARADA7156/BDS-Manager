@@ -2,7 +2,6 @@ import { InstanceConfRepo } from "../../../services/db/mongod/repositories/Confi
 import { InstanceConfig, InstanceConfigSchema, ServerConfig } from "../../entities/instanceConfigSchema";
 import crypto from 'crypto';
 import stringify from 'json-stable-stringify';
-import { logger } from "../../../services/log/logger";
 import { InstanceRepo } from "../../../services/db/mongod/repositories/InstanceRepo";
 import { generateRandomSuffix } from "../../../utils/randomSuffix";
 import { isObsidianError } from "../../errors/ObsidianError";
@@ -11,11 +10,18 @@ import { ObsidianParamError } from "../../errors/ObsidianParamError";
 import { CORE_STATUS } from "../../errors/coreStatus";
 import { ObsidianLogger } from "../../core/ObsidianLogger";
 
-export class ConfigService {
-    private configRepo: InstanceConfRepo = new InstanceConfRepo();
-    private instanceRepo: InstanceRepo = new InstanceRepo();
+export interface IConfigService {
+    registerAndPrepareConfig: (config: ServerConfig, port: number) => Promise<InstanceConfig | undefined>;
+}
 
-    constructor(private logger: ObsidianLogger) {}
+export class ConfigService implements IConfigService {
+    private configRepo: InstanceConfRepo;
+    private instanceRepo: InstanceRepo;
+
+    constructor(private logger: ObsidianLogger, configRepo: InstanceConfRepo, instanceRepo: InstanceRepo) {
+        this.configRepo = configRepo;
+        this.instanceRepo = instanceRepo;
+    }
 
     // サーバー設定をMongoDBに保存する
     public async registerAndPrepareConfig(config: ServerConfig, port: number): Promise<InstanceConfig | undefined> {
