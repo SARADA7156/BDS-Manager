@@ -19,6 +19,7 @@ const ConfigSchema = new Schema<IConfig>({
         required: true,
         enum: ['peaceful', 'easy', 'normal', 'hard']
     },
+    allowCheats: { type: Boolean, required: true },
     whiteList: { type: Boolean, required: true },
     showCoordinates: { type: Boolean, required: true },
     showdaysplayed: { type: Boolean, required: true },
@@ -35,6 +36,7 @@ const ConfigSchema = new Schema<IConfig>({
     doweathercycle: { type: Boolean, required: true },
     viewDistance: { type: Number, required: true },
     tickDistance: { type: Number, required: true },
+    maxplayers: { type: Number, required: true },
     playerIdleTimeout: { type: Number, required: true },
     maxThreads: { type: Number, required: true },
     compressionThreshold: { type: Number, required: true },

@@ -39,12 +39,44 @@ const InstanceSetting = () => {
             return acc;
         }, {} as Record<string, string>);
 
+        const testConfigStringified = {
+            allowCheats: "on",
+            whiteList: "off",
+            showCoordinates: "on",
+            showdaysplayed: "on",
+            doFireTick: "on",
+            tntExplodes: "on",
+            doMobLoot: "on",
+            doTileDrops: "on",
+            doImmediateRespawn: "off",
+            pvp: "on",
+            locatorBar: "on",
+            dodaylightcycle: "on",
+            keepinventory: "off",
+            domobspawning: "on",
+            doweathercycle: "on",
+            viewDistance: "10",
+            tickDistance: "4",
+            maxplayers: "10",
+            playerIdleTimeout: "30",
+            maxThreads: "4",
+            compressionThreshold: "1",
+            playersSleepingPercentage: "100",
+            instanceName: "Test_Instance",
+            worldName: "SampleWorld",
+            gamemodeOpt: "survival",
+            difficultyOpt: "normal",
+            playerDefaultPermission: "member",
+            levelSeed: "1234567890"
+        };
+
+
         addNotification('サーバーに作成リクエストを送信しています。', 'info');
 
         // UI/UXとサーバー負荷を軽減するため送信は遅延させる
         setTimeout(() => {
             try {
-                createInstance(formData);
+                createInstance(testConfigStringified);
                 addNotification('リクエストが受理されました。インスタンスを作成します。※インスタンスの作成には数分かかる場合がございます。', 'info', 6000);
             } catch (error) {
                 addNotification('申し訳ございません。サーバー側の不具合でインスタンスを作成できませんでした。少し時間をおいてもう一度お試しください。', 'error');

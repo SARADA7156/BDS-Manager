@@ -1,0 +1,18 @@
+{
+    "fileProperties": [
+        "server-name",
+        "gamemode",
+        "difficulty",
+        "allow-cheats",
+        "allow-list",
+        "view-distance",
+        "tick-distance",
+        "max-players",
+        "player-idle-timeout",
+        "max-threads",
+        "compression-threshold",
+        "player-default-permittion",
+        "level-seed",
+        "server-port"
+    ]
+}

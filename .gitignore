@@ -2,3 +2,4 @@
 /logs
 **/.env*
 app/src/**/tmp*
+/BDS-servers

@@ -16,6 +16,9 @@ import { ServerCreator } from "../obsidian/installer/ServerCreator";
 import { BdsDownloadService } from "../obsidian/installer/downloader/BdsDownloadService";
 import { BdsVersionRepo } from "../services/db/mysqld/Repository/BdsVersionRepo";
 import { ServerJobQueue } from "../obsidian/installer/ServerJobQueue";
+import { ObsidianIOService } from "../obsidian/utils/ObsidianOIService";
+import path from "path";
+import { BdsPropertiesService } from "../obsidian/installer/config/BdsPropertiesService";
 
 export class ServiceContainer {
     private GMAIL_USER = process.env.GMAIL_USER!;
@@ -52,7 +55,9 @@ export class ServiceContainer {
         const portManager = new ObsidianPortManager();
         const confService = new ConfigService(obsidianLogger, configRepo, instanceRepo);
         const downloader = new BdsDownloadService(obsidianLogger, versionRepo);
-        const serverCreator = new ServerCreator(portManager, confService, downloader, obsidianLogger);
+        const ioService = new ObsidianIOService(process.cwd(), obsidianLogger);
+        const propertiesWriter = new BdsPropertiesService(obsidianLogger, ioService);
+        const serverCreator = new ServerCreator(portManager, confService, downloader, ioService, propertiesWriter, obsidianLogger);
         const buildQueue = new ServerJobQueue(serverCreator, obsidianLogger);
 
         // ObsidianCoreに依存性を注入して初期化

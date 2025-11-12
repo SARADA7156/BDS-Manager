@@ -4,6 +4,7 @@ export interface ILogger {
     info(message: string, context?: string): void;
     warn(message: string, context?: string): void;
     error(message: string, context?: string): void;
+    debug(message: string, context?: string): void;
 }
 
 export class ObsidianLogger implements ILogger {
@@ -22,5 +23,10 @@ export class ObsidianLogger implements ILogger {
     error(message: string, context?: string): void {
         const obsidianMessage = `[Obsidian] ${message}`;
         this.baseLogger.error(obsidianMessage, context || 'CORE');
+    }
+
+    debug(message: string, context?: string): void {
+        const obsidianMessage = `[Obsidian] ${message}`;
+        this.baseLogger.debug(obsidianMessage, context || 'CORE');
     }
 }
