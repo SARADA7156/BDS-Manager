@@ -16,11 +16,9 @@ export interface IServerProcessManager {
     getPid(): number | undefined; // PID提供
     getState(): ServerState; // 現在の状態を返す
     getLogObserver(): IServerLogObserver;
-
-    // on(event: "started" | "stopped" | "crashed" | "log", listener: (data?: string) => void): void;
 }
 
-export class ServerProcessManager implements IServerProcessManager {
+export class ServerProcessManager extends EventEmitter implements IServerProcessManager {
     // 重要な情報は基本的にハードプライベート
     readonly #serverPath: string;
     readonly #serverBin: string;
@@ -28,7 +26,7 @@ export class ServerProcessManager implements IServerProcessManager {
     #serverProcess: ChildProcessWithoutNullStreams | null;
     #processPid: number | undefined = undefined;
     #state: ServerState = ServerState.STOPPED;
-    #isDisposed: boolean = false;
+    #iscleanuped: boolean = false;
     #isManualStop: boolean = false;
     #isRestarting: boolean = false;
     #logParser: ServerLogParser;
@@ -43,6 +41,7 @@ export class ServerProcessManager implements IServerProcessManager {
         restartPolicy: IRestartPolicy,
         logger: IObsidianProcessLogger
     ) {
+        super();
         this.#serverPath = serverPath;
         this.#serverBin = serverBin;
         this.#instanceName = instanceName;
@@ -78,14 +77,17 @@ export class ServerProcessManager implements IServerProcessManager {
                 this.logger.info(`Server process exited with code: ${code}, signal=${signal}`);
 
                 // リスナー等を破棄
-                this.#dispose();
+                this.#cleanupProcess();
 
                 if (!this.#isManualStop && code !== 0 && signal !== 'SIGTERM') {
                     this.logger.warn('Unexpected shutdown detected. Restarting...');
                     this.#setState(ServerState.CRASHED);
+                    this.#fire('crashed'); // crashイベントを発火
                     this.#handleRestart();
                 } else {
                     this.logger.info('The server has shut down successfully.');
+                    this.#fire('stopped'); // stopイベントを発火
+                    this.#setState(ServerState.STOPPED);
                 }
                 this.#isManualStop = false;
             });
@@ -94,7 +96,7 @@ export class ServerProcessManager implements IServerProcessManager {
             this.#serverProcess.on('error', (err: Error) => {
                 this.logger.error('🚨 Server startup error.');
 
-                this.#dispose();
+                this.#cleanupProcess();
                 throw new Error(`Process startup failed. ${err.message}`);
             });
 
@@ -118,12 +120,14 @@ export class ServerProcessManager implements IServerProcessManager {
 
             // サーバーが起動したことが確認できた後の処理
             if (timeoutId) clearTimeout(timeoutId);
-            this.logger.info('Minecraft server started successfully.');
             this.#setState(ServerState.RUNNING);
+            this.#fire('running'); // runningイベントを発火
+            this.logger.info('Minecraft server started successfully.');
+            this.#iscleanuped = false;
 
         } catch(err) {
             if (timeoutId) clearTimeout(timeoutId);
-            this.#dispose(); // 初期化処理を必ず呼ぶ
+            this.#cleanupProcess(); // 初期化処理を必ず呼ぶ
             const errorDetail = (err instanceof Error) ? err.message : String(err);
             this.#handleError(
                 CORE_STATUS.PROCESS_START_FAILED,
@@ -178,6 +182,10 @@ export class ServerProcessManager implements IServerProcessManager {
 
     public async restart(): Promise<void> {
         this.#isManualStop = true;
+
+        if (this.#state === ServerState.RESTARTING) return;
+        this.#setState(ServerState.RESTARTING);
+
         this.logger.info('Restart the Bedrock Server.');
         await this.stop();
         await this.start();
@@ -186,12 +194,12 @@ export class ServerProcessManager implements IServerProcessManager {
     // BDSにコマンドを送信
     sendCommand(command: string): void {
         if (!this.#serverProcess) {
-            this.logger.error(`Cannot send command: Server process does not exist.`);
+            this.logger.warn(`Cannot send command: Server process does not exist.`);
             return;
         }
 
         if (this.#state !== ServerState.RUNNING) {
-            this.logger.error(`Cannot send command: Server is not running.`);
+            this.logger.warn(`Cannot send command: Server is not running.`);
             return;
         }
 
@@ -215,10 +223,15 @@ export class ServerProcessManager implements IServerProcessManager {
         this.#state = state;
     }
 
+    // イベントを発火
+    #fire(event: 'running' | 'stopped' | 'crashed'): void {
+        this.emit(event);
+    }
+
     // プロセスを落とす際はすべてのリスナーをクリーンアップ
-    #dispose(): void {
-        if (this.#isDisposed) return;
-        this.#isDisposed = true;
+    #cleanupProcess(): void {
+        if (this.#iscleanuped) return;
+        this.#iscleanuped = true;
 
         this.#logParser.clear();
         this.#setState(ServerState.STOPPED);

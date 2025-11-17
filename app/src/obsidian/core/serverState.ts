@@ -3,5 +3,6 @@ export enum ServerState {
     STARTING = 'STARTING',
     RUNNING = 'RUNNING',
     STOPPING = 'STOPPING',
-    CRASHED = 'CRASHED'
+    CRASHED = 'CRASHED',
+    RESTARTING = 'RESTARTING'
 }
