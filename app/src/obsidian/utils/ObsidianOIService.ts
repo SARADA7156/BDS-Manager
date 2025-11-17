@@ -5,7 +5,8 @@ import pLimit from "p-limit";
 import { CORE_STATUS } from "../errors/coreStatus";
 import { ObsidianIOError } from "../errors/ObsidianIoError";
 import { createReadStream, createWriteStream } from "fs";
-import { ObsidianLogger } from "../core/ObsidianLogger";
+import { ObsidianLogger } from "../logger/ObsidianLogger";
+import { validatePath } from "./validatePath";
 
 export interface IObsidianIOService {
     // ファイルを移動(リネーム)
@@ -31,6 +32,9 @@ export interface IObsidianIOService {
 
     // ファイルの書き込み
     writeFile: (path: string, data: string | Buffer, encoding?: BufferEncoding) => Promise<void>;
+
+    // 実行権限を付ける
+    chmod(path: string, mode: number): Promise<void>
 }
 
 export class ObsidianIOService implements IObsidianIOService {
@@ -43,8 +47,8 @@ export class ObsidianIOService implements IObsidianIOService {
     }
 
     public async move(src: string, dest: string): Promise<void> {
-        const validSrc = this.#validatePath(src, 'Source');
-        const validDest = this.#validatePath(dest, 'Destination');
+        const validSrc = validatePath(this.projectRoot, src, 'Source');
+        const validDest = validatePath(this.projectRoot, dest, 'Destination');
 
         try {
             this.logger.info(`Move the file: ${validSrc}`);
@@ -58,8 +62,8 @@ export class ObsidianIOService implements IObsidianIOService {
     }
 
     public async copy(src: string, dest: string): Promise<void> {
-        const validSrc = this.#validatePath(src, 'Source');
-        const validDest = this.#validatePath(dest, 'Destination');
+        const validSrc = validatePath(this.projectRoot, src, 'Source');
+        const validDest = validatePath(this.projectRoot, dest, 'Destination');
 
         try {
             await fs.cp(validSrc, validDest, { recursive: true, force: true });
@@ -70,8 +74,8 @@ export class ObsidianIOService implements IObsidianIOService {
     }
 
     public async copyStream(src: string, dest: string): Promise<void> {
-        const validSrc = this.#validatePath(src, 'Source');
-        const validDest = this.#validatePath(dest, 'Destination');
+        const validSrc = validatePath(this.projectRoot, src, 'Source');
+        const validDest = validatePath(this.projectRoot, dest, 'Destination');
 
         try {
             await this.#ensureParentDir(validDest);
@@ -87,8 +91,8 @@ export class ObsidianIOService implements IObsidianIOService {
     }
 
     public async copyDir(src: string, dest: string): Promise<void> {
-        const validSrc = this.#validatePath(src, 'Source');
-        const validDest = this.#validatePath(dest, 'Destination');
+        const validSrc = validatePath(this.projectRoot, src, 'Source');
+        const validDest = validatePath(this.projectRoot, dest, 'Destination');
 
         try {
             // コピー先のディレクトリを再帰的に作成
@@ -119,7 +123,7 @@ export class ObsidianIOService implements IObsidianIOService {
     }
 
     public async delete(src: string): Promise<void> {
-        const validSrc = this.#validatePath(src, 'Source');
+        const validSrc = validatePath(this.projectRoot, src, 'Source');
 
         try {
             this.logger.info(`Delete the file: ${validSrc}`);
@@ -131,7 +135,7 @@ export class ObsidianIOService implements IObsidianIOService {
     }
 
     public async deleteAll(src: string): Promise<void> {
-        const validSrc = this.#validatePath(src, 'Source');
+        const validSrc = validatePath(this.projectRoot, src, 'Source');
 
         try {
             this.logger.info(`Delete the directory: ${validSrc}`);
@@ -144,7 +148,7 @@ export class ObsidianIOService implements IObsidianIOService {
     }
 
     public async readFile(path: string, encoding: BufferEncoding = 'utf-8'): Promise<string> {
-        const validPath = this.#validatePath(path, 'File');
+        const validPath = validatePath(this.projectRoot, path, 'File');
 
         try {
             const data = await fs.readFile(validPath, { encoding });
@@ -156,7 +160,7 @@ export class ObsidianIOService implements IObsidianIOService {
     }
 
     public async writeFile(path: string, data: string | Buffer, encoding: BufferEncoding = 'utf-8'): Promise<void> {
-        const validPath = this.#validatePath(path, 'File');
+        const validPath = validatePath(this.projectRoot, path, 'File');
 
         try {
             await this.#ensureParentDir(validPath);
@@ -164,6 +168,18 @@ export class ObsidianIOService implements IObsidianIOService {
         } catch (err) {
             const errorDetail = (err instanceof Error) ? err.message : String(err);
             this.handleError(CORE_STATUS.FILE_IO_ERROR, `An error occurred while writing the file: ${errorDetail}`);
+        }
+    }
+
+    public async chmod(path: string, mode: number): Promise<void> {
+        const valid = validatePath(this.projectRoot, path, 'File');
+
+        try {
+            await fs.chmod(valid, mode);
+            this.logger.info(`Set chmod ${mode.toString(8)} to: ${valid}`);
+        } catch (err) {
+            const errorDetail = (err instanceof Error) ? err.message : String(err);
+            this.handleError(CORE_STATUS.FILE_IO_ERROR, `Failed to chmod: ${errorDetail}`);
         }
     }
 
@@ -176,22 +192,6 @@ export class ObsidianIOService implements IObsidianIOService {
             const errorDetail = (err instanceof Error) ? err.message : String(err);
             this.handleError(CORE_STATUS.FILE_IO_ERROR, `An error occurred while creating the parent directory: ${errorDetail}`);
         }
-    }
-
-    #validatePath(targetPath: string, name: string): string {
-        if (typeof targetPath !== 'string' || targetPath.trim().length === 0) {
-            this.handleError(CORE_STATUS.FILE_ACCESS_DENIED, `${name} is invalid path`)
-        }
-
-        const absPath = resolve(targetPath);
-        const relPath = relative(this.projectRoot, absPath);
-
-        // ルートより上の階層を指定している場合は拒否
-        if (relPath.startsWith('..') || relPath.includes(`..${sep}`)) {
-            this.handleError(CORE_STATUS.FILE_ACCESS_DENIED, 'You cannot specify the parent directory.')
-        }
-
-        return absPath;
     }
 
     private handleError(code: number, detail: string): never {

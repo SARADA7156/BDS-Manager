@@ -3,3 +3,4 @@
 **/.env*
 app/src/**/tmp*
 /BDS-servers
+/BDS-servers-test

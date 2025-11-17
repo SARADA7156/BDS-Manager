@@ -1,4 +1,4 @@
-import { ObsidianLogger } from "../core/ObsidianLogger";
+import { ObsidianLogger } from "../logger/ObsidianLogger";
 import { ServerConfig } from "../entities/instanceConfigSchema"
 import { ReturnType } from "../types/ObsidianCore";
 import { IServerCreator } from "./ServerCreator";

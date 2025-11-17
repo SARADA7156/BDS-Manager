@@ -7,7 +7,7 @@ import { Parse } from 'unzipper';
 import { isObsidianIOError, ObsidianIOError } from "../../errors/ObsidianIoError";
 import { CORE_STATUS } from "../../errors/coreStatus";
 import { isObsidianNetworkError, ObsidianNetworkError } from "../../errors/ObsidianNetworkError";
-import { ObsidianLogger } from "../../core/ObsidianLogger";
+import { ObsidianLogger } from "../../logger/ObsidianLogger";
 import { BdsVersionRepo, VersionRecord } from "../../../services/db/mysqld/Repository/BdsVersionRepo";
 import { ObsidianParamError } from "../../errors/ObsidianParamError";
 import { ObsidianDatabaseError } from "../../errors/ObsidianDatabaseError";
@@ -204,6 +204,10 @@ export class BdsDownloadService {
 
                                 entry.pipe(writeStream);
                             });
+
+                            if (base === 'bedrock_server') {
+                                await fs.chmod(filePath, 0o755);
+                            }
                         }
                     })
                     .on('close', resolve)

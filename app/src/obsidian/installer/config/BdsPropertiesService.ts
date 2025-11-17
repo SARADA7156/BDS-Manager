@@ -1,6 +1,6 @@
 // BDSの静的ファイルの変更を担当するサービス
 import { IObsidianIOService } from "../../utils/ObsidianOIService";
-import { ObsidianLogger } from "../../core/ObsidianLogger";
+import { ObsidianLogger } from "../../logger/ObsidianLogger";
 import { isObsidianIOError } from "../../errors/ObsidianIoError";
 import { mapToFileKeys } from "./mapToFileKeys";
 

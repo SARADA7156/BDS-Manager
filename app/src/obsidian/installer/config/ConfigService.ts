@@ -8,7 +8,7 @@ import { isObsidianError } from "../../errors/ObsidianError";
 import { ObsidianDatabaseError } from "../../errors/ObsidianDatabaseError";
 import { ObsidianParamError } from "../../errors/ObsidianParamError";
 import { CORE_STATUS } from "../../errors/coreStatus";
-import { ObsidianLogger } from "../../core/ObsidianLogger";
+import { ObsidianLogger } from "../../logger/ObsidianLogger";
 
 export interface IConfigService {
     registerAndPrepareConfig: (config: ServerConfig, port: number) => Promise<InstanceConfig | undefined>;

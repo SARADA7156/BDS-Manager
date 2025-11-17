@@ -1,5 +1,5 @@
 import { logger as baseLogger } from "../../services/log/logger";
-import { ObsidianLogger } from "../core/ObsidianLogger";
+import { ObsidianLogger } from "../logger/ObsidianLogger";
 
 export class ObsidianError extends Error {
     public readonly code: number;

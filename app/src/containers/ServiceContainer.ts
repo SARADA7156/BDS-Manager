@@ -8,7 +8,7 @@ import { JwtService } from "../services/auth/JwtService";
 import { ObsidianCore } from "../obsidian/core/ObsidianCore";
 import { ObsidianPortManager } from "../obsidian/core/ObsidianPortManager";
 import { ConfigService } from "../obsidian/installer/config/ConfigService";
-import { ObsidianLogger } from "../obsidian/core/ObsidianLogger";
+import { ObsidianLogger } from "../obsidian/logger/ObsidianLogger";
 import { logger } from "../services/log/logger";
 import { InstanceConfRepo } from "../services/db/mongod/repositories/ConfigRepo";
 import { InstanceRepo } from "../services/db/mongod/repositories/InstanceRepo";
@@ -37,6 +37,8 @@ export class ServiceContainer {
         // 共有依存性を初期化
         const db = DatabaseConnection.getPool();
         const obsidianLogger = new ObsidianLogger(logger);
+        const isDevelop: boolean = process.env.NODE_ENV === 'production' ? false : true;
+        const instanceDir = isDevelop ? 'BDS-servers-test' : 'BDS-servers';
 
         // 基本サービスの組み立て
         this.userService = new UserService(db);
@@ -57,7 +59,7 @@ export class ServiceContainer {
         const downloader = new BdsDownloadService(obsidianLogger, versionRepo);
         const ioService = new ObsidianIOService(process.cwd(), obsidianLogger);
         const propertiesWriter = new BdsPropertiesService(obsidianLogger, ioService);
-        const serverCreator = new ServerCreator(portManager, confService, downloader, ioService, propertiesWriter, obsidianLogger);
+        const serverCreator = new ServerCreator(portManager, confService, downloader, ioService, propertiesWriter, obsidianLogger, instanceDir, process.cwd());
         const buildQueue = new ServerJobQueue(serverCreator, obsidianLogger);
 
         // ObsidianCoreに依存性を注入して初期化

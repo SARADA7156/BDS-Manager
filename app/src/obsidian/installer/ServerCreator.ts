@@ -3,12 +3,17 @@ import { CORE_STATUS } from "../errors/coreStatus";
 import { ConfigService } from "./config/ConfigService";
 import { ReturnType } from "../types/ObsidianCore";
 import { ObsidianPortManager } from "../core/ObsidianPortManager";
-import { ObsidianLogger } from "../core/ObsidianLogger";
+import { ObsidianLogger } from "../logger/ObsidianLogger";
 import { ObsidianParamError } from "../errors/ObsidianParamError";
 import { BdsDownloadService } from "./downloader/BdsDownloadService";
 import { IObsidianIOService } from "../utils/ObsidianOIService";
 import { generateRandomSuffix } from "../../utils/randomSuffix";
 import { IBdsPropertiesService } from "./config/BdsPropertiesService";
+import { ServerProcessManager } from "../core/ServerProcessManager";
+import { validatePath } from "../utils/validatePath";
+import { RestartPolicy } from "../core/RestartPolicy";
+import { ServerLogParser } from "../monitor/ServerLogParser";
+import { ObsidianProcessLogger } from "../logger/ObsidianProcessLogger";
 
 export interface IServerCreator {
     create(serverConfig: ServerConfig): Promise<ReturnType>;
@@ -23,6 +28,8 @@ export class ServerCreator implements IServerCreator {
         private io: IObsidianIOService,
         private writer: IBdsPropertiesService,
         private logger: ObsidianLogger,
+        private readonly instanceDir: string,
+        private readonly projectRoot: string
     ) {}
 
     public async create(serverConfig: ServerConfig): Promise<ReturnType> {
@@ -47,6 +54,23 @@ export class ServerCreator implements IServerCreator {
 
             // 設定書き込み
             await this.#writeServerProperties(config, this.#reservedPort, config.instanceName);
+
+            // 試験的にbedrock_serverを起動(絶対に消すこと)
+            const serverPath = validatePath(this.projectRoot, `${this.instanceDir}/${config.instanceName}/`, 'server_bin')
+            const manager = new ServerProcessManager(
+                serverPath,
+                './bedrock_server',
+                config.instanceName,
+                new ServerLogParser(config.instanceName, true),
+                new RestartPolicy(),
+                new ObsidianProcessLogger(config.instanceName, this.logger)
+            );
+
+            await manager.start();
+
+            setTimeout(async () => {
+                await manager.stop();
+            }, 7000);
 
             return { result: true, code: CORE_STATUS.SUCCESS, message: 'Instance creation complete.' };
         } catch(err) {
@@ -76,7 +100,7 @@ export class ServerCreator implements IServerCreator {
         // ファイルを一時ファイルにダウンロードして展開
         await this.downloader.downloadAndExtract();
 
-        const serverDir = `BDS-servers/${instanceName}/`;
+        const serverDir = `${this.instanceDir}/${instanceName}/`;
 
         // BDSのアセットをインスタンス専用のディレクトリへコピー
         this.logger.info(`Copy BDS assets to the instance directory: ${serverDir}`);
@@ -84,11 +108,13 @@ export class ServerCreator implements IServerCreator {
         await this.io.copyDir('app/src/obsidian/installer/tmp', serverDir); // コピー
         const endTime = Date.now();
         this.logger.info(`Copy complete. (${(endTime - startTime) / 1000} seconds)`);
+
+        await this.io.chmod(`${serverDir}/bedrock_server`, 0o755);
     }
 
     async #writeServerProperties(config: InstanceConfig, port: number, instanceName: string): Promise<void> {
         // server.propertiesファイルを編集する
-        const propertiesFile = `BDS-servers/${instanceName}/server.properties`;
+        const propertiesFile = `${this.instanceDir}/${instanceName}/server.properties`;
         this.logger.info('Modify server.properties...');
         await this.writer.setProperty({...config, port}, propertiesFile);
     }
