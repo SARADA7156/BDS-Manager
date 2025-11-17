@@ -33,9 +33,6 @@ declare global {
         interface Request {
             services: import('./containers/ServiceContainer').ServiceContainer;
             user?: Payload;
-            // manager: ServerManager;
-            // fullBackup: FullBackup;
-            // rsyncBackup: RsyncBackup;
         }
     }
 }
@@ -103,8 +100,6 @@ export async function bootstrap() {
         origin: 'http://localhost:5173',
         credentials: true,
     }));
-
-    const serverBin: string = './bedrock_server'; // 実行ファイルのパスと名前
 
     app.use((req, res, next) => {
         req.services = services;

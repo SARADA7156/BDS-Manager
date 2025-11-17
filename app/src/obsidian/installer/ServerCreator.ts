@@ -55,23 +55,6 @@ export class ServerCreator implements IServerCreator {
             // 設定書き込み
             await this.#writeServerProperties(config, this.#reservedPort, config.instanceName);
 
-            // 試験的にbedrock_serverを起動(絶対に消すこと)
-            const serverPath = validatePath(this.projectRoot, `${this.instanceDir}/${config.instanceName}/`, 'server_bin')
-            const manager = new ServerProcessManager(
-                serverPath,
-                './bedrock_server',
-                config.instanceName,
-                new ServerLogParser(config.instanceName, true),
-                new RestartPolicy(),
-                new ObsidianProcessLogger(config.instanceName, this.logger)
-            );
-
-            await manager.start();
-
-            setTimeout(async () => {
-                await manager.stop();
-            }, 7000);
-
             return { result: true, code: CORE_STATUS.SUCCESS, message: 'Instance creation complete.' };
         } catch(err) {
             this.#handleCreationError(err);

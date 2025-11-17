@@ -66,7 +66,7 @@ export class ServerProcessManager implements IServerProcessManager {
 
             // 1. bedrock_serverを子プロセスとして実行
             this.#serverProcess = spawn(this.#serverBin, [], { cwd: this.#serverPath, stdio: 'pipe' });
-            this.#processPid = this.#serverProcess.pid
+            this.#processPid = this.#serverProcess.pid;
 
             // 2. stdoutをparserにパース
             this.#serverProcess.stdout.on('data', (data: Buffer) => {
@@ -76,7 +76,6 @@ export class ServerProcessManager implements IServerProcessManager {
             // Exitイベントを監視
             this.#serverProcess.on('exit', (code: number | null, signal: NodeJS.Signals | null) => {
                 this.logger.info(`Server process exited with code: ${code}, signal=${signal}`);
-                this.#serverProcess = null;
 
                 // リスナー等を破棄
                 this.#dispose();
@@ -89,6 +88,14 @@ export class ServerProcessManager implements IServerProcessManager {
                     this.logger.info('The server has shut down successfully.');
                 }
                 this.#isManualStop = false;
+            });
+
+            // Errorイベントを監視
+            this.#serverProcess.on('error', (err: Error) => {
+                this.logger.error('🚨 Server startup error.');
+
+                this.#dispose();
+                throw new Error(`Process startup failed. ${err.message}`);
             });
 
             // 3. タイムアウト処理(Promise化)
@@ -137,7 +144,12 @@ export class ServerProcessManager implements IServerProcessManager {
         this.#setState(ServerState.STOPPING);
 
         try {
-            this.sendCommand('stop')
+            this.sendCommand('stop'); // BDSにstopコマンドを送信
+
+            // 'Quit correctly'を待つ
+            const waitPromise = this.#logParser.waitFor('Quit correctly');
+
+            // BDSが固まった際のタイムアウト処理
             const timeoutPromise = new Promise<never>((_, reject) => {
                 timeoutId = setTimeout(() => {
                     this.logger.error('Server did not shut down gracefully. killing...');
@@ -146,28 +158,12 @@ export class ServerProcessManager implements IServerProcessManager {
                 }, timeoutMs);
             });
 
-            // サーバーシャットダウン待ち
-            const stopPromise = Promise.race([
-                this.#logParser.waitFor('Quit correctly'),
-                new Promise<void>((resolve) => {
-                    this.#serverProcess?.once('exit', () => resolve());
-                })
-            ]).catch(err => {
-                this.logger.warn(`stop promise rejected: ${err}`);
-                throw err;
-            });
+            // 二つを競争
+            await Promise.race([waitPromise, timeoutPromise]);
 
-            // 停止とタイムアウトの競争
-            await Promise.race([
-                timeoutPromise,
-                stopPromise
-            ]);
-
-            if (timeoutId) clearTimeout(timeoutId);
             this.logger.info('The shutdown completed successfully.')
 
         } catch(err) {
-            if (timeoutId) clearTimeout(timeoutId);
             const errorDetail = (err instanceof Error) ? err.message : String(err);
             this.#handleError(
                 CORE_STATUS.PROCESS_STOP_FAILED,
@@ -176,7 +172,7 @@ export class ServerProcessManager implements IServerProcessManager {
             );
         } finally {
             this.#isManualStop = false;
-            this.#dispose(); // 初期化
+            if (timeoutId) clearTimeout(timeoutId);
         }
     }
 
@@ -187,11 +183,18 @@ export class ServerProcessManager implements IServerProcessManager {
         await this.start();
     }
 
+    // BDSにコマンドを送信
     sendCommand(command: string): void {
-        if (!this.#serverProcess || this.#state !== ServerState.RUNNING) {
+        if (!this.#serverProcess) {
+            this.logger.error(`Cannot send command: Server process does not exist.`);
+            return;
+        }
+
+        if (this.#state !== ServerState.RUNNING) {
             this.logger.error(`Cannot send command: Server is not running.`);
             return;
         }
+
         this.logger.info(`Sending command to server: ${command}`);
         this.#serverProcess.stdin.write(`${command}\n`);
     }
