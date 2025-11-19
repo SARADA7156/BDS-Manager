@@ -8,21 +8,24 @@ import { IObsidianProcessLogger } from "../logger/ObsidianProcessLogger";
 import { IRestartPolicy } from "./RestartPolicy";
 
 export interface IServerProcessManager {
+    instanceName: string;
     start(timeoutMs?: number): Promise<void>; // BDSスタート
-    stop(timeoutMs: number): Promise<void>; // BDS終了
-    restart(timeoutMs: number): Promise<void>; // 再起動
+    stop(timeoutMs?: number): Promise<void>; // BDS終了
+    restart(): Promise<void>; // 再起動
     sendCommand(command: string): void;
 
     getPid(): number | undefined; // PID提供
-    getState(): ServerState; // 現在の状態を返す
     getLogObserver(): IServerLogObserver;
+    getState(): string;
+
+    on(event: 'running' | 'stopped' | 'crashed', listener: () => void): void;
 }
 
 export class ServerProcessManager extends EventEmitter implements IServerProcessManager {
     // 重要な情報は基本的にハードプライベート
     readonly #serverPath: string;
     readonly #serverBin: string;
-    readonly #instanceName: string;
+    readonly instanceName: string;
     #serverProcess: ChildProcessWithoutNullStreams | null;
     #processPid: number | undefined = undefined;
     #state: ServerState = ServerState.STOPPED;
@@ -44,7 +47,7 @@ export class ServerProcessManager extends EventEmitter implements IServerProcess
         super();
         this.#serverPath = serverPath;
         this.#serverBin = serverBin;
-        this.#instanceName = instanceName;
+        this.instanceName = instanceName;
         this.#serverProcess = null;
         this.#logParser = logParser;
         this.#restartPolicy = restartPolicy;
@@ -55,12 +58,12 @@ export class ServerProcessManager extends EventEmitter implements IServerProcess
         let timeoutId: NodeJS.Timeout | undefined;
 
         if (this.#serverProcess) {
-            this.logger.warn('Server is already running.');
+            this.logger.warn('サーバーは既に起動しています。');
             return;
         }
 
         try {
-            this.logger.info('Starting Minecraft server...');
+            this.logger.info('BDSサーバーを起動します...');
             this.#setState(ServerState.STARTING);
 
             // 1. bedrock_serverを子プロセスとして実行
@@ -74,18 +77,18 @@ export class ServerProcessManager extends EventEmitter implements IServerProcess
 
             // Exitイベントを監視
             this.#serverProcess.on('exit', (code: number | null, signal: NodeJS.Signals | null) => {
-                this.logger.info(`Server process exited with code: ${code}, signal=${signal}`);
+                this.logger.info(`BDSサーバーがシグナル ${signal}, コード ${code} で終了しました。`);
 
                 // リスナー等を破棄
                 this.#cleanupProcess();
 
                 if (!this.#isManualStop && code !== 0 && signal !== 'SIGTERM') {
-                    this.logger.warn('Unexpected shutdown detected. Restarting...');
+                    this.logger.warn('BDSサーバーが異常終了しました。再起動を試みます...');
                     this.#setState(ServerState.CRASHED);
                     this.#fire('crashed'); // crashイベントを発火
                     this.#handleRestart();
                 } else {
-                    this.logger.info('The server has shut down successfully.');
+                    this.logger.info('BDSサーバーは正常に停止しました。');
                     this.#fire('stopped'); // stopイベントを発火
                     this.#setState(ServerState.STOPPED);
                 }
@@ -94,7 +97,7 @@ export class ServerProcessManager extends EventEmitter implements IServerProcess
 
             // Errorイベントを監視
             this.#serverProcess.on('error', (err: Error) => {
-                this.logger.error('🚨 Server startup error.');
+                this.logger.error('🚨 BDSサーバーの起動に失敗しました。');
 
                 this.#cleanupProcess();
                 throw new Error(`Process startup failed. ${err.message}`);
@@ -103,7 +106,7 @@ export class ServerProcessManager extends EventEmitter implements IServerProcess
             // 3. タイムアウト処理(Promise化)
             const timeoutPromise = new Promise<never>((_, reject) => {
                 timeoutId = setTimeout(() => {
-                    this.logger.error('Startup timeout. killing process...');
+                    this.logger.error('BDSサーバーの起動がタイムアウトしました。強制終了します...');
                     this.#serverProcess?.kill('SIGKILL');
                     reject(new Error('Server setup timed out.'));
                 }, timeoutMs);
@@ -122,7 +125,7 @@ export class ServerProcessManager extends EventEmitter implements IServerProcess
             if (timeoutId) clearTimeout(timeoutId);
             this.#setState(ServerState.RUNNING);
             this.#fire('running'); // runningイベントを発火
-            this.logger.info('Minecraft server started successfully.');
+            this.logger.info('BDSサーバーは正常に起動しました。');
             this.#iscleanuped = false;
 
         } catch(err) {
@@ -131,8 +134,8 @@ export class ServerProcessManager extends EventEmitter implements IServerProcess
             const errorDetail = (err instanceof Error) ? err.message : String(err);
             this.#handleError(
                 CORE_STATUS.PROCESS_START_FAILED,
-                `[${this.#instanceName}] bedrock_server process start up error.`,
-                `An error occurred while starting the Bedrock server. detail: ${errorDetail}`
+                `[${this.instanceName}] BDSサーバー起動エラー.`,
+                `BDSサーバーの起動中にエラーが発生しました。 詳細: ${errorDetail}`
             );
         }
     }
@@ -141,13 +144,14 @@ export class ServerProcessManager extends EventEmitter implements IServerProcess
         let timeoutId: NodeJS.Timeout | undefined;
 
         if (!this.#serverProcess || this.#state !== ServerState.RUNNING) {
-            this.logger.warn('The server has already been shut down.');
+            this.logger.warn('サーバーは既に停止しています。');
             return;
         }
         this.#isManualStop = true;
         this.#setState(ServerState.STOPPING);
 
         try {
+            this.logger.info('BDSサーバーを停止します...');
             this.sendCommand('stop'); // BDSにstopコマンドを送信
 
             // 'Quit correctly'を待つ
@@ -156,7 +160,7 @@ export class ServerProcessManager extends EventEmitter implements IServerProcess
             // BDSが固まった際のタイムアウト処理
             const timeoutPromise = new Promise<never>((_, reject) => {
                 timeoutId = setTimeout(() => {
-                    this.logger.error('Server did not shut down gracefully. killing...');
+                    this.logger.error('BDSサーバーの停止がタイムアウトしました。強制終了します...');
                     this.#serverProcess?.kill('SIGKILL');
                     reject(new Error('Timeout: server did not shut down'));
                 }, timeoutMs);
@@ -165,14 +169,14 @@ export class ServerProcessManager extends EventEmitter implements IServerProcess
             // 二つを競争
             await Promise.race([waitPromise, timeoutPromise]);
 
-            this.logger.info('The shutdown completed successfully.')
+            this.logger.info('BDSサーバーは正常に停止しました。');
 
         } catch(err) {
             const errorDetail = (err instanceof Error) ? err.message : String(err);
             this.#handleError(
                 CORE_STATUS.PROCESS_STOP_FAILED,
-                `[${this.#instanceName}] bedrock_server process shutdown error.`,
-                `An error occurred while stopping the Bedrock server. detail: ${errorDetail}`
+                `[${this.instanceName}] BDSサーバー停止エラー.`,
+                `BDSサーバーの停止処理中にエラーが発生しました。 詳細: ${errorDetail}`
             );
         } finally {
             this.#isManualStop = false;
@@ -186,7 +190,7 @@ export class ServerProcessManager extends EventEmitter implements IServerProcess
         if (this.#state === ServerState.RESTARTING) return;
         this.#setState(ServerState.RESTARTING);
 
-        this.logger.info('Restart the Bedrock Server.');
+        this.logger.info('BDSサーバーを再起動します...');
         await this.stop();
         await this.start();
     }
@@ -194,16 +198,16 @@ export class ServerProcessManager extends EventEmitter implements IServerProcess
     // BDSにコマンドを送信
     sendCommand(command: string): void {
         if (!this.#serverProcess) {
-            this.logger.warn(`Cannot send command: Server process does not exist.`);
+            this.logger.warn(`BDSサーバープロセスが存在しないため、コマンドを送信できません。`);
             return;
         }
 
         if (this.#state !== ServerState.RUNNING) {
-            this.logger.warn(`Cannot send command: Server is not running.`);
+            this.logger.warn(`BDSサーバーが起動していないため、コマンドを送信できません。`);
             return;
         }
 
-        this.logger.info(`Sending command to server: ${command}`);
+        this.logger.info(`BDSサーバーにコマンドを送信します: ${command}`);
         this.#serverProcess.stdin.write(`${command}\n`);
     }
 
@@ -211,12 +215,12 @@ export class ServerProcessManager extends EventEmitter implements IServerProcess
         return this.#processPid;
     }
 
-    public getState(): ServerState {
-        return this.#state;
-    }
-
     public getLogObserver(): IServerLogObserver {
         return this.#logParser;
+    }
+
+    public getState(): ServerState {
+        return this.#state;
     }
 
     #setState(state: ServerState): void {
@@ -250,19 +254,19 @@ export class ServerProcessManager extends EventEmitter implements IServerProcess
 
         try {
             if (!this.#restartPolicy.shouldRetry()) {
-                this.logger.error(`Max restart attempts reached. Aborting auto-restart.`);
+                this.logger.error(`再起動の最大試行回数に達しました。再起動を中止します。`);
                 return;
             }
 
             const attempt = this.#restartPolicy.getRetries();
-            this.logger.info(`Restaring server (attempt ${attempt})...`);
+            this.logger.info(`再起動を試みます。試行回数: ${attempt}`);
             await new Promise(res => setTimeout(res, 5000));
 
             await this.start();
             this.#restartPolicy.reset();
-            this.logger.info(`Server restarted successfully.`);
+            this.logger.info(`BDSサーバーの再起動に成功しました。`);
         } catch(err) {
-            this.logger.error(`Restart attempt failed: ${(err as Error).message}`);
+            this.logger.error(`BDSサーバーの再起動に失敗しました: ${(err as Error).message}`);
             setTimeout(() => this.#handleRestart(), 5000); // 再帰的に再試行
         } finally {
             this.#isRestarting = false;

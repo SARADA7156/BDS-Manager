@@ -17,7 +17,6 @@ import { BdsDownloadService } from "../obsidian/installer/downloader/BdsDownload
 import { BdsVersionRepo } from "../services/db/mysqld/Repository/BdsVersionRepo";
 import { ServerJobQueue } from "../obsidian/installer/ServerJobQueue";
 import { ObsidianIOService } from "../obsidian/utils/ObsidianOIService";
-import path from "path";
 import { BdsPropertiesService } from "../obsidian/installer/config/BdsPropertiesService";
 
 export class ServiceContainer {
