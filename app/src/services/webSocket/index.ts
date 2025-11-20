@@ -14,7 +14,7 @@ export function initSocket(httpServer: HttpServer, jwtService: JwtService): void
         pingInterval: 30000,
         pingTimeout: 60000
     });
-    logger.info('🔌Starting to accept WebSocket connections...');
+    logger.info('✅ WebScoketはクライアントからの接続受付を開始しました。');
 
     // 接続前認証ミドルウェア
     io.use((socket, next) => {
@@ -41,10 +41,10 @@ export function initSocket(httpServer: HttpServer, jwtService: JwtService): void
 
     // 接続イベント
     io.on(SocketEvent.CONNECTION, (socket: Socket) => {
-        logger.info(`✅ Client connected: ${socket.id}`);
+        logger.info(`✅ [WebScoket] クライアントが接続しました。 ID: ${socket.id}`);
 
         socket.on(SocketEvent.DISCONNECT, () => {
-            logger.info(`❌ Client disconnected: ${socket.id}`);
+            logger.info(`❌ [WebScoket] クライアントが切断しました。 ID: ${socket.id}`);
         });
     });
 }

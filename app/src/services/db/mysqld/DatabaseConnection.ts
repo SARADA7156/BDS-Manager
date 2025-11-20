@@ -14,16 +14,17 @@ export class DatabaseConnection {
             const conn = await DatabaseConnection.pool.getConnection();
             await conn.ping();
             conn.release();
-            logger.info('✅ Connection to the MySQL successfully.')
+            logger.info('✅ MySQLへ正常に接続しました。');
         } catch (error) {
-            logger.error('❌ Failed to connect to the database:', error);
+            const errorDetail = (error instanceof Error) ? error.message : String(error);
+            logger.error(`❌ MySQLへの接続に失敗しました。 詳細: ${errorDetail}`);
             throw error;
         }
     }
 
     public static getPool(): mysql.Pool {
         if (!DatabaseConnection.pool) {
-            throw new Error('Database not initialized. Call init() first.');
+            throw new Error('データベースが初期化されていません。まずinit()を呼び出してください。');
         }
         return DatabaseConnection.pool;
     }
@@ -35,7 +36,7 @@ export class DatabaseConnection {
     public static async disconnect(): Promise<void> {
         if (DatabaseConnection.pool) {
             await DatabaseConnection.pool.end();
-            logger.info('🔌 MySQL disconnected...');
+            logger.info('🔌 MySQLから正常に切断しました。');
         }
     }
 }

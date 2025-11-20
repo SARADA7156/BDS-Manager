@@ -1,4 +1,4 @@
-import { IRedisClient } from "../../services/db/redis/RedisClient";
+import { RedisClient } from "../../services/db/redis/RedisClient";
 import { IObsidianProcessLogger } from "../logger/ObsidianProcessLogger";
 
 export interface IRedisStateService {
@@ -7,11 +7,11 @@ export interface IRedisStateService {
 }
 
 export class RedisStateService implements IRedisStateService {
-    constructor(private redis: IRedisClient, private logger: IObsidianProcessLogger) {};
+    constructor(private logger: IObsidianProcessLogger) {};
 
     async setServerState(instanceName: string, state: string): Promise<void> {
         try {
-            const client = this.redis.getClient();
+            const client = RedisClient.getClient();
             await client.set(`server:${instanceName}:state`, state);
         } catch(err) {
             const errorDetail = (err instanceof Error) ? err.message : String(err);
@@ -21,7 +21,7 @@ export class RedisStateService implements IRedisStateService {
 
     async getServerState(instanceName: string): Promise<string | null> {
         try {
-            const client = this.redis.getClient();
+            const client = RedisClient.getClient();
             return client.get(`server:${instanceName}:state`);
         } catch(err) {
             const errorDetail = (err instanceof Error) ? err.message : String(err);

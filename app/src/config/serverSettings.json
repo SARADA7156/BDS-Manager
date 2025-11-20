@@ -14,7 +14,10 @@
         "MONGO_PORT",
         "MONGO_URL",
         "GMAIL_USER",
-        "GMAIL_PASS"
+        "GMAIL_PASS",
+        "REDIS_HOST",
+        "REDIS_PORT",
+        "REDIS_PASSWORD"
     ],
     "fullBackupTime": {
         "second": "0",

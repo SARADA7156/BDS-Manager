@@ -27,6 +27,8 @@ import { MongoConnection } from './services/db/mongod/MongoConnection';
 import { ServiceContainer } from './containers/ServiceContainer';
 import { Payload } from './types/jwt/payload';
 import { initSocket } from './services/webSocket';
+import { BullMQRedisClient } from './services/db/redis/BullmqRedisClient';
+import { RedisClient } from './services/db/redis/RedisClient';
 
 declare global {
     namespace Express {
@@ -56,8 +58,16 @@ export async function bootstrap() {
         queueLimit: 0,
     });
 
+    // MongoDB初期化
     const mongodb = MongoConnection.getInstance();
     await mongodb.connect(process.env.MONGO_URL!);
+
+    // Redis初期化
+    const host = process.env.REDIS_HOST;
+    const port = Number(process.env.REDIS_PORT);
+    const pass = process.env.REDIS_PASSWORD;
+    await RedisClient.init(`redis://:${pass}@${host}:${port}`);
+    await BullMQRedisClient.init({ host: host, port: port, password: pass });
 
     // 環境変数を読み込み
     const VERSION = process.env.VERSION!;

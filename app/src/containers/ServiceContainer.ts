@@ -35,6 +35,7 @@ export class ServiceContainer {
     constructor() {
         // 共有依存性を初期化
         const db = DatabaseConnection.getPool();
+
         const obsidianLogger = new ObsidianLogger(logger);
         const isDevelop: boolean = process.env.NODE_ENV === 'production' ? false : true;
         const instanceDir = isDevelop ? 'BDS-servers-test' : 'BDS-servers';

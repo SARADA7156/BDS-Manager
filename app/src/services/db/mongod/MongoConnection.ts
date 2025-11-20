@@ -16,9 +16,10 @@ export class MongoConnection {
     public async connect(url: string): Promise<void> {
         try {
             await mongoose.connect(url);
-            logger.info('✅ Connection to the MongoDB successfully.');
+            logger.info('✅ MongoDBに正常に接続しました。');
         } catch(err) {
-            logger.error('❌ MongoDB connection error:', err);
+            const errorDetail = (err instanceof Error) ? err.message : String(err);
+            logger.error(`❌ MongoDBへの接続に失敗しました。 詳細: ${errorDetail}`);
             throw err;
         }
     }
@@ -26,9 +27,10 @@ export class MongoConnection {
     public async disconnect(): Promise<void> {
         try {
             await mongoose.disconnect();
-            logger.info('🔌 MongoDB disconnected...');
+            logger.info('🔌 MongoDBから正常に切断しました。');
         } catch(err) {
-            logger.error('❌ Error disconnecting MongoDB:', err);
+            const errorDetail = (err instanceof Error) ? err.message : String(err);
+            logger.error(`MongoDBへの切断に失敗しました。 詳細: ${errorDetail}`);
         }
     }
 }
