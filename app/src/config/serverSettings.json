@@ -31,5 +31,6 @@
     },
     "serverDir": "/opt/minecraft/mcbedrock_control/mcbedrock",
     "serverDirDev": "/opt/minecraft/mcbedrock_control/mc_dummy",
+    "serverBin": "./bedrock_server",
     "bedrockPorts": [19132, 19134, 19136, 19138, 19140]
 }

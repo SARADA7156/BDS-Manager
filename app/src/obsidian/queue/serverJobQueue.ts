@@ -20,4 +20,8 @@ export class ServerJobQueue {
             attempts: 1,
         });
     }
+
+    public async clean(): Promise<void> {
+        await this.queue.clean(1000 * 60 * 10, 1000, 'completed');
+    }
 }
