@@ -7,6 +7,13 @@ import { CORE_STATUS } from "../errors/coreStatus";
 import { IObsidianProcessLogger } from "../logger/ObsidianProcessLogger";
 import { IRestartPolicy } from "./RestartPolicy";
 
+interface ServerEvents {
+    'running': [];
+    'stopped': [];
+    'crashed': [];
+    'dispose': [];
+}
+
 export interface IServerProcessManager {
     instanceName: string;
     start(timeoutMs?: number): Promise<void>; // BDSスタート
@@ -17,8 +24,30 @@ export interface IServerProcessManager {
     getPid(): number | undefined; // PID提供
     getLogObserver(): IServerLogObserver;
     getState(): string;
+    dispose(): Promise<void>
 
-    on(event: 'running' | 'stopped' | 'crashed', listener: () => void): void;
+    on<K extends keyof ServerEvents>(
+        event: K,
+        // リスナー関数は、ServerEvents[K]で定義された引数型を受け取る
+        listener: (...args: ServerEvents[K]) => void
+    ): void;
+
+    off<K extends keyof ServerEvents>(
+        event: K,
+        listener: (...args: ServerEvents[K]) => void
+    ): void;
+
+    // removeListenerも同様に定義する
+    removeListener<K extends keyof ServerEvents>(
+        event: K,
+        listener: (...args: ServerEvents[K]) => void
+    ): void;
+
+    // once も同様に定義する
+    once<K extends keyof ServerEvents>(
+        event: K,
+        listener: (...args: ServerEvents[K]) => void
+    ): void;
 }
 
 export class ServerProcessManager extends EventEmitter implements IServerProcessManager {
@@ -147,6 +176,7 @@ export class ServerProcessManager extends EventEmitter implements IServerProcess
             this.logger.warn('サーバーは既に停止しています。');
             return;
         }
+
         this.#isManualStop = true;
         this.#setState(ServerState.STOPPING);
 
@@ -154,10 +184,10 @@ export class ServerProcessManager extends EventEmitter implements IServerProcess
             this.logger.info('BDSサーバーを停止します...');
             this.sendCommand('stop'); // BDSにstopコマンドを送信
 
-            // 'Quit correctly'を待つ
+            // 'Quit correctly' を待つ
             const waitPromise = this.#logParser.waitFor('Quit correctly');
 
-            // BDSが固まった際のタイムアウト処理
+            // ログが来ない場合のタイムアウト
             const timeoutPromise = new Promise<never>((_, reject) => {
                 timeoutId = setTimeout(() => {
                     this.logger.error('BDSサーバーの停止がタイムアウトしました。強制終了します...');
@@ -171,16 +201,19 @@ export class ServerProcessManager extends EventEmitter implements IServerProcess
 
             this.logger.info('BDSサーバーは正常に停止しました。');
 
-        } catch(err) {
+        } catch (err) {
             const errorDetail = (err instanceof Error) ? err.message : String(err);
             this.#handleError(
                 CORE_STATUS.PROCESS_STOP_FAILED,
                 `[${this.instanceName}] BDSサーバー停止エラー.`,
-                `BDSサーバーの停止処理中にエラーが発生しました。 詳細: ${errorDetail}`
+                `停止処理中にエラーが発生しました。 詳細: ${errorDetail}`
             );
         } finally {
             this.#isManualStop = false;
             if (timeoutId) clearTimeout(timeoutId);
+
+            // プロセス終了を exit イベントで確実に待つ
+            await this.#waitForExit(3000);
         }
     }
 
@@ -242,10 +275,45 @@ export class ServerProcessManager extends EventEmitter implements IServerProcess
 
         if (this.#serverProcess) {
             this.#serverProcess.removeAllListeners();
-            this.#serverProcess.stdout.removeAllListeners();
-            this.#serverProcess.stderr.removeAllListeners();
+            this.#serverProcess.stdout?.removeAllListeners();
+            this.#serverProcess.stderr?.removeAllListeners();
             this.#serverProcess = null;
         }
+    }
+
+    public async dispose(): Promise<void> {
+        if (this.#serverProcess) {
+            await this.stop();
+        }
+
+        this.emit('dispose'); // StateManagerへリスナーを削除するよう指示
+
+        this.#cleanupProcess();
+    }
+
+    #waitForExit(timeoutMs: number): Promise<void> {
+        return new Promise((resolve) => {
+            const proc = this.#serverProcess;
+
+            // 既にプロセスが無いなら即終了
+            if (!proc) return resolve();
+
+            let timer: NodeJS.Timeout | null = null;
+
+            const onExit = () => {
+                if (timer) clearTimeout(timer);
+                resolve();
+            };
+
+            // exit 一度だけキャッチ
+            proc.once('exit', onExit);
+
+            // exit が来なくてもタイムアウトで resolve
+            timer = setTimeout(() => {
+                proc.off('exit', onExit);
+                resolve();
+            }, timeoutMs);
+        });
     }
 
     async #handleRestart(): Promise<void> {

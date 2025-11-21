@@ -8,6 +8,7 @@ export interface IServerStateListener {
 export class ServerStateListener implements IServerStateListener {
     private manager: IServerProcessManager;
     private stateService: IRedisStateService;
+    private bindings: Array<() => void> = [];
 
     constructor(manager: IServerProcessManager, stateService: IRedisStateService) {
         this.manager = manager;
@@ -16,9 +17,16 @@ export class ServerStateListener implements IServerStateListener {
         const events = ['running', 'stopped', 'crashed'] as const;
 
         // イベント購読
-        events.forEach(event => 
-            this.manager.on(event, () => this.handleStateChange(event))
-        );
+        events.forEach(event => {
+            const handler = () => this.handleStateChange(event);
+            this.manager.on(event, handler);
+
+            // 後で解除するために保持
+            this.bindings.push(() => this.manager.off(event, handler))
+        });
+
+        this.manager.once('dispose', () => this.removeListeners());
+
     }
 
     private async handleStateChange(state: 'running' | 'stopped' | 'crashed'): Promise<void> {
@@ -27,5 +35,12 @@ export class ServerStateListener implements IServerStateListener {
 
     public async getState(): Promise<string | null> {
         return await this.stateService.getServerState(this.manager.instanceName);
+    }
+
+    private removeListeners(): void {
+        for (const remove of this.bindings) {
+            remove();
+        }
+        this.bindings = [];
     }
 }
