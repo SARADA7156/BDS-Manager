@@ -1,11 +1,11 @@
 import { Worker } from "bullmq";
-import { IServerJobWorker, ServerJobWorker } from "../obsidian/queue/ServerJobWorker";
-import { Job } from "../obsidian/types/job";
-import { IServerProcessManager } from "../obsidian/process/ServerProcessManager";
-import { IServerManager } from "../obsidian/process/ServerManager";
-import { BullMQRedisClient } from "../services/db/redis/BullmqRedisClient";
-import { IServerCreator } from "../obsidian/installer/ServerCreator";
-import { ObsidianWorkerLogger } from "../obsidian/logger/ObsidianWorkerLogger";
+import { IServerJobWorker, ServerJobWorker } from "./ServerJobWorker";
+import { Job } from "../types/job";
+import { IServerProcessManager } from "../process/ServerProcessManager";
+import { IServerManager } from "../process/ServerManager";
+import { BullMQRedisClient } from "../../services/db/redis/BullmqRedisClient";
+import { IServerCreator } from "../installer/ServerCreator";
+import { ObsidianWorkerLogger } from "../logger/ObsidianWorkerLogger";
 
 export class ServerJobWorkerBootstrapper {
     private worker?: Worker;

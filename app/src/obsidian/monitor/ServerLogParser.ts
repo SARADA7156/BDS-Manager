@@ -9,6 +9,7 @@ interface CallBackEntry {
 export interface IServerLogObserver {
     on(keyword: string | RegExp, callBack: (line: string) => void): void;
     waitFor(keyword: string | RegExp): Promise<string>;
+    on(keyword: string | RegExp, callBack: LogCallback): void;
 }
 
 export class ServerLogParser implements IServerLogObserver {

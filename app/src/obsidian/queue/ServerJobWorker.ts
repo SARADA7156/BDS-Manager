@@ -1,8 +1,8 @@
-import { ServerConfig } from "../entities/instanceConfigSchema";
+import { InstanceConfig } from "../entities/instanceConfigSchema";
 import { IServerCreator } from "../installer/ServerCreator";
 import { IObsidianWorkerLogger } from "../logger/ObsidianWorkerLogger";
 import { IServerProcessManager } from "../process/ServerProcessManager";
-import { Job } from "../types/job";
+import { CommandJob, Job } from "../types/job";
 
 export interface IServerJobWorker {
     handle(job: Job, manager: IServerProcessManager): Promise<void>;
@@ -36,7 +36,7 @@ export class ServerJobWorker implements IServerJobWorker {
                     if (!job.command) {
                         throw new Error('コマンドが適切に渡されていません。');
                     }
-                    await this.sendCommand(manager, job.command);
+                    await this.executeCommandJob(manager, job);
                     break;
                 case 'create':
                     if (!job.config) {
@@ -70,11 +70,28 @@ export class ServerJobWorker implements IServerJobWorker {
         await manager.restart();
     }
 
-    private sendCommand(manager: IServerProcessManager, command: string): void {
+    private async executeCommandJob(manager: IServerProcessManager, job: CommandJob): Promise<void> {
+        const { command, expect, timeoutMs, coolTime } = job;
+
         manager.sendCommand(command);
+
+        const logParser = manager.getLogObserver();
+        const waitLog = logParser.waitFor(expect);
+
+        const timeout = new Promise<never>((_, reject) => {
+            setTimeout(() => {
+                reject(new Error(`期待するログが表示されなかったため、コマンド送信がタイムアウトしました。 期待する結果: ${expect}`));
+            }, timeoutMs);
+        });
+
+        await Promise.race([waitLog, timeout]);
+
+        if (coolTime > 0) {
+            await new Promise((resolve) => setTimeout(resolve, coolTime));
+        }
     }
 
-    private async createServer(config: ServerConfig): Promise<void> {
+    private async createServer(config: InstanceConfig): Promise<void> {
         await this.creator.create(config);
     }
 }

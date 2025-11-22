@@ -1,17 +1,15 @@
-import { InstanceConfig, ServerConfig } from "../entities/instanceConfigSchema";
+import { InstanceConfig } from "../entities/instanceConfigSchema";
 import { CORE_STATUS } from "../errors/coreStatus";
 import { ConfigService } from "./config/ConfigService";
 import { ReturnType } from "../types/ObsidianCore";
 import { ObsidianPortManager } from "../core/ObsidianPortManager";
 import { ObsidianLogger } from "../logger/ObsidianLogger";
-import { ObsidianParamError } from "../errors/ObsidianParamError";
 import { BdsDownloadService } from "./downloader/BdsDownloadService";
 import { IObsidianIOService } from "../utils/ObsidianOIService";
-import { generateRandomSuffix } from "../../utils/randomSuffix";
 import { IBdsPropertiesService } from "./config/BdsPropertiesService";
 
 export interface IServerCreator {
-    create(serverConfig: ServerConfig): Promise<ReturnType>;
+    create(serverConfig: InstanceConfig): Promise<ReturnType>;
 }
 
 export class ServerCreator implements IServerCreator {
@@ -24,10 +22,9 @@ export class ServerCreator implements IServerCreator {
         private writer: IBdsPropertiesService,
         private logger: ObsidianLogger,
         private readonly instanceDir: string,
-        private readonly projectRoot: string
     ) {}
 
-    public async create(serverConfig: ServerConfig): Promise<ReturnType> {
+    public async create(serverConfig: InstanceConfig): Promise<ReturnType> {
         this.#reservedPort = undefined;
         try {
             // 利用可能なポートを取得
@@ -42,13 +39,13 @@ export class ServerCreator implements IServerCreator {
             this.logger.info(`The port used by the [${serverConfig.instanceName}] is ${this.#reservedPort}.`);
 
             // 設定保存フェーズ
-            const config: InstanceConfig = await this.#registerConfig(serverConfig, this.#reservedPort);
+            await this.#registerConfig(serverConfig, this.#reservedPort);
 
             // I/Oフェーズ
-            await this.#downloadAndCopyAssets(config.instanceName);
+            await this.#downloadAndCopyAssets(serverConfig.instanceName);
 
             // 設定書き込み
-            await this.#writeServerProperties(config, this.#reservedPort, config.instanceName);
+            await this.#writeServerProperties(serverConfig, this.#reservedPort, serverConfig.instanceName);
 
             return { result: true, code: CORE_STATUS.SUCCESS, message: 'Instance creation complete.' };
         } catch(err) {
@@ -61,17 +58,10 @@ export class ServerCreator implements IServerCreator {
         return this.portManager.reserveAvailablePort();
     }
 
-    async #registerConfig(serverConfig: ServerConfig, port: number): Promise<InstanceConfig> {
-        // インスタンス名にランダムな文字列をつける
-        serverConfig.instanceName = `${serverConfig.instanceName}-${generateRandomSuffix()}`;
+    async #registerConfig(serverConfig: InstanceConfig, port: number): Promise<void> {
 
         // MongoDBへ保存し、フォーマットした設定を取得
-        const config: InstanceConfig | undefined = await this.confService.registerAndPrepareConfig(serverConfig, port);
-        if (!config) {
-            this.logger.error('The instance settings data format is incorrect.')
-            throw new ObsidianParamError(CORE_STATUS.BAT_REQUEST, 'Config format Error.', 'The data format of the configuration file is different.');
-        }
-        return config;
+        await this.confService.registerAndPrepareConfig(serverConfig, port);
     }
 
     async #downloadAndCopyAssets(instanceName: string): Promise<void> {

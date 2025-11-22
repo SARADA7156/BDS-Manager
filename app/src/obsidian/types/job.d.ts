@@ -1,50 +1,36 @@
-import { ServerConfig } from "../entities/instanceConfigSchema";
+import { InstanceConfig } from "../entities/instanceConfigSchema";
 
-export type StartJob = {
+export type BaseJob = {
     jobId: string;
+    instanceName: string;
+    executorType: 'user' | 'system';
+    executedBy: string;
+    createdAt: Date;
+};
+
+export type StartJob = BaseJob & {
     type: 'start';
-    instanceName: string;
-    executorType: 'user' | 'system';
-    executedBy: string;
-    createdAt: Date;
 };
 
-export type StopJob = {
-    jobId: string;
+export type StopJob = BaseJob & {
     type: 'stop';
-    instanceName: string;
-    executorType: 'user' | 'system';
-    executedBy: string;
-    createdAt: Date;
 };
 
-export type RestartJob = {
-    jobId: string;
+export type RestartJob = BaseJob & {
     type: 'restart';
-    instanceName: string;
-    executorType: 'user' | 'system';
-    executedBy: string;
-    createdAt: Date;
 };
 
-export type CommandJob = {
-    jobId: string;
+export type CommandJob = BaseJob & {
     type: 'command';
-    instanceName: string;
-    executorType: 'user' | 'system';
-    executedBy: string;
-    createdAt: Date;
     command: string;
+    expect: string | RegExp;
+    timeoutMs: number;
+    coolTime: number
 };
 
-export type CreateJob = {
-    jobId: string;
+export type CreateJob = BaseJob & {
     type: 'create';
-    instanceName: string;
-    executorType: 'user' | 'system';
-    executedBy: string;
-    createdAt: Date;
-    config: ServerConfig;
+    config: InstanceConfig;
 };
 
 export type Job =

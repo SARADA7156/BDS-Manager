@@ -35,7 +35,7 @@ export class ObsidianPortManager implements IPortManager {
 
         if (!usedPort || !usedPort.used) {
             // 不正な操作(登録されていないポート番号や既に未使用済みのポート)に対して例外を投げる
-            throw new ObsidianParamError(CORE_STATUS.BAT_REQUEST, 'bat request', 'The port is already unused or does not exist.');
+            throw new ObsidianParamError(CORE_STATUS.BAD_REQUEST, 'bat request', 'The port is already unused or does not exist.');
         }
 
         // 未使用状態に変更

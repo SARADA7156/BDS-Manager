@@ -120,42 +120,15 @@ export async function bootstrap() {
 
     initSocket(httpServer, services.jwtService);
 
-    const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-        try {
-            res.render('layout', {
-                stylesheets: ['pages/error'],
-                page: 'error.ejs',
-                errorCode: '500',
-                errorMsg: 'サーバー側でエラーが発生しました。'
-            });
-            logger.error(err);
-        } catch(error) {
-            logger.error('Server rendering error.', error);
-            res.status(500).send('サーバーエラーが発生しました。')
-        }
-    }
-
-    app.use(errorHandler);
-
-    // ==== CLIツールの設定 ====
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
-
-    // コマンドラインからサーバー操作のコマンドを受け付ける
-    rl.on('line', async (input) => {
-        handler(httpServer, rl, input.trim(), mongodb);
-    });
-
     // 終了シグナルをキャッチするとサーバーをシャットダウン
-    process.on('SIGINT', () => shutdown(httpServer, rl, mongodb));
-    process.on('SIGTERM', () => shutdown(httpServer, rl, mongodb));
+    process.on('SIGINT', () => shutdown(httpServer, mongodb));
+    process.on('SIGTERM', () => shutdown(httpServer, mongodb));
 
     try {
         logger.info('Starting Server');
         logger.info(`version ${VERSION}`);
         logger.info(`Development mode: ${isMode}`);
+        logger.info(`Server PID: ${process.pid}`);
 
         httpServer.listen(PORT, () => {
             logger.info(`Http Server use port: ${PORT}`);

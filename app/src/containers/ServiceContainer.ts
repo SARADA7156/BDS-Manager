@@ -39,6 +39,7 @@ export class ServiceContainer {
         const obsidianLogger = new ObsidianLogger(logger);
         const isDevelop: boolean = process.env.NODE_ENV === 'production' ? false : true;
         const instanceDir = isDevelop ? 'BDS-servers-test' : 'BDS-servers';
+        const projectRoot = process.cwd();
 
         // 基本サービスの組み立て
         this.userService = new UserService(db);
@@ -57,9 +58,9 @@ export class ServiceContainer {
         const portManager = new ObsidianPortManager();
         const confService = new ConfigService(obsidianLogger, configRepo, instanceRepo);
         const downloader = new BdsDownloadService(obsidianLogger, versionRepo);
-        const ioService = new ObsidianIOService(process.cwd(), obsidianLogger);
+        const ioService = new ObsidianIOService(projectRoot, obsidianLogger);
         const propertiesWriter = new BdsPropertiesService(obsidianLogger, ioService);
-        const serverCreator = new ServerCreator(portManager, confService, downloader, ioService, propertiesWriter, obsidianLogger, instanceDir, process.cwd());
+        const serverCreator = new ServerCreator(portManager, confService, downloader, ioService, propertiesWriter, obsidianLogger, instanceDir);
         const buildQueue = new ServerJobQueue(serverCreator, obsidianLogger);
 
         // ObsidianCoreに依存性を注入して初期化

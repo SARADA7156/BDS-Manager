@@ -8,7 +8,7 @@ router.post('/create', async (req, res) => {
         const serverConfig = ServerConfigSchema.safeParse(req.body);
 
         if (!serverConfig.success) {
-            return res.status(400).json({ status: 400, code: "bat_request", message: "インスタンスの設定項目が不足しています。" });
+            return res.status(400).json({ status: 400, code: "BAD_REQUEST", message: "インスタンスの設定項目が不足しています。" });
         }
 
         const result = await req.services.obsidianCore.createServer(req.body);

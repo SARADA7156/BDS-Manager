@@ -14,5 +14,20 @@
         "player-default-permittion",
         "level-seed",
         "server-port"
+    ],
+    "commandProperties": [
+        "showCoordinates",
+        "showdaysplayed",
+        "doFireTick",
+        "tntExplodes",
+        "doMobLoot",
+        "doTileDrops",
+        "doImmediateRespawn",
+        "pvp",
+        "locatorBar",
+        "dodaylightcycle",
+        "keepinventory",
+        "domobspawning",
+        "doweathercycle"
     ]
 }
