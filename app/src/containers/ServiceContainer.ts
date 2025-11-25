@@ -15,9 +15,14 @@ import { InstanceRepo } from "../services/db/mongod/repositories/InstanceRepo";
 import { ServerCreator } from "../obsidian/installer/ServerCreator";
 import { BdsDownloadService } from "../obsidian/installer/downloader/BdsDownloadService";
 import { BdsVersionRepo } from "../services/db/mysqld/Repository/BdsVersionRepo";
-import { ServerJobQueue } from "../obsidian/installer/ServerJobQueue";
 import { ObsidianIOService } from "../obsidian/utils/ObsidianOIService";
 import { BdsPropertiesService } from "../obsidian/installer/config/BdsPropertiesService";
+import { ServerJobWorker } from "../obsidian/queue/ServerJobWorker";
+import { IServerJobWorkerBootstrapper, ServerJobWorkerBootstrapper } from "../obsidian/queue/ServerJobWorkerSetup";
+import { ServerJobQueue } from "../obsidian/queue/serverJobQueue";
+import { IObsidianWorkerLogger, ObsidianWorkerLogger } from "../obsidian/logger/ObsidianWorkerLogger";
+import { ServerManager } from "../obsidian/process/ServerManager";
+import { JobPlan } from "../obsidian/jobs/JobPlan";
 
 export class ServiceContainer {
     private GMAIL_USER = process.env.GMAIL_USER!;
@@ -31,6 +36,8 @@ export class ServiceContainer {
     public gmailService: GmailService;
     public uuidManager: UuidManager;
     public jwtService: JwtService;
+
+    public WorkerBootstrap: IServerJobWorkerBootstrapper;
 
     constructor() {
         // 共有依存性を初期化
@@ -55,15 +62,21 @@ export class ServiceContainer {
         const versionRepo = new BdsVersionRepo(db);
 
         // Obsidian関連の依存性を組み立て
+        const serverManager = new ServerManager(isDevelop, projectRoot, obsidianLogger);
         const portManager = new ObsidianPortManager();
         const confService = new ConfigService(obsidianLogger, configRepo, instanceRepo);
         const downloader = new BdsDownloadService(obsidianLogger, versionRepo);
         const ioService = new ObsidianIOService(projectRoot, obsidianLogger);
         const propertiesWriter = new BdsPropertiesService(obsidianLogger, ioService);
-        const serverCreator = new ServerCreator(portManager, confService, downloader, ioService, propertiesWriter, obsidianLogger, instanceDir);
-        const buildQueue = new ServerJobQueue(serverCreator, obsidianLogger);
+        const serverCreator = new ServerCreator(portManager, serverManager, confService, downloader, ioService, propertiesWriter, obsidianLogger, instanceDir);
+
+        // Queue関連
+        const workerLogger: IObsidianWorkerLogger = new ObsidianWorkerLogger(obsidianLogger);
+        const queue = new ServerJobQueue();
+        this.WorkerBootstrap = new ServerJobWorkerBootstrapper(serverCreator, workerLogger, serverManager);
+        const jobPlan = new JobPlan(obsidianLogger);
 
         // ObsidianCoreに依存性を注入して初期化
-        this.obsidianCore = new ObsidianCore(buildQueue);
+        this.obsidianCore = new ObsidianCore(queue, jobPlan);
     }
 }

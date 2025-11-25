@@ -67,7 +67,7 @@ export async function bootstrap() {
     const port = Number(process.env.REDIS_PORT);
     const pass = process.env.REDIS_PASSWORD;
     await RedisClient.init(`redis://:${pass}@${host}:${port}`);
-    await BullMQRedisClient.init({ host: host, port: port, password: pass });
+    await BullMQRedisClient.init({ host: host, port: port, password: pass, maxRetriesPerRequest: null });
 
     // 環境変数を読み込み
     const VERSION = process.env.VERSION!;
@@ -76,29 +76,6 @@ export async function bootstrap() {
     const app = express();
     const services = new ServiceContainer(); // すべてのサービスをインスタンス化
     const httpServer = createServer(app);
-
-    let serverDir: string = settings.serverDir;
-
-    // 開発モードで起動しているかを確認しセットアップ
-    if (isMode) {
-        serverDir = settings.serverDirDev; // 開発モードで起動すると作業ディレクトリを変更
-    }
-
-    // ==== sessionの設定 ====
-    app.use(
-        session({
-            secret: process.env.SESSION_SECRET || "default_secret",
-            resave: false,
-            saveUninitialized: true,
-            cookie: {
-                secure: false,
-                maxAge: 60 * 60 * 1000,
-            },
-        })
-    )
-
-    // ==== 静的ファイル ====
-    app.use(express.static(path.join(__dirname, '../public')));
 
     // ==== Expressの基本設定 ====
 
@@ -119,6 +96,7 @@ export async function bootstrap() {
     app.use('/api', apiRouter);
 
     initSocket(httpServer, services.jwtService);
+    services.WorkerBootstrap.start(); // キューワーカーをスタート
 
     // 終了シグナルをキャッチするとサーバーをシャットダウン
     process.on('SIGINT', () => shutdown(httpServer, mongodb));

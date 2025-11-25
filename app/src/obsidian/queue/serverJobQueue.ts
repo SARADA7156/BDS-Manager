@@ -2,13 +2,19 @@ import { Queue } from "bullmq";
 import { Job } from "../types/job";
 import { BullMQRedisClient } from "../../services/db/redis/BullmqRedisClient";
 
-export class ServerJobQueue {
+export interface IServerJobQueue {
+    addJob(job: Job): Promise<void>;
+
+    clean(): Promise<void>;
+}
+
+export class ServerJobQueue implements IServerJobQueue {
     private queue: Queue<Job>;
 
     constructor() {
         const redisClient = BullMQRedisClient.getConnection();
 
-        this.queue = new Queue<Job>('server-job', {
+        this.queue = new Queue<Job>('server-jobs', {
             connection: redisClient,
         });
     }

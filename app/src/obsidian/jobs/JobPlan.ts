@@ -8,7 +8,7 @@ import { commandProperties } from './settingsMap.json';
 import { generateRandomSuffix } from "../../utils/randomSuffix";
 import { ObsidianLogger } from "../logger/ObsidianLogger";
 
-interface IJobPlan {
+export interface IJobPlan {
     CreateJobPlan(config: ServerConfig, executorType: 'user' | 'system', executedBy: string): Job[] | undefined;
     createJob(type: 'start', instanceName: string, executorType: 'user' | 'system', executedBy: string): StartJob;
     createJob(type: 'stop', instanceName: string, executorType: 'user' | 'system', executedBy: string): StopJob;
@@ -34,6 +34,7 @@ export class JobPlan implements IJobPlan {
             const jobPlans: Job[] = []; // ジョブのプランが格納された配列
 
             // まずstartジョブを追加
+            jobPlans.push(this.createJob('create', convertedCfg.instanceName, executorType, executedBy, convertedCfg));
             jobPlans.push(this.createJob('start', convertedCfg.instanceName, executorType, executedBy));
 
             // その後にゲームルール変更コマンドジョブを追加してゆく

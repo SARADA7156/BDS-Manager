@@ -2,10 +2,11 @@ import { InstanceConfig } from "../entities/instanceConfigSchema";
 import { IServerCreator } from "../installer/ServerCreator";
 import { IObsidianWorkerLogger } from "../logger/ObsidianWorkerLogger";
 import { IServerProcessManager } from "../process/ServerProcessManager";
-import { CommandJob, Job } from "../types/job";
+import { CommandJob, CreateJob, Job } from "../types/job";
 
 export interface IServerJobWorker {
-    handle(job: Job, manager: IServerProcessManager): Promise<void>;
+    handle(job: CreateJob): Promise<void>;
+    handle(job: Job, manager?: IServerProcessManager): Promise<void>;
 }
 
 export class ServerJobWorker implements IServerJobWorker {
@@ -17,22 +18,31 @@ export class ServerJobWorker implements IServerJobWorker {
         this.logger = logger;
     }
 
-    public async handle(job: Job, manager: IServerProcessManager): Promise<void> {
+    public async handle(job: CreateJob): Promise<void>;
+    public async handle(job: Job, manager: IServerProcessManager): Promise<void>;
+
+    public async handle(job: Job, manager?: IServerProcessManager): Promise<void> {
+        console.log('handle関数が呼ばれました。')
+        const name = job.instanceName ?? manager?.instanceName ?? 'unknown';
         const start = Date.now();
-        this.logger.info(`${manager.instanceName} に対してジョブ ${job.type} を開始します。`);
+        this.logger.info(`${name} に対してジョブ ${job.type} を開始します。`);
 
         try {
             switch (job.type) {
                 case 'start':
+                    if (!manager) throw new Error('start ジョブに manager が必要です。');
                     await this.startServer(manager);
                     break;
                 case 'stop':
+                    if (!manager) throw new Error('start ジョブに manager が必要です。');
                     await this.stopServer(manager);
                     break;
                 case 'restart':
+                    if (!manager) throw new Error('start ジョブに manager が必要です。');
                     await this.restartServer(manager);
                     break;
                 case 'command':
+                    if (!manager) throw new Error('start ジョブに manager が必要です。');
                     if (!job.command) {
                         throw new Error('コマンドが適切に渡されていません。');
                     }
@@ -45,17 +55,17 @@ export class ServerJobWorker implements IServerJobWorker {
                     await this.createServer(job.config);
                     break;
                 default:
-                    this.logger.warn(`${manager.instanceName} に対して不明なジョブタイプが実行されました。`);
+                    this.logger.warn(`${name} に対して不明なジョブタイプが実行されました。`);
             }
         } catch (err) {
             const errorDetail = (err instanceof Error) ? err.message : String(err);
-            this.logger.error(`${manager.instanceName} のジョブ ${job.type} 中にエラーが発生しました。 詳細: ${errorDetail}`);
+            this.logger.error(`${name} のジョブ ${job.type} 中にエラーが発生しました。 詳細: ${errorDetail}`);
             throw err;
         }
 
         const end = Date.now();
         const seconds = (end - start) / 1000;
-        this.logger.info(`${manager.instanceName} に対してジョブ ${job.type} を ${seconds}秒 で完了しました。`)
+        this.logger.info(`${name} に対してジョブ ${job.type} を ${seconds}秒 で完了しました。`)
     }
 
     private async startServer(manager: IServerProcessManager): Promise<void> {

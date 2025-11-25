@@ -11,7 +11,7 @@ router.post('/create', async (req, res) => {
             return res.status(400).json({ status: 400, code: "BAD_REQUEST", message: "インスタンスの設定項目が不足しています。" });
         }
 
-        const result = await req.services.obsidianCore.createServer(req.body);
+        const result = await req.services.obsidianCore.createServer(req.body, 'shou');
         if (!result.result) {
             throw new Error('Instance create Error')
         }

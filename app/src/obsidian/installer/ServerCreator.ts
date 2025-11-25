@@ -7,6 +7,7 @@ import { ObsidianLogger } from "../logger/ObsidianLogger";
 import { BdsDownloadService } from "./downloader/BdsDownloadService";
 import { IObsidianIOService } from "../utils/ObsidianOIService";
 import { IBdsPropertiesService } from "./config/BdsPropertiesService";
+import { IServerManager } from "../process/ServerManager";
 
 export interface IServerCreator {
     create(serverConfig: InstanceConfig): Promise<ReturnType>;
@@ -16,6 +17,7 @@ export class ServerCreator implements IServerCreator {
     #reservedPort: number | undefined;
     constructor(
         private portManager: ObsidianPortManager,
+        private serverManager: IServerManager,
         private confService: ConfigService,
         private downloader: BdsDownloadService,
         private io: IObsidianIOService,
@@ -47,6 +49,8 @@ export class ServerCreator implements IServerCreator {
             // 設定書き込み
             await this.#writeServerProperties(serverConfig, this.#reservedPort, serverConfig.instanceName);
 
+            // 最後にProcessManager類のインスタンス化を行う
+            this.#buildInstance(serverConfig.instanceName)
             return { result: true, code: CORE_STATUS.SUCCESS, message: 'Instance creation complete.' };
         } catch(err) {
             this.#handleCreationError(err);
@@ -85,6 +89,11 @@ export class ServerCreator implements IServerCreator {
         const propertiesFile = `${this.instanceDir}/${instanceName}/server.properties`;
         this.logger.info('Modify server.properties...');
         await this.writer.setProperty({...config, port}, propertiesFile);
+    }
+
+    async #buildInstance(instanceName: string) {
+        const serverDir = `${this.instanceDir}/${instanceName}/`;
+        this.serverManager.buildInstance(instanceName, serverDir);
     }
 
     #handleCreationError(err: unknown): void {
