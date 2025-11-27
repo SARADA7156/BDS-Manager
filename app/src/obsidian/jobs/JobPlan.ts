@@ -3,7 +3,7 @@ import { ulid } from "ulid";
 import { InstanceConfig, InstanceConfigSchema, ServerConfig } from "../entities/instanceConfigSchema";
 import { CORE_STATUS } from "../errors/coreStatus";
 import { isObsidianParamError, ObsidianParamError } from "../errors/ObsidianParamError";
-import { BaseJob, CommandJob, CreateJob, Job, RestartJob, StartJob, StopJob } from "../types/job";
+import { BaseJob, CommandJob, CreateJob, Job, RestartJob, StartJob, StopJob } from "../../../shared/types/job";
 import { commandProperties } from './settingsMap.json';
 import { generateRandomSuffix } from "../../utils/randomSuffix";
 import { ObsidianLogger } from "../logger/ObsidianLogger";

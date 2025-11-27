@@ -20,15 +20,14 @@ checkEnvironmentVariables(settings.environment); // .envファイルにすべて
 console.log('setting up server logging...');
 import { shutdown } from './services/process/shutdown';
 import { logger } from './services/log/logger'; // ロガー関数をインポート
-import { handler } from './services/cli/cliHandler';
 import { DatabaseConnection } from "./services/db/mysqld/DatabaseConnection";
 import apiRouter from './routes/apiRouter';
 import { MongoConnection } from './services/db/mongod/MongoConnection';
 import { ServiceContainer } from './containers/ServiceContainer';
 import { Payload } from './types/jwt/payload';
-import { initSocket } from './services/webSocket';
 import { BullMQRedisClient } from './services/db/redis/BullmqRedisClient';
 import { RedisClient } from './services/db/redis/RedisClient';
+import { WebSocketManager } from './services/webSocket/WebSocketManager';
 
 declare global {
     namespace Express {
@@ -95,7 +94,7 @@ export async function bootstrap() {
 
     app.use('/api', apiRouter);
 
-    initSocket(httpServer, services.jwtService);
+    WebSocketManager.init(httpServer, services.jwtService);
     services.WorkerBootstrap.start(); // キューワーカーをスタート
 
     // 終了シグナルをキャッチするとサーバーをシャットダウン

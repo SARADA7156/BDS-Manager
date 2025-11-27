@@ -5,7 +5,7 @@ import { UserService } from "../services/db/mysqld/Service/UserService";
 import { GmailService } from "../services/mailer/GmailService";
 import { GmailSender } from "../services/mailer/mailer";
 import { JwtService } from "../services/auth/JwtService";
-import { ObsidianCore } from "../obsidian/core/ObsidianCore";
+import { ObsidianCore, IObsidianCore } from "../obsidian/core/ObsidianCore";
 import { ObsidianPortManager } from "../obsidian/core/ObsidianPortManager";
 import { ConfigService } from "../obsidian/installer/config/ConfigService";
 import { ObsidianLogger } from "../obsidian/logger/ObsidianLogger";
@@ -17,7 +17,6 @@ import { BdsDownloadService } from "../obsidian/installer/downloader/BdsDownload
 import { BdsVersionRepo } from "../services/db/mysqld/Repository/BdsVersionRepo";
 import { ObsidianIOService } from "../obsidian/utils/ObsidianOIService";
 import { BdsPropertiesService } from "../obsidian/installer/config/BdsPropertiesService";
-import { ServerJobWorker } from "../obsidian/queue/ServerJobWorker";
 import { IServerJobWorkerBootstrapper, ServerJobWorkerBootstrapper } from "../obsidian/queue/ServerJobWorkerSetup";
 import { ServerJobQueue } from "../obsidian/queue/serverJobQueue";
 import { IObsidianWorkerLogger, ObsidianWorkerLogger } from "../obsidian/logger/ObsidianWorkerLogger";
@@ -30,7 +29,7 @@ export class ServiceContainer {
 
     private gmailMailer: GmailSender;
     private tokenRepo: TokenRepository;
-    public obsidianCore: ObsidianCore
+    public obsidianCore: IObsidianCore
 
     public userService: UserService;
     public gmailService: GmailService;

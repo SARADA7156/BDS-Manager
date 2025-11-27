@@ -25,7 +25,7 @@ export const NotificationsProvider = ({ children }: { children: ReactNode }) => 
 
     // 追加
     const addNotification = (message: string, level: NotificationsLevel, duration: number = 5000) => {
-        const id = Date.now()
+        const id = Date.now();
         const newNotification = { id: id, message: message, level: level, duration: duration };
         setNotifications((prevNotifications) => [...prevNotifications, newNotification]);
 

@@ -10,8 +10,8 @@ export const NotificationsContainer = () => {
 
     return (
         <div className="position-fixed end-0 bottom-0 notifications-container">
-            {notifications.map((n) => (
-                <div key={n.id} className={`level-${n.level} d-grid m-2 bg-dark`}>
+            {notifications.map((n, index) => (
+                <div key={n.id + index} className={`level-${n.level} d-grid m-2 bg-dark`}>
                     <div className='notifications d-grid p-2'>
                         <div className='d-grid'>
                             <div className="notice-content d-flex">

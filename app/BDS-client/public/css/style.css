@@ -61,6 +61,10 @@ footer {
 /* ==== 各コンポーネントの共通のスタイリング ==== */
 
 /* ==== ボーダーのスタイリング ==== */
+.border {
+    border: 1px solid var(--border-color-normal);
+}
+
 .box-border {
     border-top: solid 5px var(--border-color-1);
     border-left: solid 5px var(--border-color-1);
@@ -173,6 +177,16 @@ p {
     margin: 0;
 }
 
+a, a:visited {
+    color: #fff;
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--bg-color-green-hover);
+    text-decoration: none;
+}
+
 .custom-scrollbar {
     scrollbar-color: white var(--bg-color-black-2);
 }
@@ -251,6 +265,11 @@ input {
 
 .border-bottom {
     border-bottom: solid 1px var(--border-color-normal) !important;
+}
+
+.action-hover:hover {
+    background-color: var(--hover-color);
+    color: var(--bg-color-green);
 }
 
 /* アニメーション定義 */

@@ -10,6 +10,8 @@ import { NotificationsContainer } from './components/Notice/NotificationsContain
 import { VerifyToken } from './pages/verifyToken/VerifyToken';
 import Login from './pages/login/Login';
 import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
+import { JobLayout } from './pages/job/JobLayout';
+import { JobQueueList } from './pages/job/JobQueueList';
 
 
 function App() {
@@ -44,14 +46,14 @@ function App() {
                             <Route path='/login' element={<Login />}></Route>
                             <Route path='/auth/login/token' element={<VerifyToken />}></Route>
 
-                            <Route
-                                path='/dashboard'
-                                element={< ProtectedRoute element={<Dashboard />}/>}
-                            />
-                            <Route
-                                path='/createInstance'
-                                element={< ProtectedRoute element={<Create />}/>}
-                            />
+                            <Route path='/dashboard' element={< ProtectedRoute element={<Dashboard />}/>} />
+
+                            <Route path='/createInstance' element={< ProtectedRoute element={<Create />}/>} />
+
+                            <Route path='/jobs' element={< ProtectedRoute element={<JobLayout />} />} />
+
+                            <Route path='/jobs/queue' element={< ProtectedRoute element={<JobQueueList />} />} />
+
                         </Routes>
                     </div>
                 </main>

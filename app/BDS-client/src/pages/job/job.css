@@ -1,0 +1,153 @@
+@charset "UTF-8";
+
+#job-func-list a {
+    height: 66px;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+}
+
+#job-func-list a:hover {
+    background-color: var(--hover-color);
+}
+
+.job-func-item {
+    margin-left: 0.3em;
+}
+
+.queue-list-container {
+    min-height: 700px;
+}
+
+/* ここから /jobs/queue ページのスタイリング */
+
+#queue-info-container {
+    display: grid;
+    grid-template-columns: 200px auto;
+}
+
+#queue-info-tab {
+    border-right: solid 1px var(--border-color-normal);
+}
+
+#queue-info-tab li {
+    width: 200px;
+    height: 66px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    position: relative;
+    transition: var(--transition-speed-2);
+}
+
+#queue-info-tab li::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 5px;
+    height: 0;
+    background-color: var(--bg-color-green);
+    transition: height 0.1s ease-out;
+}
+
+#queue-info-tab li.active {
+    background-color: var(--hover-color);
+}
+
+#queue-info-tab li.active::before {
+    height: 100%;
+}
+
+#job-list {
+    overflow-y: auto;
+    max-height: 650px;
+}
+
+.job-card {
+    padding: 0.5em;
+    display: grid;
+    grid-template-columns: 80% 20%;
+    align-items: center;
+    text-shadow: 1px 1px 2px #000;
+}
+
+.job-state {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    padding-right: 1em;
+    animation: bounce 1s infinite ease-in-out;
+}
+
+.job-state.active, .job-state.prioritized {
+    animation: flashing 1s infinite ease-in-out;
+}
+
+.job-state p {
+    margin-left: 0.1em;
+}
+
+.job-title {
+    font-size: 23px;
+}
+
+.job-info {
+    font-size: 14px;
+}
+
+.job-card.job-state-active {
+    color: aqua;
+    background-color: #00ffff0e;
+}
+
+.job-card.job-state-failed {
+    color: #ff1e1e;
+    background-color: #ff000010;
+}
+
+.job-card.job-state-waiting, .job-card.job-state-unknown {
+    color: #e0e0e0;
+    background-color: #ffffff25;
+}
+
+.job-card.job-state-waiting-children {
+    color: #fdb2fd;
+    background-color: #892be21e;
+}
+
+.job-card.job-state-completed {
+    color: #00ff00;
+    background-color: #00ff0015;
+}
+
+.job-card.job-state-prioritized {
+    color: yellow;
+    background-color: #ffff0010;
+}
+
+.job-card.job-state-delayed {
+    color: #ffbf49;
+    background-color: #ffa60013;
+}
+
+@keyframes bounce {
+    0%, 30%, 100% {
+        transform: translateY(0);
+    }
+    15% {
+        transform: translateY(-2px);
+    }
+}
+
+@keyframes flashing {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.2;
+    }
+}

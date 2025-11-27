@@ -1,4 +1,5 @@
-import { InstanceConfig } from "../entities/instanceConfigSchema";
+import { JobState } from "bullmq";
+import { InstanceConfig } from "../../src/obsidian/entities/instanceConfigSchema";
 
 export type BaseJob = {
     jobId: string;
@@ -39,3 +40,7 @@ export type Job =
     | RestartJob
     | CommandJob
     | CreateJob;
+
+export type JobInfo = Job & {
+    state: JobState | 'unknown';
+}

@@ -2,7 +2,7 @@ import { InstanceConfig } from "../entities/instanceConfigSchema";
 import { IServerCreator } from "../installer/ServerCreator";
 import { IObsidianWorkerLogger } from "../logger/ObsidianWorkerLogger";
 import { IServerProcessManager } from "../process/ServerProcessManager";
-import { CommandJob, CreateJob, Job } from "../types/job";
+import { CommandJob, CreateJob, Job } from "../../../shared/types/job";
 
 export interface IServerJobWorker {
     handle(job: CreateJob): Promise<void>;
@@ -22,7 +22,6 @@ export class ServerJobWorker implements IServerJobWorker {
     public async handle(job: Job, manager: IServerProcessManager): Promise<void>;
 
     public async handle(job: Job, manager?: IServerProcessManager): Promise<void> {
-        console.log('handle関数が呼ばれました。')
         const name = job.instanceName ?? manager?.instanceName ?? 'unknown';
         const start = Date.now();
         this.logger.info(`${name} に対してジョブ ${job.type} を開始します。`);

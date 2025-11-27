@@ -2,6 +2,7 @@
     BDS Obsidianのすべての機能の統括部分
     Obsidianのすべての機能はこのクラスを介してでしか呼び出してはならない。
  */
+import { JobInfo } from "@shared/types/job";
 import { ServerConfig } from "../entities/instanceConfigSchema";
 import { CORE_STATUS } from "../errors/coreStatus";
 import { isObsidianError } from "../errors/ObsidianError";
@@ -9,8 +10,10 @@ import { IJobPlan } from "../jobs/JobPlan";
 import { IServerJobQueue } from "../queue/serverJobQueue";
 import { ReturnType } from "../types/ObsidianCore";
 
-interface IObsidianCore {
+export interface IObsidianCore {
     createServer(serverConfig: ServerConfig, executedBy: string): Promise<ReturnType>;
+
+    getJobs(): Promise<JobInfo[]>
 }
 
 export class ObsidianCore implements IObsidianCore {
@@ -45,5 +48,9 @@ export class ObsidianCore implements IObsidianCore {
             }
             return { result: false, code: CORE_STATUS.INTERNAL_SERVER_ERROR, message: `Internal Obsidian Error: ${error}` };
         }
+    }
+
+    public async getJobs(): Promise<JobInfo[]> {
+        return await this.queue.getJobs();
     }
 }

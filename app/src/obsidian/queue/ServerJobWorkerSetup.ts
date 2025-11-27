@@ -1,6 +1,6 @@
 import { Queue, Worker } from "bullmq";
 import { IServerJobWorker, ServerJobWorker } from "./ServerJobWorker";
-import { Job } from "../types/job";
+import { Job } from "../../../shared/types/job";
 import { IServerProcessManager } from "../process/ServerProcessManager";
 import { IServerManager } from "../process/ServerManager";
 import { BullMQRedisClient } from "../../services/db/redis/BullmqRedisClient";

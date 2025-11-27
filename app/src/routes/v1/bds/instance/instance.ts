@@ -11,7 +11,11 @@ router.post('/create', async (req, res) => {
             return res.status(400).json({ status: 400, code: "BAD_REQUEST", message: "インスタンスの設定項目が不足しています。" });
         }
 
-        const result = await req.services.obsidianCore.createServer(req.body, 'shou');
+        if (!req.user) {
+            return res.status(500).json({ status: 500, code: "internal_server_error", message: "JWT認証が通されていません。" });
+        }
+
+        const result = await req.services.obsidianCore.createServer(req.body, req.user.userName);
         if (!result.result) {
             throw new Error('Instance create Error')
         }

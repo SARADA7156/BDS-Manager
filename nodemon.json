@@ -1,3 +1,8 @@
 {
-    "ignore": ["./app/src/obsidian/installer/tmp", "BDS-servers/*", "BDS-servers-test/*"]
+    "ignore": [
+        "./app/src/obsidian/installer/tmp",
+        "BDS-servers/*",
+        "BDS-servers-test/*",
+        "./app/BDS-client"
+    ]
 }

@@ -7,6 +7,7 @@ import type { PreviewData, TabDataSchema } from '../../types/InstanceSetting/Ins
 import { initializeFormData } from '../../utils/instanceSetting/formDataInitializer';
 import { useNotifications, type NotificationsContext } from '../../contexts/NotificationsContext';
 import { createInstance } from '../../api/instanceSetting';
+import { useNavigate } from 'react-router-dom';
 
 const InstanceSetting = () => {
     const [activeTab, setActiveTab] = useState('general');
@@ -16,6 +17,8 @@ const InstanceSetting = () => {
     const context: NotificationsContext = useNotifications();
     if (!context) return null;
     const { addNotification } = context;
+
+    const navigate = useNavigate();
 
     const handleClick = () => {
         const errorMessages: string[] = []; // エラーリスト
@@ -70,14 +73,14 @@ const InstanceSetting = () => {
             levelSeed: "1234567890"
         };
 
-
         addNotification('サーバーに作成リクエストを送信しています。', 'info');
 
         // UI/UXとサーバー負荷を軽減するため送信は遅延させる
-        setTimeout(() => {
+        setTimeout(async () => {
             try {
-                createInstance(testConfigStringified);
+                await createInstance(testConfigStringified);
                 addNotification('リクエストが受理されました。インスタンスを作成します。※インスタンスの作成には数分かかる場合がございます。', 'info', 6000);
+                navigate('/jobs/queue');
             } catch (error) {
                 addNotification('申し訳ございません。サーバー側の不具合でインスタンスを作成できませんでした。少し時間をおいてもう一度お試しください。', 'error');
             }
