@@ -26,7 +26,7 @@ export const JobInfoCard = ({ job }: JobCardProps) => {
             "delayed": "schedule",
             "prioritized": "arrow_shape_up_stack",
             "waiting": "hourglass",
-            "waiting-children": "pace",
+            "waiting-children": "autopause",
             "unknown": "error",
         } as const;
 

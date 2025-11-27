@@ -76,9 +76,9 @@ export class WebSocketManager {
     }
 
     /**
-     * 特定のイベントをブロードキャストするヘルパーメソッドの例
+     * 特定のイベントをブロードキャストするヘルパーメソッド
      */
-    public static emitToAll(eventName: string, data: any): void {
+    public static emitToAll<T>(eventName: string, data: T): void {
         if (this.ioInstance) {
             this.ioInstance.emit(eventName, data);
             logger.debug(`📤 [WebSocket] ${eventName} をブロードキャストしました。`);

@@ -1,11 +1,9 @@
-import express, { ErrorRequestHandler } from 'express';
-import session from 'express-session';
+import express from 'express';
 import cors from 'cors';
 const cookiePerser = require('cookie-parser');
 import { createServer } from 'http';
 import path from 'path';
 import dotenv from 'dotenv';
-import readline from 'readline';
 import settings from './config/serverSettings.json';
 import { checkEnvironmentVariables } from './config/checkEnvironment';
 import { checkStartMode } from './services/process/startMode';

@@ -37,7 +37,6 @@ export class ObsidianCore implements IObsidianCore {
             }
 
             for (const job of jobPlans) {
-                console.log('jobを追加')
                 await this.queue.addJob(job);
             }
 

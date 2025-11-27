@@ -3,6 +3,8 @@ import { IServerCreator } from "../installer/ServerCreator";
 import { IObsidianWorkerLogger } from "../logger/ObsidianWorkerLogger";
 import { IServerProcessManager } from "../process/ServerProcessManager";
 import { CommandJob, CreateJob, Job } from "../../../shared/types/job";
+import { WebSocketManager } from "../../services/webSocket/WebSocketManager";
+import type { JobUpdate } from '@shared/types/socketEvents';
 
 export interface IServerJobWorker {
     handle(job: CreateJob): Promise<void>;
@@ -59,12 +61,14 @@ export class ServerJobWorker implements IServerJobWorker {
         } catch (err) {
             const errorDetail = (err instanceof Error) ? err.message : String(err);
             this.logger.error(`${name} のジョブ ${job.type} 中にエラーが発生しました。 詳細: ${errorDetail}`);
+            WebSocketManager.emitToAll<JobUpdate>('job_update', { jobId: job.jobId, newState: 'failed'});
             throw err;
         }
 
         const end = Date.now();
         const seconds = (end - start) / 1000;
-        this.logger.info(`${name} に対してジョブ ${job.type} を ${seconds}秒 で完了しました。`)
+        this.logger.info(`${name} に対してジョブ ${job.type} を ${seconds}秒 で完了しました。`);
+        WebSocketManager.emitToAll<JobUpdate>('job_update', { jobId: job.jobId, newState: 'completed'});
     }
 
     private async startServer(manager: IServerProcessManager): Promise<void> {

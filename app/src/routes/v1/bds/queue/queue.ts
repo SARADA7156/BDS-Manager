@@ -18,9 +18,6 @@ router.post('/jobList', async (req, res) => {
         //     {type: 'start', jobId: '00007', instanceName: 'test-instance', executedBy: 'shou', executorType: 'user', createdAt: new Date(), state: 'waiting-children'},
         //     {type: 'start', jobId: '00008', instanceName: 'test-instance', executedBy: 'shou', executorType: 'user', createdAt: new Date(), state: 'unknown'},
         //     {type: 'start', jobId: '00009', instanceName: 'test-instance', executedBy: 'shou', executorType: 'user', createdAt: new Date(), state: 'waiting'},
-        //     {type: 'start', jobId: '00009', instanceName: 'test-instance', executedBy: 'shou', executorType: 'user', createdAt: new Date(), state: 'waiting'},
-        //     {type: 'start', jobId: '00009', instanceName: 'test-instance', executedBy: 'shou', executorType: 'user', createdAt: new Date(), state: 'waiting'},
-        //     {type: 'start', jobId: '00009', instanceName: 'test-instance', executedBy: 'shou', executorType: 'user', createdAt: new Date(), state: 'waiting'},
         // ]
 
         res.status(200).json({ jobs });
